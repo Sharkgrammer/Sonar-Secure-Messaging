@@ -14,5 +14,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        DbControl con = new DbControl(this);
+
+        if (!con.databaseExists()){
+            con.createTables();
+        }
+
+        //con.runDatabaseTest();
     }
 }

@@ -8,7 +8,7 @@ public class Conversation {
     private ArrayList<History> historyArrayList;
     private Colour colour;
     private Bridge bridge;
-    private Profile user;
+    private Profile profile;
 
     public int getConversation_ID() {
         return conversation_ID;
@@ -26,12 +26,20 @@ public class Conversation {
         this.historyArrayList = historyArrayList;
     }
 
+    public void setHistory(int History_ID) {
+        //TODO fix this pls
+    }
+
     public Colour getColour() {
         return colour;
     }
 
     public void setColour(Colour colour) {
         this.colour = colour;
+    }
+
+    public void setColour(int Colour_ID) {
+        //TODO fix this pls
     }
 
     public Bridge getBridge() {
@@ -42,11 +50,20 @@ public class Conversation {
         this.bridge = bridge;
     }
 
-    public Profile getUser() {
-        return user;
+    public void setBridge(int Bridge_ID) {
+        //TODO fix this pls
     }
 
-    public void setUser(Profile user) {
-        this.user = user;
+    public Profile getProfile() {
+        return profile;
     }
-}
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
+    public void setProfile(int Profile_ID) {
+        //TODO fix this pls
+    }
+
+}1
