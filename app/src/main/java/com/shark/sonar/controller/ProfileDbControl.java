@@ -22,7 +22,7 @@ public class ProfileDbControl extends DbControl {
         return selectProfile(null);
     }
 
-    public Profile selectSignleProfile(int Profile_ID){
+    public Profile selectSingleProfile(int Profile_ID){
         return selectProfile(Profile_ID).get(0);
     }
 

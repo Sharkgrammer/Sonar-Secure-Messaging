@@ -6,6 +6,7 @@ public class Icon {
 
     private int Icon_ID;
     private Bitmap Icon;
+    private String Icon_Loc;
 
     public int getIcon_ID() {
         return Icon_ID;
@@ -21,5 +22,13 @@ public class Icon {
 
     public void setIcon(Bitmap icon) {
         Icon = icon;
+    }
+
+    public String getIcon_Loc() {
+        return Icon_Loc;
+    }
+
+    public void setIcon_Loc(String icon_Loc) {
+        Icon_Loc = icon_Loc;
     }
 }
