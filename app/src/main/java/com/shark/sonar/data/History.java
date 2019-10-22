@@ -4,9 +4,8 @@ public class History {
 
     private int History_ID;
     private int Conversation_ID;
-    private String Mesasge;
-    private String Time;
-    private String End_date;
+    private TextItem messageObj;
+    private String end_date;
 
     public int getHistory_ID() {
         return History_ID;
@@ -24,27 +23,19 @@ public class History {
         Conversation_ID = conversation_ID;
     }
 
-    public String getMesasge() {
-        return Mesasge;
+    public TextItem getMessageObj() {
+        return messageObj;
     }
 
-    public void setMesasge(String mesasge) {
-        Mesasge = mesasge;
-    }
-
-    public String getTime() {
-        return Time;
-    }
-
-    public void setTime(String time) {
-        Time = time;
+    public void setMessageObj(TextItem messageObj) {
+        this.messageObj = messageObj;
     }
 
     public String getEnd_date() {
-        return End_date;
+        return end_date;
     }
 
     public void setEnd_date(String end_date) {
-        End_date = end_date;
+        this.end_date = end_date;
     }
 }

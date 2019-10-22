@@ -6,7 +6,7 @@ public class Profile {
 
     private int Profile_ID;
     private String Name;
-    private int Icon_ID;
+    private Icon Icon;
     private Blob user_key_public;
     private Blob user_key_private;
     private Blob user_ID_key;
@@ -27,12 +27,12 @@ public class Profile {
         Name = name;
     }
 
-    public int getIcon_ID() {
-        return Icon_ID;
+    public Icon getIcon() {
+        return Icon;
     }
 
-    public void setIcon_ID(int icon_ID) {
-        Icon_ID = icon_ID;
+    public void setIcon_ID(Icon Icon) {
+        this.Icon = Icon;
     }
 
     public Blob getUser_key_public() {
