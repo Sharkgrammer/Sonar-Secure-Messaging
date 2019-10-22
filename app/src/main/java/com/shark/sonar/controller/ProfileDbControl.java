@@ -8,7 +8,6 @@ import android.util.Log;
 import com.shark.sonar.data.Profile;
 import com.shark.sonar.utility.readFile;
 
-import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
