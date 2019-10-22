@@ -21,6 +21,7 @@ create table Connection(
 create table Profile(
 	profile_id integer primary key autoincrement,
 	icon_id integer not null,
+	name varchar(255),
 	user_key_public blob not null,
 	user_key_private blob,
 	user_id_key blob not null

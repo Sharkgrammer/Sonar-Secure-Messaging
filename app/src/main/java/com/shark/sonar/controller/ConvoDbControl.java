@@ -16,7 +16,7 @@ public class ConvoDbControl extends DbControl {
     public ConvoDbControl(Context c){
         super(c);
     }
-    
+
     public List<Conversation> selectAllConvo(){
         return selectConversation(null, null);
     }
@@ -31,7 +31,7 @@ public class ConvoDbControl extends DbControl {
 
     private List<Conversation> selectConversation(Integer profile_ID, Integer convo_ID){
         List<Conversation> result = new ArrayList<>();
-        String name = "selectSql", sqlFile;
+        String name = "selectProfile", sqlFile;
         final int SELECT_ALL = 0, SELECT_PROFILE = 1, SELECT_CONVO = 2;
 
         try {
@@ -63,6 +63,7 @@ public class ConvoDbControl extends DbControl {
             do{
                 c = new Conversation();
 
+                c.setConversation_ID(cursor.getInt(0));
                 c.setColour(cursor.getInt(1));
                 c.setBridge(cursor.getInt(2));
                 c.setProfile(cursor.getInt(3));
