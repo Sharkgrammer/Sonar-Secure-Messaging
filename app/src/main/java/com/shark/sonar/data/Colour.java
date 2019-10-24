@@ -7,6 +7,7 @@ public class Colour {
     private String Chat_Col_To;
     private String Chat_Col_From;
     private String Chat_Col_Background;
+    private String Chat_Col_Accent;
 
     public int getColour_ID() {
         return Colour_ID;
@@ -46,5 +47,13 @@ public class Colour {
 
     public void setChat_Col_Background(String chat_Col_Background) {
         Chat_Col_Background = chat_Col_Background;
+    }
+
+    public String getChat_Col_Accent() {
+        return Chat_Col_Accent;
+    }
+
+    public void setChat_Col_Accent(String chat_Col_Accent) {
+        Chat_Col_Accent = chat_Col_Accent;
     }
 }

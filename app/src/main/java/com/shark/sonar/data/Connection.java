@@ -7,7 +7,7 @@ public class Connection {
     private int Connection_ID;
     private int Bridge_ID;
     private String Server_IP;
-    private Blob key;
+    private byte[] key;
     private int position;
 
     public int getConnection_ID() {
@@ -26,11 +26,11 @@ public class Connection {
         Server_IP = server_IP;
     }
 
-    public Blob getKey() {
+    public byte[] getKey() {
         return key;
     }
 
-    public void setKey(Blob key) {
+    public void setKey(byte[] key) {
         this.key = key;
     }
 

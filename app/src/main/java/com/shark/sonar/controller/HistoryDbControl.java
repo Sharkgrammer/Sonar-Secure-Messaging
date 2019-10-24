@@ -31,7 +31,7 @@ public class HistoryDbControl extends DbControl {
             String sqlFile = readFile.returnAssetAsString(name +".sql");
             Cursor cursor;
 
-            cursor = db.rawQuery(sqlFile, null);
+            cursor = db.rawQuery(sqlFile, new String[] {String.valueOf(convo_ID)});
 
             cursor.moveToFirst();
 
