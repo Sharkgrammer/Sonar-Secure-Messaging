@@ -2,9 +2,15 @@ package com.shark.sonar.data;
 
 public class TextItem {
 
-    private boolean toSide;
+    private Boolean toSide;
     private String text;
     private String time;
+
+    public TextItem(String text, String time, Boolean toSide){
+        this.text = text;
+        this.time = time;
+        this.toSide = toSide;
+    }
 
     public boolean isToSide() {
         return toSide;

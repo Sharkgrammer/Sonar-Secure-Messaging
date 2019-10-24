@@ -6,6 +6,7 @@ public class History {
     private int Conversation_ID;
     private TextItem messageObj;
     private String end_date;
+    private Profile user_from;
 
     public int getHistory_ID() {
         return History_ID;
@@ -37,5 +38,17 @@ public class History {
 
     public void setEnd_date(String end_date) {
         this.end_date = end_date;
+    }
+
+    public Profile getUser_from() {
+        return user_from;
+    }
+
+    public void setUser_from(Profile user_from) {
+        this.user_from = user_from;
+    }
+
+    public void setUser_from(int user_from) {
+        //TODO fix this pls
     }
 }

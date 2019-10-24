@@ -9,7 +9,6 @@ import android.util.Log;
 import com.shark.sonar.utility.readFile;
 import java.io.IOException;
 
-@SuppressWarnings("WeakerAccess")
 public class DbControl extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
@@ -33,8 +32,8 @@ public class DbControl extends SQLiteOpenHelper {
         //not called
     }
 
-    public Boolean databaseExists(){
-        Boolean result = false;
+    public boolean databaseExists(){
+        boolean result = false;
 
         try {
             readFile readFile = new readFile(context);
@@ -57,8 +56,8 @@ public class DbControl extends SQLiteOpenHelper {
         return result;
     }
 
-    public Boolean createTables(){
-        Boolean result = false;
+    public boolean createTables(){
+        boolean result = false;
 
         if (!databaseExists()){
             try {
@@ -106,7 +105,7 @@ public class DbControl extends SQLiteOpenHelper {
             Log.wtf("TablesDeleted", "Tables Deleted");
 
         } catch (IOException e) {
-            Log.wtf("Error", e.toString());
+            Log.wtf("Error in Test", e.toString());
         }
 
         Log.wtf("TestEnd", "Test has Ended");
