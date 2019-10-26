@@ -1,0 +1,1 @@
+select * from Bridge where "bridge_id" = ?;

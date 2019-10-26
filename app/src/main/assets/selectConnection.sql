@@ -1,0 +1,1 @@
+select * from C where "bridge_id" = ?;

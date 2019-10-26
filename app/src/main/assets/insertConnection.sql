@@ -1,0 +1,1 @@
+INSERT INTO Connection ("bridge_id","server_IP","server_key","posistion") VALUES (?, ?, ?, ?);

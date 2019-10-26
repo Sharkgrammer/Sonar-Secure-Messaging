@@ -1,0 +1,1 @@
+select * from history where "convo_id" = ?;

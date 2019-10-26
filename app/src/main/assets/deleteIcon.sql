@@ -1,0 +1,1 @@
+delete from icon where "icon_id" = ?;

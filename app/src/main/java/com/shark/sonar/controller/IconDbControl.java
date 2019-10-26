@@ -18,21 +18,17 @@ public class IconDbControl extends DbControl {
     }
 
     public List<Icon> selectAllIcons(){
-        return selectIcon(null, null);
+        return selectIcon(null);
     }
 
     public Icon selectSingleIcon(int Icon_ID){
-        return selectIcon(Icon_ID, null).get(0);
+        return selectIcon(Icon_ID).get(0);
     }
 
-    public Icon selectUserIcon(int profile_ID){
-        return selectIcon(null, profile_ID).get(0);
-    }
-
-    private List<Icon> selectIcon(Integer icon_ID, Integer profile_ID){
+    private List<Icon> selectIcon(Integer icon_ID){
         List<Icon> result = new ArrayList<>();
         String name = "selectIcon", sqlFile;
-        final int SELECT_ALL = 0, SELECT_USER = 1, SELECT_SINGLE = 2;
+        final int SELECT_ALL = 0, SELECT_SINGLE = 1;
 
         try {
             readFile readFile = new readFile(context);
@@ -44,11 +40,6 @@ public class IconDbControl extends DbControl {
 
                 sqlFile = sqlFileAll[SELECT_SINGLE];
                 cursor = db.rawQuery(sqlFile, new String[] {String.valueOf(icon_ID)});
-
-            }else if (profile_ID != null){
-
-                sqlFile = sqlFileAll[SELECT_USER];
-                cursor = db.rawQuery(sqlFile, new String[] {String.valueOf(profile_ID)});
 
             }else{
 

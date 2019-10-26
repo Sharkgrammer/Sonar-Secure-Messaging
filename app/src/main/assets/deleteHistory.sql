@@ -1,0 +1,1 @@
+delete from History where "history_id" = ?

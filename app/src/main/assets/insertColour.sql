@@ -1,0 +1,1 @@
+INSERT INTO Colour ("to_col","from_col","text_col","background_col","acce_col") VALUES (?,?,?,?,?);

@@ -1,0 +1,1 @@
+UPDATE Connection SET "bridge_id" = ?,"server_IP" = ?, "server_key" = ?, "posistion" = ? WHERE "conn_id" = ?;

@@ -35,18 +35,18 @@ create table Icon(
 create table History(
 	history_id integer primary key autoincrement,
 	convo_id integer not null,
-	message text not null
-	time datetime not null,
-	end date datetime not null,
+	message text not null,
+	his_time datetime not null,
+	end_date datetime not null,
 	user_from integer not null
 );
 
 create table Colour(
 	colour_id integer primary key autoincrement,
-	prim_col varchar(20) not null,
-	seco_col varchar(20) not null,
+	to_col varchar(20) not null,
+	from_col varchar(20) not null,
 	text_col varchar(20) not null,
-	hint_col varchar(20) not null,
+	background_col varchar(20) not null,
 	acce_col varchar(20) not null
 );
 

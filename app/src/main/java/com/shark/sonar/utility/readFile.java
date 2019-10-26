@@ -15,14 +15,10 @@ public class readFile {
         this.context = context;
     }
 
-    public InputStream returnAssetAsInputStream(String name) throws IOException {
+    InputStream returnAssetAsInputStream(String name) throws IOException {
         InputStream in = context.getAssets().open(name);
 
-        if (in != null){
-            return  in;
-        }else{
-            throw new NullPointerException();
-        }
+        return  in;
     }
 
     public String returnAssetAsString(String name) throws IOException {

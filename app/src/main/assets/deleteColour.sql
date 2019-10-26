@@ -1,0 +1,1 @@
+delete from Colour where "colour_id" = ?;

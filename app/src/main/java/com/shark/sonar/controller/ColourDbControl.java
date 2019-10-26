@@ -26,14 +26,10 @@ public class ColourDbControl extends DbControl {
         return selectColour(Colour_ID).get(0);
     }
 
-    public Colour selectUserColour(){
-        return selectColour(0).get(0);
-    }
-
     private List<Colour> selectColour(Integer colour_ID){
         List<Colour> result = new ArrayList<>();
         String name = "selectColour", sqlFile;
-        final int SELECT_ALL = 0, SELECT_USER = 1;
+        final int SELECT_ALL = 0, SELECT_SINGLE = 1;
 
         try {
             readFile readFile = new readFile(context);
@@ -43,7 +39,7 @@ public class ColourDbControl extends DbControl {
 
             if (colour_ID != null){
 
-                sqlFile = sqlFileAll[SELECT_USER];
+                sqlFile = sqlFileAll[SELECT_SINGLE];
                 cursor = db.rawQuery(sqlFile, new String[] {String.valueOf(colour_ID)});
 
             }else{

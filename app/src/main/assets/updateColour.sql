@@ -1,0 +1,1 @@
+UPDATE Colour SET "to_col" = ?, "from_col" = ?, "text_col" = ?, "background_col" = ?, "acce_col" = ? WHERE "colour_id" = ?;

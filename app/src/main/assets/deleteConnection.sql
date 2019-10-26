@@ -1,0 +1,1 @@
+delete from Connection where "conn_id" = ?;

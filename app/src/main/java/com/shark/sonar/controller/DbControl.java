@@ -63,9 +63,11 @@ public class DbControl extends SQLiteOpenHelper {
             try {
                 readFile readFile = new readFile(context);
 
-                String sqlFile = readFile.returnAssetAsString("table_creates.sql");
+                String[] sqlFileAll = readFile.returnAssetAsString("table_creates.sql").split(";");
 
-                db.execSQL(sqlFile);
+                for (String sqlFile : sqlFileAll){
+                    db.execSQL(sqlFile);
+                }
 
                 result = true;
             } catch (IOException e) {
