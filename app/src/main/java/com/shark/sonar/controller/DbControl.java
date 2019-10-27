@@ -38,7 +38,7 @@ public class DbControl extends SQLiteOpenHelper {
         try {
             readFile readFile = new readFile(context);
 
-            String sqlFile = readFile.returnAssetAsString("check_tables.sql");
+            String sqlFile = readFile.returnAssetAsString("checkTables.sql");
 
             Cursor cursor = db.rawQuery(sqlFile, null);
             if (cursor.moveToFirst())
@@ -49,8 +49,8 @@ public class DbControl extends SQLiteOpenHelper {
             }
 
             cursor.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Log.wtf("Error in databaseExists", e.toString());
         }
 
         return result;
@@ -63,15 +63,35 @@ public class DbControl extends SQLiteOpenHelper {
             try {
                 readFile readFile = new readFile(context);
 
-                String[] sqlFileAll = readFile.returnAssetAsString("table_creates.sql").split(";");
+                String[] sqlFileAll = readFile.returnAssetAsString("tableCreates.sql").split(";");
 
                 for (String sqlFile : sqlFileAll){
                     db.execSQL(sqlFile);
                 }
 
                 result = true;
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                Log.wtf("Error in createTables", e.toString());
+            }
+        }
+
+        return result;
+    }
+
+    public boolean deleteTables(){
+        boolean result = false;
+
+        if (!databaseExists()){
+            try {
+                readFile readFile = new readFile(context);
+
+                String sqlFile = readFile.returnAssetAsString("deleteTables.sql");
+
+                db.execSQL(sqlFile);
+
+                result = true;
+            } catch (Exception e) {
+                Log.wtf("Error in deleteTables", e.toString());
             }
         }
 
@@ -106,7 +126,7 @@ public class DbControl extends SQLiteOpenHelper {
             db.execSQL(readFile.returnAssetAsString("testDel.sql"));
             Log.wtf("TablesDeleted", "Tables Deleted");
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.wtf("Error in Test", e.toString());
         }
 
