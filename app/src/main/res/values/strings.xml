@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Sonar</string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="toolbar">Sonar Messaging</string>
+    <string name="mainText">Add new friends with the plus button!</string>
 </resources>

@@ -11,4 +11,5 @@
     <color name="colorPass">@android:color/holo_green_dark</color>
     <color name="colorFail">@android:color/holo_red_dark</color>
     <color name="border">@android:color/black</color>
+    <color name="spaceCol">#A9A9A9</color>
 </resources>

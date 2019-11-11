@@ -40,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Sonar Messaging");
-        getSupportActionBar().setIcon(R.drawable.sonar_alone);
+        getSupportActionBar().setTitle(R.string.toolbar);
 
         MainMessage[] data = new MainMessage[] {
                 new MainMessage(R.drawable.ic_person, "Shark", "Howdy", "eh"),
@@ -49,13 +48,15 @@ public class MainActivity extends AppCompatActivity {
                 new MainMessage(R.drawable.ic_person, "Kate", "I love sharks!", "eh"),
                 new MainMessage(R.drawable.ic_person, "Not Kate", "I hate sharks", "eh"),
                 new MainMessage(R.drawable.ic_person, "Hmm", "This is one long fucking message, its wednesday my dudes", "eh"),
-                new MainMessage(R.drawable.ic_person, "This is one longer name then normal", "But whatever eh?", "eh")
+                new MainMessage(R.drawable.ic_person, "This is one longer name then normal", "But whatever eh?", "eh"),
+                new MainMessage(R.drawable.ic_person, "Pizza", "Nom da pizza", "eh"),
+                new MainMessage(R.drawable.ic_person, "Boop", "Boop the snoop", "eh"),
+                new MainMessage(R.drawable.ic_person, "Shark", "Shark shark shark", "eh"),
+                new MainMessage(R.drawable.ic_person, "Pizza boop shark", "Interesting...", "eh")
         };
 
-        //new MainMessage("Email", android.R.drawable.ic_dialog_email),
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        MainAdapter adapter = new MainAdapter(data);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        MainAdapter adapter = new MainAdapter(data, this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
