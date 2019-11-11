@@ -22,8 +22,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.item_user_message);
 
+        /*
         DbControl con = new DbControl(this);
 
         if (!con.databaseExists()){
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         txtMessage = findViewById(R.id.txtMessage);
         txtIDfrom = findViewById(R.id.txtIDfrom);
         txtIDto = findViewById(R.id.txtIDto);
+        //*/
+
     }
 
     public void setID(View v){
