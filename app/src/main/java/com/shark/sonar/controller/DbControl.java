@@ -7,7 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.shark.sonar.utility.readFile;
-import java.io.IOException;
+
+//REF https://github.com/Sharkgrammer/Android-Assistant/blob/master/app/src/main/java/com/shark/assistant/database.java
 
 public class DbControl extends SQLiteOpenHelper {
 
@@ -29,8 +30,10 @@ public class DbControl extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //not called
+
     }
+
+    //REF https://stackoverflow.com/questions/1601151/how-do-i-check-in-sqlite-whether-a-table-exists#1604121
 
     public boolean databaseExists(){
         boolean result = false;

@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("shark test start");
         server = new DataHolder();
         server.setPort(6000);
-        server.setIP("35.234.148.116");
+        server.setIP("35.235.49.238");
 
         txtMessage = findViewById(R.id.txtMessage);
         txtIDfrom = findViewById(R.id.txtIDfrom);

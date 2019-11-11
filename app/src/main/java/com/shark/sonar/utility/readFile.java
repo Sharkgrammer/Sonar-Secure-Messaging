@@ -15,11 +15,15 @@ public class readFile {
         this.context = context;
     }
 
+    //REF https://stackoverflow.com/questions/30152784/working-with-sql-file-in-android
+
     InputStream returnAssetAsInputStream(String name) throws IOException {
         InputStream in = context.getAssets().open(name);
 
         return  in;
     }
+
+    //REF https://stackoverflow.com/questions/14825374/reading-a-textfile-using-inputstream
 
     public String returnAssetAsString(String name) throws IOException {
 

@@ -11,7 +11,7 @@ import java.net.Socket;
 
 import send.MessageHandler;
 
-
+//REF https://guides.codepath.com/android/Sending-and-Receiving-Data-with-Sockets
 public class NetControlAsyncTask extends AsyncTask<Boolean, Void, Void> {
 
     private String message;
