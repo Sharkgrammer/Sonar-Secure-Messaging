@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- REF https://www.viralandroid.com/2015/09/how-to-add-ripple-effect-to-android-button.html -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/colorMessageMainClicked">
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/colorMessageMain" />
+        </shape>
+    </item>
+</ripple>

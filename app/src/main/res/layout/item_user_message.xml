@@ -2,6 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linLayoutTop"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -49,8 +50,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Person Name Here"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+                android:fontFamily="sans-serif"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="Person Name Here" />
 
             <TextView
                 android:id="@+id/lblMessage"
@@ -58,7 +62,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ellipsize="end"
-                android:text="Here goes the most recent message from them! It could be anything!" />
+                android:fontFamily="sans-serif"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="14sp"
+                tools:text="Here goes the most recent message from them! It could be anything!" />
 
         </LinearLayout>
 

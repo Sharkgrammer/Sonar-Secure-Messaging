@@ -65,9 +65,9 @@ public class NetControl implements ResultHandler {
 
             @Override
             public void run() {
-                TextView response = act.findViewById(R.id.lblResponse);
+                //TextView response = act.findViewById(R.id.lblResponse);
 
-                response.setText(message);
+                //response.setText(message);
             }
         });
     }

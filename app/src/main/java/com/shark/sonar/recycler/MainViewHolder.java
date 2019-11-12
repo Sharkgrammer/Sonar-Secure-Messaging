@@ -1,6 +1,7 @@
 package com.shark.sonar.recycler;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shark.sonar.R;
+import com.shark.sonar.activity.MessageActivity;
 
 //REF https://www.javatpoint.com/android-recyclerview-list-example
 class MainViewHolder extends RecyclerView.ViewHolder {
@@ -48,14 +50,14 @@ class MainViewHolder extends RecyclerView.ViewHolder {
         layoutin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(),"Person " + lblPerson.getText() + " clicked",Toast.LENGTH_LONG).show();
+                context.startActivity(new Intent(context, MessageActivity.class));
             }
         });
     }
 
     public void addSpace(){
         if (!lineAdded){
-            View Child = LayoutInflater.from(context).inflate(R.layout.line, null);
+            View Child = LayoutInflater.from(context).inflate(R.layout.item_line, null);
             layouttop.addView(Child);
 
             lineAdded = true;
@@ -64,7 +66,7 @@ class MainViewHolder extends RecyclerView.ViewHolder {
 
     public void addText(String text){ ;
         if (!textAdded){
-            View Child = LayoutInflater.from(context).inflate(R.layout.footer, null);
+            View Child = LayoutInflater.from(context).inflate(R.layout.item_footer, null);
 
             TextView view = Child.findViewById(R.id.childTextView);
             view.setText(text);

@@ -1,19 +1,14 @@
-package com.shark.sonar.main;
+package com.shark.sonar.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.shark.sonar.R;
 import com.shark.sonar.controller.NetControl;
 import com.shark.sonar.data.MainMessage;
@@ -34,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ImageView mainView = findViewById(R.id.imgPersonMain);
-        mainView.setImageDrawable(getResources().getDrawable(R.drawable.ic_person_black));
+        mainView.setImageDrawable(getResources().getDrawable(R.drawable.ic_person_black, null));
         //DbControl con = new DbControl(this);
 
        // if (!con.databaseExists()){
