@@ -10,10 +10,11 @@ import android.widget.Toast;
 import com.shark.sonar.R;
 import com.shark.sonar.data.MainMessage;
 
+//REF https://www.javatpoint.com/android-recyclerview-list-example
 public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
 
     private MainMessage[] listData;
-    Context context;
+    private Context context;
 
     public MainAdapter(MainMessage[] listData, Context context) {
         this.listData = listData;
@@ -52,7 +53,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
 
     @Override
     public int getItemCount() {
-        return listData.length;
+        try{
+            return listData.length;
+        }catch(Exception e){
+            return 0;
+        }
     }
 
 }

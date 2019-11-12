@@ -47,8 +47,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\gills\Documents\Sonar\sonar_alone.png" />
-                                      <entry key="outputName" value="ic_logo_alone" />
+                                      <entry key="imageAsset" value="C:\Users\gills\Documents\Sonar\person.png" />
+                                      <entry key="outputName" value="ic_person_black" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="000000" />
                                     </map>
@@ -78,7 +78,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="foregroundImage" value="C:\Users\gills\Documents\Sonar\SonarLogo.png" />
+                                      <entry key="foregroundImage" value="C:\Users\gills\Documents\Sonar\star.png" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -128,12 +128,22 @@
                             </entry>
                           </map>
                         </option>
+                        <option name="values">
+                          <map>
+                            <entry key="outputIconType" value="ACTIONBAR" />
+                          </map>
+                        </option>
                       </PersistentState>
                     </value>
                   </entry>
                 </map>
               </option>
             </PersistentState>
+          </value>
+        </entry>
+        <entry key="vectorWizard">
+          <value>
+            <PersistentState />
           </value>
         </entry>
       </map>

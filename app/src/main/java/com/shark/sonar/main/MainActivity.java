@@ -9,6 +9,7 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ImageView mainView = findViewById(R.id.imgPersonMain);
+        mainView.setImageDrawable(getResources().getDrawable(R.drawable.ic_person_black));
         //DbControl con = new DbControl(this);
 
        // if (!con.databaseExists()){
@@ -42,17 +45,19 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.toolbar);
 
+
+        //REF https://www.javatpoint.com/android-recyclerview-list-example
         MainMessage[] data = new MainMessage[] {
-                new MainMessage(R.drawable.ic_person, "Shark", "Howdy", "eh"),
-                new MainMessage(R.drawable.ic_person, "Person", "Fuck you boi", "eh"),
-                new MainMessage(R.drawable.ic_person, "Kate", "I love sharks!", "eh"),
-                new MainMessage(R.drawable.ic_person, "Not Kate", "I hate sharks", "eh"),
-                new MainMessage(R.drawable.ic_person, "Hmm", "This is one long fucking message, its wednesday my dudes", "eh"),
-                new MainMessage(R.drawable.ic_person, "This is one longer name then normal", "But whatever eh?", "eh"),
-                new MainMessage(R.drawable.ic_person, "Pizza", "Nom da pizza", "eh"),
-                new MainMessage(R.drawable.ic_person, "Boop", "Boop the snoop", "eh"),
-                new MainMessage(R.drawable.ic_person, "Shark", "Shark shark shark", "eh"),
-                new MainMessage(R.drawable.ic_person, "Pizza boop shark", "Interesting...", "eh")
+                new MainMessage(R.drawable.ic_star_black, "Shark", "Howdy", "eh"),
+                new MainMessage(R.drawable.ic_person_black, "Person", "Fuck you boi", "eh"),
+                new MainMessage(R.drawable.ic_star_blue, "Kate", "I love sharks!", "eh"),
+                new MainMessage(R.drawable.ic_person_red, "Not Kate", "I hate sharks", "eh"),
+                new MainMessage(R.drawable.ic_person_orange, "Hmm", "This is one long fucking message, its wednesday my dudes", "eh"),
+                new MainMessage(R.drawable.ic_star_orange, "This is one longer name then normal", "But whatever eh?", "eh"),
+                new MainMessage(R.drawable.ic_star_red, "Pizza", "Nom da pizza", "eh"),
+                new MainMessage(R.drawable.ic_person_purple, "Boop", "Boop the snoop", "eh"),
+                new MainMessage(R.drawable.ic_star_yellow, "Shark", "Shark shark shark", "eh"),
+                new MainMessage(R.drawable.ic_person_green, "Pizza boop shark", "Interesting...", "eh")
         };
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);

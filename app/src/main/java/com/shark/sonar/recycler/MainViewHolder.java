@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.shark.sonar.R;
 
+//REF https://www.javatpoint.com/android-recyclerview-list-example
 class MainViewHolder extends RecyclerView.ViewHolder {
 
     private ImageView imgPerson;
@@ -17,7 +18,6 @@ class MainViewHolder extends RecyclerView.ViewHolder {
     private LinearLayout layout;
     private Context context;
     private boolean textAdded = false, lineAdded = false;
-
 
     public MainViewHolder(View itemView, Context context) {
         super(itemView);
