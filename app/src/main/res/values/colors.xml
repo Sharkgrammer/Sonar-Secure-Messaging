@@ -12,4 +12,6 @@
     <color name="colorFail">@android:color/holo_red_dark</color>
     <color name="border">@android:color/black</color>
     <color name="spaceCol">#A9A9A9</color>
+    <color name="colorMessageMain">#ffffff</color>
+    <color name="colorMessageMainClicked">#E8E8E8</color>
 </resources>

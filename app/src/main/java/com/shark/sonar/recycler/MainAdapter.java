@@ -42,12 +42,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
         holder.setImgPerson(data.getImage());
         holder.setTextMessage(data.getMessage());
         holder.setTextPerson(data.getPerson());
-        holder.setOnClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(view.getContext(),"click on item: "+ data.getPerson(),Toast.LENGTH_LONG).show();
-            }
-        });
+        holder.setOnClick();
 
     }
 

@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.shark.sonar.R;
 
 //REF https://www.javatpoint.com/android-recyclerview-list-example
@@ -15,7 +17,7 @@ class MainViewHolder extends RecyclerView.ViewHolder {
     private ImageView imgPerson;
     private TextView lblPerson;
     private TextView lblMessage;
-    private LinearLayout layout;
+    private LinearLayout layoutin, layouttop;
     private Context context;
     private boolean textAdded = false, lineAdded = false;
 
@@ -25,7 +27,8 @@ class MainViewHolder extends RecyclerView.ViewHolder {
         this.imgPerson = itemView.findViewById(R.id.imgPerson);
         this.lblPerson = itemView.findViewById(R.id.lblPerson);
         this.lblMessage = itemView.findViewById(R.id.lblMessage);
-        this.layout = itemView.findViewById(R.id.linLayout);
+        this.layouttop = itemView.findViewById(R.id.linLayoutTop);
+        this.layoutin = itemView.findViewById(R.id.linLayoutInside);
         this.context = context;
     }
 
@@ -41,14 +44,19 @@ class MainViewHolder extends RecyclerView.ViewHolder {
         lblMessage.setText(Message);
     }
 
-    public void setOnClick(View.OnClickListener listener){
-        layout.setOnClickListener(listener);
+    public void setOnClick(){
+        layoutin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(),"Person " + lblPerson.getText() + " clicked",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void addSpace(){
         if (!lineAdded){
             View Child = LayoutInflater.from(context).inflate(R.layout.line, null);
-            layout.addView(Child);
+            layouttop.addView(Child);
 
             lineAdded = true;
         }
@@ -61,7 +69,7 @@ class MainViewHolder extends RecyclerView.ViewHolder {
             TextView view = Child.findViewById(R.id.childTextView);
             view.setText(text);
 
-            layout.addView(Child);
+            layouttop.addView(Child);
 
             textAdded = true;
         }
