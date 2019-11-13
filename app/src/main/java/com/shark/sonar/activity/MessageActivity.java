@@ -25,6 +25,8 @@ public class MessageActivity extends AppCompatActivity {
         sendView = findViewById(R.id.sendView);
         sendView.setMaxWidth(sendView.getWidth());
 
+
+        
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Kate");
