@@ -6,13 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".activity.MessageActivity">
 
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/message_background"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp" />
+
+    </LinearLayout>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -48,25 +58,34 @@
             android:ems="10"
             android:hint="@string/send"
             android:inputType="textMultiLine"
+            android:maxLines="3"
             android:minLines="1"
-            android:maxLines="5"
             android:theme="@style/PrimaryTextView"
             tools:text="Text here" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatingActionButton2"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
-            app:fabSize="mini"
-            app:maxImageSize="30dp"
-            app:srcCompat="@android:drawable/ic_menu_send" />
+            android:layout_weight="1">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/floatingActionButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                app:fabSize="mini"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:maxImageSize="30dp"
+                app:srcCompat="@android:drawable/ic_menu_send" />
+
+        </android.support.constraint.ConstraintLayout>
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

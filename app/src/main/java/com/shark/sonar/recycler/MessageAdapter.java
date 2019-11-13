@@ -8,50 +8,43 @@ import android.view.ViewGroup;
 
 import com.shark.sonar.R;
 import com.shark.sonar.data.MainMessage;
+import com.shark.sonar.data.Message;
 
 //REF https://www.javatpoint.com/android-recyclerview-list-example
-public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
+public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
-    private MainMessage[] listData;
+    private Message[] listData;
     private Context context;
 
-    public MainAdapter(MainMessage[] listData, Context context) {
+    public MessageAdapter(Message[] listData, Context context) {
         this.listData = listData;
         this.context = context;
     }
 
     //REF https://stackoverflow.com/a/39678755/11480852
     @Override
-    public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View Child = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_message, null, false);
+    public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View Child = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, null, false);
         Child.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-        return new MainViewHolder(Child, context);
+        return new MessageViewHolder(Child, context);
     }
 
     @Override
-    public void onBindViewHolder(MainViewHolder holder, int pos) {
-        final MainMessage data = listData[pos];
-
-        if (getItemCount() - 1 != pos){
-            holder.addSpace();
-        }else{
-            holder.addText(context.getResources().getString(R.string.mainText));
-        }
+    public void onBindViewHolder(MessageViewHolder holder, int pos) {
+        final Message data = listData[pos];
 
         holder.setImgPerson(data.getImage());
         holder.setTextMessage(data.getMessage());
-        holder.setTextPerson(data.getPerson());
-        holder.setOnClick();
-
+        holder.isFromYou(data.isFromYou());
+        holder.addNewMessage("And i also said this!");
     }
 
     @Override
     public int getItemCount() {
-        try{
+        try {
             return listData.length;
-        }catch(Exception e){
+        } catch (Exception e) {
             return 0;
         }
     }
-
 }
