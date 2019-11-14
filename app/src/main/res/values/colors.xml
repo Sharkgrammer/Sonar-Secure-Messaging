@@ -14,4 +14,8 @@
     <color name="spaceCol">#A9A9A9</color>
     <color name="colorMessageMain">#ffffff</color>
     <color name="colorMessageMainClicked">#E8E8E8</color>
+    <color name="outgoing">@color/colorAccent</color>
+    <color name="outgoing_border">@color/border</color>
+    <color name="incoming">@color/colorPrimary</color>
+    <color name="incoming_border">@color/border</color>
 </resources>

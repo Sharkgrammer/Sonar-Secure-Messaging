@@ -36,7 +36,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         holder.setImgPerson(data.getImage());
         holder.setTextMessage(data.getMessage());
         holder.isFromYou(data.isFromYou());
-        holder.addNewMessage("And i also said this!");
     }
 
     @Override

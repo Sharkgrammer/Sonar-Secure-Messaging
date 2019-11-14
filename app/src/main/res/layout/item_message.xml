@@ -48,27 +48,20 @@
 
 
         <LinearLayout
-            android:id="@+id/linLayoutMessages"
+            android:id="@+id/linLayoutMessageWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="5dp"
-            android:background="@drawable/speech_bubble_incoming"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/lblMessage"
-                android:layout_width="match_parent"
+            <!-- REF https://duckduckgo.com/?q=include+a+layout+in+another+layout&t=ffab&ia=web -->
+            <include
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:fontFamily="sans-serif"
-                android:padding="4dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                tools:text="Here goes the most recent message from" />
+                layout="@layout/item_single_message" />
 
         </LinearLayout>
 
