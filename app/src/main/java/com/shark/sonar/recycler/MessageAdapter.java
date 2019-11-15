@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shark.sonar.R;
-import com.shark.sonar.data.MainMessage;
 import com.shark.sonar.data.Message;
 
 //REF https://www.javatpoint.com/android-recyclerview-list-example

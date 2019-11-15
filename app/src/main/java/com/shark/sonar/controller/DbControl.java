@@ -34,24 +34,27 @@ public class DbControl extends SQLiteOpenHelper {
     }
 
     //REF https://stackoverflow.com/questions/1601151/how-do-i-check-in-sqlite-whether-a-table-exists#1604121
-
-    public boolean databaseExists(){
+    public boolean databaseExists() {
         boolean result = false;
 
         try {
             readFile readFile = new readFile(context);
 
-            String sqlFile = readFile.returnAssetAsString("checkTables.sql");
+            String[] sqlFileAll = readFile.returnAssetAsString("checkTables.sql").split(";");
 
-            Cursor cursor = db.rawQuery(sqlFile, null);
-            if (cursor.moveToFirst())
-            {
-                int count = cursor.getInt(0);
+            Cursor cursor;
+            for (String sqlFile : sqlFileAll) {
+                cursor = db.rawQuery(sqlFile, null);
+                if (cursor.moveToFirst()) {
+                    int count = cursor.getInt(0);
 
-                result = count > 0;
+                    result = count != 0;
+                }
+                cursor.close();
+
+                if (!result) break;
             }
 
-            cursor.close();
         } catch (Exception e) {
             Log.wtf("Error in databaseExists", e.toString());
         }
@@ -59,16 +62,16 @@ public class DbControl extends SQLiteOpenHelper {
         return result;
     }
 
-    public boolean createTables(){
+    public boolean createTables() {
         boolean result = false;
 
-        if (!databaseExists()){
+        if (!databaseExists()) {
             try {
                 readFile readFile = new readFile(context);
 
                 String[] sqlFileAll = readFile.returnAssetAsString("tableCreates.sql").split(";");
 
-                for (String sqlFile : sqlFileAll){
+                for (String sqlFile : sqlFileAll) {
                     db.execSQL(sqlFile);
                 }
 
@@ -81,27 +84,28 @@ public class DbControl extends SQLiteOpenHelper {
         return result;
     }
 
-    public boolean deleteTables(){
+    public boolean deleteTables() {
         boolean result = false;
 
-        if (!databaseExists()){
-            try {
-                readFile readFile = new readFile(context);
+        try {
+            readFile readFile = new readFile(context);
 
-                String sqlFile = readFile.returnAssetAsString("deleteTables.sql");
+            String[] sqlFileAll = readFile.returnAssetAsString("deleteTables.sql").split(";");
 
+            for (String sqlFile : sqlFileAll) {
                 db.execSQL(sqlFile);
-
-                result = true;
-            } catch (Exception e) {
-                Log.wtf("Error in deleteTables", e.toString());
             }
+
+            result = true;
+        } catch (Exception e) {
+            Log.wtf("Error in deleteTables", e.toString());
         }
+
 
         return result;
     }
 
-    public void runDatabaseTest(){
+    public void runDatabaseTest() {
 
         Log.wtf("TestStart", "Test has Started");
 
@@ -111,7 +115,7 @@ public class DbControl extends SQLiteOpenHelper {
             db.execSQL(readFile.returnAssetAsString("testCreate.sql"));
             Log.wtf("TablesCreated", "Tables Created");
 
-            for (String x : readFile.returnAssetAsString("testInsert.sql").split(";")){
+            for (String x : readFile.returnAssetAsString("testInsert.sql").split(";")) {
                 db.execSQL(x);
             }
 
@@ -121,9 +125,9 @@ public class DbControl extends SQLiteOpenHelper {
             Log.wtf("Select Run", "Count is " + String.valueOf(cursor.getCount()) + " and is closed? " + String.valueOf(cursor.isClosed()));
 
             cursor.moveToFirst();
-            do{
+            do {
                 Log.wtf("Test Item Output", cursor.getString(0));
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
             cursor.close();
 
             db.execSQL(readFile.returnAssetAsString("testDel.sql"));

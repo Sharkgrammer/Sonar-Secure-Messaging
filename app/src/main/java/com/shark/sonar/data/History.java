@@ -51,4 +51,14 @@ public class History {
     public void setUser_from(int user_from) {
         //TODO fix this pls
     }
+
+    public History returnMostRecent(){
+        //TODO do stuff
+
+        History his = new History();
+        his.setUser_from(1);
+        his.setMessageObj(new TextItem("Shark", "Pizza", false));
+
+        return new History();
+    }
 }

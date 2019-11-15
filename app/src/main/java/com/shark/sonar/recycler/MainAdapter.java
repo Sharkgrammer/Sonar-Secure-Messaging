@@ -7,15 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shark.sonar.R;
-import com.shark.sonar.data.MainMessage;
+import com.shark.sonar.data.Conversation;
+import com.shark.sonar.data.Profile;
+
+import java.util.List;
 
 //REF https://www.javatpoint.com/android-recyclerview-list-example
 public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
 
-    private MainMessage[] listData;
+    private List<Conversation> listData;
     private Context context;
 
-    public MainAdapter(MainMessage[] listData, Context context) {
+    public MainAdapter(List<Conversation> listData, Context context) {
         this.listData = listData;
         this.context = context;
     }
@@ -30,7 +33,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, int pos) {
-        final MainMessage data = listData[pos];
+        final Conversation data = listData.get(pos);
 
         if (getItemCount() - 1 != pos){
             holder.addSpace();
@@ -38,9 +41,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
             holder.addText(context.getResources().getString(R.string.mainText));
         }
 
-        holder.setImgPerson(data.getImage());
-        holder.setTextMessage(data.getMessage());
-        holder.setTextPerson(data.getPerson());
+        Profile prof = data.getProfile();
+
+        holder.setImgPerson(prof.getIcon().getIcon_ID());
+        holder.setTextMessage(data.getLatestMessage().getMessageObj().getText());
+        holder.setTextPerson(prof.getName());
         holder.setOnClick();
 
     }
@@ -48,7 +53,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
     @Override
     public int getItemCount() {
         try{
-            return listData.length;
+            return listData.size();
         }catch(Exception e){
             return 0;
         }

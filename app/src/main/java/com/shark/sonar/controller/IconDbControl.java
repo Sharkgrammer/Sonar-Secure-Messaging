@@ -52,10 +52,7 @@ public class IconDbControl extends DbControl {
 
             Icon i;
             do{
-                i = new Icon();
-
-                i.setIcon_ID(cursor.getInt(0));
-                i.setIcon_Loc(cursor.getString(1));
+                i = new Icon(cursor.getInt(0), context);
 
                 result.add(i);
 
@@ -128,10 +125,9 @@ public class IconDbControl extends DbControl {
         SQLiteStatement queryState = db.compileStatement(sqlFile);
 
         queryState.bindDouble(1, icon.getIcon_ID());
-        queryState.bindString(2, icon.getIcon_Loc());
 
         if (iconID != null){
-            queryState.bindDouble(7, iconID);
+            queryState.bindDouble(2, iconID);
             queryState.executeUpdateDelete();
         }else{
             queryState.executeInsert();

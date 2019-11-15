@@ -31,7 +31,7 @@ public class ConvoDbControl extends DbControl {
 
     private List<Conversation> selectConversation(Integer profile_ID, Integer convo_ID){
         List<Conversation> result = new ArrayList<>();
-        String name = "selectProfile", sqlFile;
+        String name = "selectConvo", sqlFile;
         final int SELECT_ALL = 0, SELECT_PROFILE = 1, SELECT_CONVO = 2;
 
         try {
@@ -57,11 +57,13 @@ public class ConvoDbControl extends DbControl {
 
             }
 
+            System.out.println(sqlFile);
+
             cursor.moveToFirst();
 
             Conversation c;
             do{
-                c = new Conversation();
+                c = new Conversation(context);
 
                 c.setConversation_ID(cursor.getInt(0));
                 c.setColour(cursor.getInt(1));

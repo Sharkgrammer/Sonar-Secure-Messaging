@@ -9,6 +9,20 @@ public class Profile {
     private byte[] user_key_private;
     private byte[] user_ID_key;
 
+    public Profile(){}
+
+    public Profile(Integer ID, String Name, Icon icon, byte[] publicKey, byte[] privateKey, byte[] userKey){
+        if (ID != null){
+            this.Profile_ID = ID;
+        }
+
+        this.Name = Name;
+        this.Icon = icon;
+        this.user_key_public = publicKey;
+        this.user_key_private = privateKey;
+        this.user_ID_key = userKey;
+    }
+
     public int getProfile_ID() {
         return Profile_ID;
     }

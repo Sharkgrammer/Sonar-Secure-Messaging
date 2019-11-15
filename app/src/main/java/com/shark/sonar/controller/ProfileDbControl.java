@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.Profile;
 import com.shark.sonar.utility.readFile;
 
@@ -18,7 +19,7 @@ public class ProfileDbControl extends DbControl {
         super(c);
     }
 
-    public List<Profile> selectAllprofile(){
+    public List<Profile> selectAllProfiles(){
         return selectProfile(null);
     }
 
@@ -96,19 +97,40 @@ public class ProfileDbControl extends DbControl {
         return true;
     }
 
+    public boolean makeUserProfile(Profile profile){
+        return insertProfile(profile, true);
+    }
+
     public boolean insertProfile(Profile profile){
+        return insertProfile(profile, false);
+    }
+
+    public boolean insertProfile(Profile profile, boolean userProfile){
         String name = "insertProfile";
+        int ID = 0;
 
         try {
             readFile readFile = new readFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
-            insertUpdate(null, profile, sqlFile);
+            ID = (int) insertUpdate(null, profile, sqlFile);
 
         } catch (Exception e) {
             Log.wtf("Error in " + name, e.toString());
             return false;
+        }
+
+        if (!userProfile){
+
+            Conversation convo = new Conversation(context);
+
+            convo.setProfile(ID);
+            convo.setBridge(null);
+            convo.setColour(null);
+            convo.setHistoryArrayList();
+
+            new ConvoDbControl(context).insertConvo(convo);
         }
 
         return true;
@@ -133,22 +155,28 @@ public class ProfileDbControl extends DbControl {
         return true;
     }
 
-    private void insertUpdate(Integer profileID, Profile profile, String sqlFile) throws SQLException {
+    private long insertUpdate(Integer profileID, Profile profile, String sqlFile) throws SQLException {
         SQLiteStatement queryState = db.compileStatement(sqlFile);
+        int num = 1;
 
-        queryState.bindDouble(1, profile.getProfile_ID());
-        queryState.bindDouble(2, profile.getIcon().getIcon_ID());
-        queryState.bindString(3, profile.getName());
-        queryState.bindBlob(4, profile.getUser_key_public());
-        queryState.bindBlob(5, profile.getUser_key_private());
-        queryState.bindBlob(6, profile.getUser_ID_key());
 
         if (profileID != null){
-            queryState.bindDouble(7, profileID);
-            queryState.executeUpdateDelete();
-        }else{
-            queryState.executeInsert();
+            queryState.bindDouble(num++, profile.getProfile_ID());
         }
+
+        queryState.bindDouble(num++, profile.getIcon().getIcon_ID());
+        queryState.bindString(num++, profile.getName());
+        queryState.bindBlob(num++, profile.getUser_key_public());
+        queryState.bindBlob(num++, profile.getUser_key_private());
+        queryState.bindBlob(num++, profile.getUser_ID_key());
+
+        if (profileID != null){
+            queryState.bindDouble(num, profileID);
+            return queryState.executeUpdateDelete();
+        }else{
+            return queryState.executeInsert();
+        }
+
     }
 
 
