@@ -35,37 +35,38 @@ public class MessageActivity extends AppCompatActivity {
         });
 
         Message[] data = new Message[] {
-                new Message(R.drawable.ic_star_orange, false, "Howdy", "eh"),
-                new Message(R.drawable.ic_person_purple, true, "How are you?", "eh"),
-                new Message(R.drawable.ic_star_orange, false, "I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
-                new Message(R.drawable.ic_person_purple, true, "That's great! I have a shark now and many many pizza boops so its all good", "eh"),
-                new Message(R.drawable.ic_star_orange, false, "Howdy", "eh"),
-                new Message(R.drawable.ic_person_purple, true, "How are you?", "eh"),
-                new Message(R.drawable.ic_star_orange, false, "I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
-                new Message(R.drawable.ic_person_purple, true, "That's great! I have a shark now and many many pizza boops so its all good", "eh"),
-                new Message(R.drawable.ic_star_orange, false, "Howdy", "eh"),
-                new Message(R.drawable.ic_person_purple, true, "How are you?", "eh"),
-                new Message(R.drawable.ic_star_orange, false, "I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
-                new Message(R.drawable.ic_person_purple, true, "That's great! I have a shark now and many many pizza boops so its all good", "eh"),
-                new Message(R.drawable.ic_star_orange, false, "Howdy", "eh"),
-                new Message(R.drawable.ic_person_purple, true, "How are you?", "eh"),
-                new Message(R.drawable.ic_star_orange, false, "I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
-                new Message(R.drawable.ic_person_purple, true, "That's great! I have a shark now and many many pizza boops so its all good", "eh"),
-                new Message(R.drawable.ic_star_orange, false, "Howdy", "eh"),
-                new Message(R.drawable.ic_person_purple, true, "How are you?", "eh"),
-                new Message(R.drawable.ic_star_orange, false, "I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
-                new Message(R.drawable.ic_person_purple, true, "That's great! I have a shark now and many many pizza boops so its all good", "eh"),
-                new Message(R.drawable.ic_star_orange, false, "Howdy", "eh"),
-                new Message(R.drawable.ic_person_purple, true, "How are you?", "eh"),
-                new Message(R.drawable.ic_star_orange, false, "I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
-                new Message(R.drawable.ic_person_purple, true, "That's great! I have a shark now and many many pizza boops so its all good", "eh")
+                new Message(R.drawable.ic_star_orange, false, "1Howdy", "eh"),
+                new Message(R.drawable.ic_person_purple, true, "2How are you?", "eh"),
+                new Message(R.drawable.ic_star_orange, false, "3I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
+                new Message(R.drawable.ic_person_purple, true, "4That's great! I have a shark now and many many pizza boops so its all good", "eh"),
+                new Message(R.drawable.ic_star_orange, false, "5Howdy", "eh"),
+                new Message(R.drawable.ic_person_purple, true, "6How are you?", "eh"),
+                new Message(R.drawable.ic_star_orange, false, "7I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
+                new Message(R.drawable.ic_person_purple, true, "8That's great! I have a shark now and many many pizza boops so its all good", "eh"),
+                new Message(R.drawable.ic_star_orange, false, "9Howdy", "eh"),
+                new Message(R.drawable.ic_person_purple, true, "10How are you?", "eh"),
+                new Message(R.drawable.ic_star_orange, false, "11I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
+                new Message(R.drawable.ic_person_purple, true, "12That's great! I have a shark now and many many pizza boops so its all good", "eh"),
+                new Message(R.drawable.ic_star_orange, false, "13Howdy", "eh"),
+                new Message(R.drawable.ic_person_purple, true, "14How are you?", "eh"),
+                new Message(R.drawable.ic_star_orange, false, "15I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
+                new Message(R.drawable.ic_person_purple, true, "16That's great! I have a shark now and many many pizza boops so its all good", "eh"),
+                new Message(R.drawable.ic_star_orange, false, "17Howdy", "eh"),
+                new Message(R.drawable.ic_person_purple, true, "18How are you?", "eh"),
+                new Message(R.drawable.ic_star_orange, false, "19I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
+                new Message(R.drawable.ic_person_purple, true, "20That's great! I have a shark now and many many pizza boops so its all good", "eh"),
         };
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         MessageAdapter adapter = new MessageAdapter(data, this);
-
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //REF https://stackoverflow.com/questions/26580723/how-to-scroll-to-the-bottom-of-a-recyclerview-scrolltoposition-doesnt-work
+        LinearLayoutManager lay = new LinearLayoutManager(this);
+        //lay.setReverseLayout(true);
+        lay.setStackFromEnd(true);
+
+        recyclerView.setLayoutManager(lay);
         recyclerView.setAdapter(adapter);
     }
 }

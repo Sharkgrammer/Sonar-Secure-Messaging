@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.toolbar);
 
-
         //REF https://www.javatpoint.com/android-recyclerview-list-example
         MainMessage[] data = new MainMessage[] {
                 new MainMessage(R.drawable.ic_star_black, "Shark", "Howdy", "eh"),
