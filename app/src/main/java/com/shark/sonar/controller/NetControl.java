@@ -5,9 +5,11 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
+import com.scottyab.aescrypt.AESCrypt;
 import com.shark.sonar.R;
 
 import java.net.Socket;
+import java.security.GeneralSecurityException;
 
 import send.MessageHandler;
 import util.DataHolder;
@@ -32,7 +34,13 @@ public class NetControl implements ResultHandler {
 
         DataContainer data = new DataContainer();
 
-        data.setMessage(message);
+        String password = "password";
+        try {
+            String encryptedMsg = AESCrypt.encrypt(password, message);
+            data.setMessage(encryptedMsg);
+        }catch (GeneralSecurityException e){
+            //handle error
+        }
         data.setToID(to);
         //TODO set auth as false defaultly
         data.setAuth(false);
@@ -58,17 +66,27 @@ public class NetControl implements ResultHandler {
     }
 
     @Override
-    public void messageReceived(final String message, Socket socket, DataHolder dataHolder) {
-        System.out.println("Message from server: " + message);
+    public void messageReceived(String message, Socket socket, DataHolder dataHolder) {
 
-        act.runOnUiThread(new Runnable() {
+        String password = "password";
+        try {
+            final String messageAfterDecrypt = AESCrypt.decrypt(password, message);
 
-            @Override
-            public void run() {
-                //TextView response = act.findViewById(R.id.lblResponse);
+            System.out.println("Message from server: " + message + " : " + messageAfterDecrypt);
 
-                //response.setText(message);
-            }
-        });
+            act.runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    TextView response = act.findViewById(R.id.lblResponse);
+
+                    response.setText(messageAfterDecrypt);
+                }
+            });
+
+        }catch (GeneralSecurityException e){
+            //handle error - could be due to incorrect password or tampered encryptedMsg
+        }
+
     }
 }

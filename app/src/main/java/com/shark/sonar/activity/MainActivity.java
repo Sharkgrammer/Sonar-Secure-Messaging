@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         //REF https://www.javatpoint.com/android-recyclerview-list-example
         MainMessage[] data = new MainMessage[] {
-                new MainMessage(R.drawable.ic_star_black, "Shark", "Howdy", "eh"),
+                new MainMessage(R.drawable.ic_star_black, "Shark", "", "eh"),
                 new MainMessage(R.drawable.ic_person_black, "Person", "Fuck you boi", "eh"),
                 new MainMessage(R.drawable.ic_star_blue, "Kate", "I love sharks!", "eh"),
                 new MainMessage(R.drawable.ic_person_red, "Not Kate", "I hate sharks", "eh"),
