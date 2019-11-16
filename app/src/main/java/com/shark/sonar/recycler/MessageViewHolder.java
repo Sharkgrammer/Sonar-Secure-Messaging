@@ -16,7 +16,7 @@ import com.shark.sonar.data.Message;
 
 import java.util.List;
 
-class MessageViewHolder extends RecyclerView.ViewHolder {
+public class MessageViewHolder extends RecyclerView.ViewHolder {
 
     private ImageView imgPerson;
     private TextView lblMessage, lblID;

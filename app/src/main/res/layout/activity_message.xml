@@ -79,6 +79,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 app:fabSize="mini"
+                android:onClick="sendMessage"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

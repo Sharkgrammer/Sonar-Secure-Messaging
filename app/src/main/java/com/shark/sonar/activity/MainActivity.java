@@ -10,15 +10,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 import com.shark.sonar.R;
 import com.shark.sonar.controller.ConvoDbControl;
 import com.shark.sonar.controller.DbControl;
-import com.shark.sonar.controller.IconDbControl;
-import com.shark.sonar.controller.NetControl;
 import com.shark.sonar.controller.ProfileDbControl;
 import com.shark.sonar.data.Conversation;
-import com.shark.sonar.data.Icon;
 import com.shark.sonar.data.Profile;
 import com.shark.sonar.recycler.MainAdapter;
 
@@ -28,9 +24,7 @@ import util.DataHolder;
 
 public class MainActivity extends AppCompatActivity {
 
-    private NetControl client;
     private DataHolder server;
-    private String ID = "";
     private EditText txtIDto, txtMessage, txtIDfrom;
 
     @Override
@@ -50,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
             con.initialise();
         }
-
 
         /*
         ProfileDbControl control = new ProfileDbControl(this);
@@ -85,23 +78,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    public void setID(View v){
-        //if (!ID.equals("")) client.stop();
 
-        ID = txtIDfrom.getText().toString();
-        client = new NetControl(this, server, ID);
-
-        client.sendAuthMessage();
-
-        Toast.makeText(this, "ID set to " + ID, Toast.LENGTH_SHORT).show();
-    }
-
-
-    public void sendMessage(View v){
-        String message = txtMessage.getText().toString(), to = txtIDto.getText().toString();
-        client.sendMessage(message, to.getBytes());
-        Toast.makeText(this, "Message: " + message + " sent to " + to, Toast.LENGTH_SHORT).show();
-    }
 
     public void gotoScan(View v){
         startActivity(new Intent(this, ScanActivity.class));

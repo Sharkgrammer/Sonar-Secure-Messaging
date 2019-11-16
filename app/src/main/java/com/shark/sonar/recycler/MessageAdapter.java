@@ -56,6 +56,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         }
     }
 
+    public void add(History his){
+        listData.add(his);
+
+        this.notifyItemInserted(listData.size() - 1);
+    }
+
     public MessageViewHolder getRecentViewholder(){
         return recentViewHolder;
     }
