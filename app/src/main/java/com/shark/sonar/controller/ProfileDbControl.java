@@ -24,11 +24,14 @@ public class ProfileDbControl extends DbControl {
     }
 
     public Profile selectSingleProfile(int Profile_ID){
+
+        System.out.println("SELECT SINGLE PROFILE " + Profile_ID);
+
         return selectProfile(Profile_ID).get(0);
     }
 
     public Profile selectUserProfile(){
-        return selectProfile(0).get(0);
+        return selectProfile(1).get(0);
     }
 
     private List<Profile> selectProfile(Integer profile_ID){
@@ -54,11 +57,13 @@ public class ProfileDbControl extends DbControl {
 
             }
 
+            System.out.println("PROFILE ID " + profile_ID);
+
             cursor.moveToFirst();
 
             Profile p;
             do{
-                p = new Profile();
+                p = new Profile(context);
 
                 p.setProfile_ID(cursor.getInt(0));
                 p.setIcon(cursor.getInt(1));
@@ -107,30 +112,38 @@ public class ProfileDbControl extends DbControl {
 
     public boolean insertProfile(Profile profile, boolean userProfile){
         String name = "insertProfile";
-        int ID = 0;
+        long ID;
 
         try {
             readFile readFile = new readFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
-            ID = (int) insertUpdate(null, profile, sqlFile);
+            ID = insertUpdate(null, profile, sqlFile);
 
         } catch (Exception e) {
             Log.wtf("Error in " + name, e.toString());
             return false;
         }
 
-        if (!userProfile){
+        System.out.println("Insert User " + ID);
 
+
+        if (!userProfile){
+            System.out.println("oi");
             Conversation convo = new Conversation(context);
 
-            convo.setProfile(ID);
+            Profile temp = new Profile();
+            temp.setProfile_ID((int) ID);
+            convo.setProfile(temp);
+
             convo.setBridge(null);
             convo.setColour(null);
             convo.setHistoryArrayList();
 
-            new ConvoDbControl(context).insertConvo(convo);
+            System.out.println("USER PROFILE CONVO " + convo.getProfile().getName());
+
+            System.out.println("CONVERSATION CREATED" + new ConvoDbControl(context).insertConvo(convo));
         }
 
         return true;
@@ -174,7 +187,10 @@ public class ProfileDbControl extends DbControl {
             queryState.bindDouble(num, profileID);
             return queryState.executeUpdateDelete();
         }else{
-            return queryState.executeInsert();
+            long temp = queryState.executeInsert();
+            System.out.println("OI " + temp);
+
+            return temp;
         }
 
     }

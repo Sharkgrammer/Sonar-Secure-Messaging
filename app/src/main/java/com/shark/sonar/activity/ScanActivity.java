@@ -1,5 +1,6 @@
 package com.shark.sonar.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,10 +25,12 @@ public class ScanActivity extends AppCompatActivity {
         TextView name = findViewById(R.id.txtName);
         TextView key = findViewById(R.id.txtIDKey);
 
-        Icon icon = new Icon(R.drawable.ic_person_purple, this);
+        Icon icon = new Icon(R.drawable.ic_star3, this);
         Profile prof = new Profile(null, name.getText().toString(), icon, "shark".getBytes(),
                 "shark".getBytes(), key.getText().toString().getBytes());
 
         control.insertProfile(prof);
+
+        startActivity(new Intent(this, MainActivity.class));
     }
 }

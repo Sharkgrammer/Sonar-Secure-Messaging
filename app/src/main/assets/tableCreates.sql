@@ -28,7 +28,7 @@ create table Profile(
 );
 
 create table Icon(
-	icon_id integer primary key autoincrement
+	icon_id integer
 );
 
 create table History(

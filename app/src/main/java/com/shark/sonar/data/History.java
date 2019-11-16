@@ -57,8 +57,8 @@ public class History {
 
         History his = new History();
         his.setUser_from(1);
-        his.setMessageObj(new TextItem("Shark", "Pizza", false));
+        his.setMessageObj(new TextItem("", "", false));
 
-        return new History();
+        return his;
     }
 }

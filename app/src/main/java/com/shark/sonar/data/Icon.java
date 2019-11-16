@@ -11,8 +11,14 @@ public class Icon {
     public Icon(){
     }
 
+    public Icon(int Icon){
+        this.Icon_ID = Icon;
+    }
+
+
     public Icon(int Icon, Context context){
         this.Icon_ID = Icon;
+        System.out.println("ICON " + Icon);
         this.Icon = context.getResources().getDrawable(Icon, null);
     }
 

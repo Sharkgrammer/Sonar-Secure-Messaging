@@ -94,7 +94,6 @@ public class Conversation {
 
     public void setProfile(Integer Profile_ID) {
         ProfileDbControl con = new ProfileDbControl(context);
-
         profile = con.selectSingleProfile(Profile_ID);
     }
 

@@ -6,7 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.shark.sonar.data.Icon;
 import com.shark.sonar.utility.readFile;
+
+import java.util.List;
 
 //REF https://github.com/Sharkgrammer/Android-Assistant/blob/master/app/src/main/java/com/shark/assistant/database.java
 
@@ -103,6 +106,32 @@ public class DbControl extends SQLiteOpenHelper {
 
 
         return result;
+    }
+
+    public void initialise(){
+        IconDbControl con = new IconDbControl(context);
+        int noOfIcons = 6;
+        String[] names = {"star", "person"};
+        Icon icon;
+
+        //REF https://stackoverflow.com/questions/9948105/android-how-to-iterate-an-r-drawable-object#11318781
+        for (String name : names){
+            for (int x = 1; x <= noOfIcons; x++){
+                icon = new Icon(context.getResources().getIdentifier("ic_" + name + x, "drawable" , context.getPackageName()));
+
+                System.out.println(icon.getIcon_ID());
+
+                con.insertIcon(icon);
+            }
+        }
+
+
+        IconDbControl connnn = new IconDbControl(context);
+        List<Icon> iconn = connnn.selectAllIcons();
+
+        for (Icon p : iconn){
+            Log.wtf("ICON", String.valueOf(p.getIcon_ID()));
+        }
     }
 
     public void runDatabaseTest() {

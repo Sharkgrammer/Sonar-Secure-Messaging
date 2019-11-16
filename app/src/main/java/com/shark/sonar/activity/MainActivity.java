@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.shark.sonar.R;
 import com.shark.sonar.controller.ConvoDbControl;
 import com.shark.sonar.controller.DbControl;
+import com.shark.sonar.controller.IconDbControl;
 import com.shark.sonar.controller.NetControl;
 import com.shark.sonar.controller.ProfileDbControl;
 import com.shark.sonar.data.Conversation;
@@ -38,27 +39,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ImageView mainView = findViewById(R.id.imgPersonMain);
-        mainView.setImageDrawable(getResources().getDrawable(R.drawable.ic_person_black, null));
+        mainView.setImageDrawable(getResources().getDrawable(R.drawable.ic_person1, null));
         DbControl con = new DbControl(this);
 
-        con.deleteTables();
+        //con.deleteTables();
 
         System.out.println(con.databaseExists());
         if (!con.databaseExists()){
             con.createTables();
+
+            con.initialise();
         }
 
 
+        /*
         ProfileDbControl control = new ProfileDbControl(this);
         Icon icon = new Icon(R.drawable.ic_star_yellow, this);
         Profile prof = new Profile(null, "Sharkie", icon, "shark".getBytes(), "shark".getBytes(), "shark".getBytes());
-        control.insertProfile(prof);
+        control.makeUserProfile(prof);
+        //*/
 
-        //List<Profile> profs = new ProfileDbControl(this).selectAllProfiles();
+        //ProfileDbControl control = new ProfileDbControl(this);
+        //Profile prof = control.selectSingleProfile(1);
+        //System.out.println("OLD PROFILE " + prof.getName());
 
-        //for (Profile p : profs){
-         //   Log.wtf("PROFILE", p.getName());
-        //}
+        List<Profile> profs = new ProfileDbControl(this).selectAllProfiles();
+
+        for (Profile p : profs){
+            Log.wtf("PROFILE", p.getName());
+        }
 
         List<Conversation> conversations = new ConvoDbControl(this).selectAllConvo();
 

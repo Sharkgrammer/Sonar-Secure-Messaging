@@ -23,7 +23,11 @@ public class ColourDbControl extends DbControl {
     }
 
     public Colour selectSingleColour(int Colour_ID){
-        return selectColour(Colour_ID).get(0);
+        try{
+            return selectColour(Colour_ID).get(0);
+        }catch (Exception e){
+            return null;
+        }
     }
 
     private List<Colour> selectColour(Integer colour_ID){
