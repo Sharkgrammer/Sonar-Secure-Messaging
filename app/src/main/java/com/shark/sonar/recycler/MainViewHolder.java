@@ -18,8 +18,7 @@ import com.shark.sonar.activity.MessageActivity;
 class MainViewHolder extends RecyclerView.ViewHolder {
 
     private ImageView imgPerson;
-    private TextView lblPerson;
-    private TextView lblMessage;
+    private TextView lblPerson, lblMessage, lblID;
     private LinearLayout layoutin, layouttop;
     private Context context;
     private boolean textAdded = false, lineAdded = false;
@@ -32,6 +31,7 @@ class MainViewHolder extends RecyclerView.ViewHolder {
         this.lblMessage = itemView.findViewById(R.id.lblMessage);
         this.layouttop = itemView.findViewById(R.id.linLayoutTop);
         this.layoutin = itemView.findViewById(R.id.linLayoutInside);
+        this.lblID = itemView.findViewById(R.id.lblID);
         this.context = context;
     }
 
@@ -47,11 +47,19 @@ class MainViewHolder extends RecyclerView.ViewHolder {
         lblMessage.setText(Message);
     }
 
+    public void setID(int ID){
+        lblID.setText(String.valueOf(ID));
+    }
+
     public void setOnClick(){
         layoutin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, MessageActivity.class));
+
+                Intent i = new Intent(context, MessageActivity.class);
+                i.putExtra("ID", lblID.getText().toString());
+
+                context.startActivity(i);
             }
         });
     }

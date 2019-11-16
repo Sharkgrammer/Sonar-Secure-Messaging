@@ -9,8 +9,13 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.shark.sonar.R;
+import com.shark.sonar.controller.ConvoDbControl;
+import com.shark.sonar.data.Conversation;
+import com.shark.sonar.data.History;
 import com.shark.sonar.data.Message;
 import com.shark.sonar.recycler.MessageAdapter;
+
+import java.util.List;
 
 public class MessageActivity extends AppCompatActivity {
 
@@ -21,9 +26,12 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
+        ConvoDbControl conDB = new ConvoDbControl(this);
+        Conversation conversation = conDB.selectConvoByID(Integer.parseInt((String) getIntent().getExtras().get("ID")));
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Kate");
+        getSupportActionBar().setTitle(conversation.getProfile().getName());
 
         //REF https://freakycoder.com/android-notes-24-how-to-add-back-button-at-toolbar-941e6577418e
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
@@ -34,37 +42,23 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-        Message[] data = new Message[] {
-                new Message(R.drawable.ic_star3, false, "1Howdy", "eh"),
-                new Message(R.drawable.ic_person4, true, "2How are you?", "eh"),
-                new Message(R.drawable.ic_star3, false, "3I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
-                new Message(R.drawable.ic_person4, true, "4That's great! I have a shark now and many many pizza boops so its all good", "eh"),
-                new Message(R.drawable.ic_star3, false, "5Howdy", "eh"),
-                new Message(R.drawable.ic_person4, true, "6How are you?", "eh"),
-                new Message(R.drawable.ic_star3, false, "7I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
-                new Message(R.drawable.ic_person4, true, "8That's great! I have a shark now and many many pizza boops so its all good", "eh"),
-                new Message(R.drawable.ic_star3, false, "9Howdy", "eh"),
-                new Message(R.drawable.ic_person4, true, "10How are you?", "eh"),
-                new Message(R.drawable.ic_star3, false, "11I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
-                new Message(R.drawable.ic_person4, true, "12That's great! I have a shark now and many many pizza boops so its all good", "eh"),
-                new Message(R.drawable.ic_star3, false, "13Howdy", "eh"),
-                new Message(R.drawable.ic_person4, true, "14How are you?", "eh"),
-                new Message(R.drawable.ic_star3, false, "15I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
-                new Message(R.drawable.ic_person4, true, "16That's great! I have a shark now and many many pizza boops so its all good", "eh"),
-                new Message(R.drawable.ic_star3, false, "17Howdy", "eh"),
-                new Message(R.drawable.ic_person4, true, "18How are you?", "eh"),
-                new Message(R.drawable.ic_star3, false, "19I'm doing good! Life has done some real stuff to me lately but whateves bro", "eh"),
-                new Message(R.drawable.ic_person4, true, "20That's great! I have a shark now and many many pizza boops so its all good", "eh"),
-        };
+        List<History> his = conversation.getHistoryArrayList();
+
+        History his2 = new History();
+        Message msg = new Message(conversation.getProfile().getIcon().getIcon_ID(), true, "Hey you!", "");
+        his2.setMessageObj(msg);
+        his.add(his2);
+
+        conversation.setHistoryArrayList(his);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        MessageAdapter adapter = new MessageAdapter(data, this);
+        MessageAdapter adapter = new MessageAdapter(conversation, this);
         recyclerView.setHasFixedSize(true);
 
         //REF https://stackoverflow.com/questions/26580723/how-to-scroll-to-the-bottom-of-a-recyclerview-scrolltoposition-doesnt-work
         LinearLayoutManager lay = new LinearLayoutManager(this);
         //lay.setReverseLayout(true);
-        lay.setStackFromEnd(true);
+        //lay.setStackFromEnd(true);
 
         recyclerView.setLayoutManager(lay);
         recyclerView.setAdapter(adapter);

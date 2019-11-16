@@ -7,6 +7,7 @@ import com.shark.sonar.controller.ColourDbControl;
 import com.shark.sonar.controller.HistoryDbControl;
 import com.shark.sonar.controller.ProfileDbControl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Conversation {
@@ -31,6 +32,11 @@ public class Conversation {
     }
 
     public List<History> getHistoryArrayList() {
+
+        if (historyArrayList == null){
+            historyArrayList = new ArrayList<History>();
+        }
+
         return historyArrayList;
     }
 

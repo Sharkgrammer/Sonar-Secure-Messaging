@@ -7,16 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shark.sonar.R;
+import com.shark.sonar.data.Conversation;
+import com.shark.sonar.data.History;
 import com.shark.sonar.data.Message;
+
+import java.util.List;
 
 //REF https://www.javatpoint.com/android-recyclerview-list-example
 public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
-    private Message[] listData;
+    private List<History>  listData;
+    private Conversation convo;
     private Context context;
+    private MessageViewHolder recentViewHolder;
 
-    public MessageAdapter(Message[] listData, Context context) {
-        this.listData = listData;
+    public MessageAdapter(Conversation convo, Context context) {
+        this.convo = convo;
+        this.listData = convo.getHistoryArrayList();
         this.context = context;
     }
 
@@ -30,19 +37,26 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int pos) {
-        final Message data = listData[pos];
+        final Message data = listData.get(pos).getMessageObj();
 
+        holder.setID(convo.getConversation_ID());
         holder.setImgPerson(data.getImage());
         holder.setTextMessage(data.getMessage());
         holder.isFromYou(data.isFromYou());
+
+        recentViewHolder = holder;
     }
 
     @Override
     public int getItemCount() {
         try {
-            return listData.length;
+            return listData.size();
         } catch (Exception e) {
             return 0;
         }
+    }
+
+    public MessageViewHolder getRecentViewholder(){
+        return recentViewHolder;
     }
 }

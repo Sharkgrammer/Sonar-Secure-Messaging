@@ -44,8 +44,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
         Profile prof = data.getProfile();
 
         holder.setImgPerson(prof.getIcon().getIcon_ID());
-        holder.setTextMessage(data.getLatestMessage().getMessageObj().getText());
+        holder.setTextMessage(data.getLatestMessage().getMessageObj().getMessage());
         holder.setTextPerson(prof.getName());
+        holder.setID(data.getConversation_ID());
         holder.setOnClick();
 
     }
