@@ -12,9 +12,11 @@ import android.widget.EditText;
 import com.shark.sonar.R;
 import com.shark.sonar.controller.ConvoDbControl;
 import com.shark.sonar.controller.NetControlAsyncTask;
+import com.shark.sonar.controller.ProfileDbControl;
 import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.History;
 import com.shark.sonar.data.Message;
+import com.shark.sonar.data.Profile;
 import com.shark.sonar.recycler.MessageAdapter;
 import com.shark.sonar.recycler.MessageViewHolder;
 
@@ -33,6 +35,7 @@ public class MessageActivity extends AppCompatActivity implements ResultHandler 
     private Conversation conversation;
     private MessageAdapter adapter;
     private RecyclerView recyclerView;
+    private Profile ProfUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +45,14 @@ public class MessageActivity extends AppCompatActivity implements ResultHandler 
         sendView = findViewById(R.id.sendView);
 
         DataHolder server = new DataHolder();
-        String ID = "boop";
+
+        ProfileDbControl ProfCon = new ProfileDbControl(this);
+        ProfUser = ProfCon.selectUserProfile();
+
         server.setPort(6000);
         server.setIP("35.235.49.238");
 
-        client = new MessageHandler(server, this, ID.getBytes());
+        client = new MessageHandler(server, this, ProfUser.getUser_ID_key());
 
         ConvoDbControl conDB = new ConvoDbControl(this);
         conversation = conDB.selectConvoByID(Integer.parseInt((String) getIntent().getExtras().get("ID")));
@@ -100,7 +106,7 @@ public class MessageActivity extends AppCompatActivity implements ResultHandler 
         MessageViewHolder msg = adapter.getRecentViewholder();
         if (msgReceived || adapter.getItemCount() == 0){
             History his = new History();
-            Message msg2 = new Message(conversation.getProfile().getIcon().getIcon_ID(), true, message, "");
+            Message msg2 = new Message(ProfUser.getIcon().getIcon_ID(), true, message, "");
             his.setMessageObj(msg2);
 
             adapter.add(his);

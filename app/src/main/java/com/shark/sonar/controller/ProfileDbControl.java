@@ -15,26 +15,32 @@ import java.util.List;
 
 public class ProfileDbControl extends DbControl {
 
-    public ProfileDbControl(Context c){
+    public ProfileDbControl(Context c) {
         super(c);
     }
 
-    public List<Profile> selectAllProfiles(){
+    public List<Profile> selectAllProfiles() {
         return selectProfile(null);
     }
 
-    public Profile selectSingleProfile(int Profile_ID){
+    public Profile selectSingleProfile(int Profile_ID) {
 
         System.out.println("SELECT SINGLE PROFILE " + Profile_ID);
 
         return selectProfile(Profile_ID).get(0);
     }
 
-    public Profile selectUserProfile(){
-        return selectProfile(1).get(0);
+    public Profile selectUserProfile() {
+        List<Profile> profs = selectProfile(1);
+
+        if (profs.isEmpty()) {
+            return null;
+        } else {
+            return selectProfile(1).get(0);
+        }
     }
 
-    private List<Profile> selectProfile(Integer profile_ID){
+    private List<Profile> selectProfile(Integer profile_ID) {
         List<Profile> result = new ArrayList<>();
         String name = "selectProfile", sqlFile;
         final int SELECT_ALL = 0, SELECT_USER = 1;
@@ -42,15 +48,15 @@ public class ProfileDbControl extends DbControl {
         try {
             readFile readFile = new readFile(context);
 
-            String[] sqlFileAll = readFile.returnAssetAsString(name +".sql").split(";");
+            String[] sqlFileAll = readFile.returnAssetAsString(name + ".sql").split(";");
             Cursor cursor;
 
-            if (profile_ID != null){
+            if (profile_ID != null) {
 
                 sqlFile = sqlFileAll[SELECT_USER];
-                cursor = db.rawQuery(sqlFile, new String[] {String.valueOf(profile_ID)});
+                cursor = db.rawQuery(sqlFile, new String[]{String.valueOf(profile_ID)});
 
-            }else{
+            } else {
 
                 sqlFile = sqlFileAll[SELECT_ALL];
                 cursor = db.rawQuery(sqlFile, null);
@@ -62,7 +68,7 @@ public class ProfileDbControl extends DbControl {
             cursor.moveToFirst();
 
             Profile p;
-            do{
+            do {
                 p = new Profile(context);
 
                 p.setProfile_ID(cursor.getInt(0));
@@ -74,7 +80,7 @@ public class ProfileDbControl extends DbControl {
 
                 result.add(p);
 
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
 
             cursor.close();
 
@@ -85,7 +91,7 @@ public class ProfileDbControl extends DbControl {
         return result;
     }
 
-    public boolean deleteProfile(int profileID){
+    public boolean deleteProfile(int profileID) {
         String name = "deleteProfile";
 
         try {
@@ -102,15 +108,15 @@ public class ProfileDbControl extends DbControl {
         return true;
     }
 
-    public boolean makeUserProfile(Profile profile){
+    public boolean makeUserProfile(Profile profile) {
         return insertProfile(profile, true);
     }
 
-    public boolean insertProfile(Profile profile){
+    public boolean insertProfile(Profile profile) {
         return insertProfile(profile, false);
     }
 
-    public boolean insertProfile(Profile profile, boolean userProfile){
+    public boolean insertProfile(Profile profile, boolean userProfile) {
         String name = "insertProfile";
         long ID;
 
@@ -129,7 +135,7 @@ public class ProfileDbControl extends DbControl {
         System.out.println("Insert User " + ID);
 
 
-        if (!userProfile){
+        if (!userProfile) {
             System.out.println("oi");
             Conversation convo = new Conversation(context);
 
@@ -149,8 +155,11 @@ public class ProfileDbControl extends DbControl {
         return true;
     }
 
+    public boolean updateUserProfile(Profile profile) {
+        return  updateProfile(1, profile);
+    }
 
-    public boolean updateProfile(int profileID, Profile profile){
+    public boolean updateProfile(int profileID, Profile profile) {
         String name = "updateProfile";
 
         try {
@@ -172,29 +181,22 @@ public class ProfileDbControl extends DbControl {
         SQLiteStatement queryState = db.compileStatement(sqlFile);
         int num = 1;
 
-
-        if (profileID != null){
-            queryState.bindDouble(num++, profile.getProfile_ID());
-        }
-
         queryState.bindDouble(num++, profile.getIcon().getIcon_ID());
         queryState.bindString(num++, profile.getName());
         queryState.bindBlob(num++, profile.getUser_key_public());
         queryState.bindBlob(num++, profile.getUser_key_private());
         queryState.bindBlob(num++, profile.getUser_ID_key());
 
-        if (profileID != null){
+        if (profileID != null) {
             queryState.bindDouble(num, profileID);
             return queryState.executeUpdateDelete();
-        }else{
+        } else {
             long temp = queryState.executeInsert();
-            System.out.println("OI " + temp);
 
             return temp;
         }
 
     }
-
 
 
 }
