@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 
@@ -26,6 +27,7 @@ import java.util.List;
 import send.MessageHandler;
 import util.DataHolder;
 import util.ResultHandler;
+import util.UserHolder;
 
 public class MessageActivity extends AppCompatActivity implements ResultHandler {
 
@@ -44,15 +46,17 @@ public class MessageActivity extends AppCompatActivity implements ResultHandler 
 
         sendView = findViewById(R.id.sendView);
 
-        DataHolder server = new DataHolder();
+        DataHolder data = new DataHolder();
 
         ProfileDbControl ProfCon = new ProfileDbControl(this);
         ProfUser = ProfCon.selectUserProfile();
 
-        server.setPort(6000);
-        server.setIP("35.235.49.238");
+        data.setPort(6000);
+        data.setIP("35.235.49.238");
 
-        client = new MessageHandler(server, this, ProfUser.getUser_ID_key());
+        UserHolder user = new UserHolder(ProfUser.getUser_ID_key(), null, null);
+
+        client = new MessageHandler(data, this, user);
 
         ConvoDbControl conDB = new ConvoDbControl(this);
         conversation = conDB.selectConvoByID(Integer.parseInt((String) getIntent().getExtras().get("ID")));
@@ -150,19 +154,26 @@ public class MessageActivity extends AppCompatActivity implements ResultHandler 
     @Override
     public void messageReceived(final String message, Socket socket, DataHolder dataHolder) {
         System.out.println("Message from server: " + message);
+        String decodedMessage = message;
+        try{
+            decodedMessage = new String(Base64.decode(message.getBytes("UTF-8"), Base64.DEFAULT));
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
 
+        final String finalDecodedMessage = decodedMessage;
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 MessageViewHolder msgAd = adapter.getRecentViewholder();
                 if (!msgReceived || adapter.getItemCount() == 0){
                     History his = new History();
-                    Message msg2 = new Message(conversation.getProfile().getIcon().getIcon_ID(), false, message, "");
+                    Message msg2 = new Message(conversation.getProfile().getIcon().getIcon_ID(), false, finalDecodedMessage, "");
                     his.setMessageObj(msg2);
 
                     adapter.add(his);
                 }else{
-                    msgAd.addNewMessage(message);
+                    msgAd.addNewMessage(finalDecodedMessage);
                 }
                 msgReceived = true;
             }
