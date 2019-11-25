@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.shark.sonar.data.Icon;
-import com.shark.sonar.utility.readFile;
+import com.shark.sonar.utility.ReadFile;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class DbControl extends SQLiteOpenHelper {
         boolean result = false;
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String[] sqlFileAll = readFile.returnAssetAsString("checkTables.sql").split(";");
 
@@ -70,7 +70,7 @@ public class DbControl extends SQLiteOpenHelper {
 
         if (!databaseExists()) {
             try {
-                readFile readFile = new readFile(context);
+                ReadFile readFile = new ReadFile(context);
 
                 String[] sqlFileAll = readFile.returnAssetAsString("tableCreates.sql").split(";");
 
@@ -91,7 +91,7 @@ public class DbControl extends SQLiteOpenHelper {
         boolean result = false;
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String[] sqlFileAll = readFile.returnAssetAsString("deleteTables.sql").split(";");
 
@@ -139,7 +139,7 @@ public class DbControl extends SQLiteOpenHelper {
         Log.wtf("TestStart", "Test has Started");
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             db.execSQL(readFile.returnAssetAsString("testCreate.sql"));
             Log.wtf("TablesCreated", "Tables Created");

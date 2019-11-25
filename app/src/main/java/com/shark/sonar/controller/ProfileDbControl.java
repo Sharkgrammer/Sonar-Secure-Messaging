@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.Profile;
-import com.shark.sonar.utility.readFile;
+import com.shark.sonar.utility.ReadFile;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class ProfileDbControl extends DbControl {
         final int SELECT_ALL = 0, SELECT_USER = 1;
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String[] sqlFileAll = readFile.returnAssetAsString(name + ".sql").split(";");
             Cursor cursor;
@@ -95,7 +95,7 @@ public class ProfileDbControl extends DbControl {
         String name = "deleteProfile";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -121,7 +121,7 @@ public class ProfileDbControl extends DbControl {
         long ID;
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -163,7 +163,7 @@ public class ProfileDbControl extends DbControl {
         String name = "updateProfile";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 

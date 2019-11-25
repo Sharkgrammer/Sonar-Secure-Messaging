@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.shark.sonar.data.Icon;
-import com.shark.sonar.utility.readFile;
+import com.shark.sonar.utility.ReadFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class IconDbControl extends DbControl {
         final int SELECT_ALL = 0, SELECT_SINGLE = 1;
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String[] sqlFileAll = readFile.returnAssetAsString(name +".sql").split(";");
             Cursor cursor;
@@ -71,7 +71,7 @@ public class IconDbControl extends DbControl {
         String name = "deleteIcon";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -88,7 +88,7 @@ public class IconDbControl extends DbControl {
         String name = "insertIcon";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -107,7 +107,7 @@ public class IconDbControl extends DbControl {
         String name = "updateIcon";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 

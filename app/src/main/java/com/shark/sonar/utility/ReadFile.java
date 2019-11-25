@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class readFile {
+public class ReadFile {
 
     Context context;
 
-    public readFile(Context context){
+    public ReadFile(Context context){
         this.context = context;
     }
 

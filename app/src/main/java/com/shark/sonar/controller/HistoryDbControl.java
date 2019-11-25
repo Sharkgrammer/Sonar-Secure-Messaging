@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.shark.sonar.data.History;
 import com.shark.sonar.data.Message;
-import com.shark.sonar.utility.readFile;
+import com.shark.sonar.utility.ReadFile;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class HistoryDbControl extends DbControl {
         String name = "selectHistory";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name +".sql");
             Cursor cursor;
@@ -64,7 +64,7 @@ public class HistoryDbControl extends DbControl {
         String name = "deleteHistory";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -81,7 +81,7 @@ public class HistoryDbControl extends DbControl {
         String name = "insertHistory";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -100,7 +100,7 @@ public class HistoryDbControl extends DbControl {
         String name = "updateHistory";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 

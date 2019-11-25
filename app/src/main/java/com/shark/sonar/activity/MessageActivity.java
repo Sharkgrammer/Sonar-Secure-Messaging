@@ -155,6 +155,7 @@ public class MessageActivity extends AppCompatActivity implements ResultHandler 
     public void messageReceived(final String message, Socket socket, DataHolder dataHolder) {
         System.out.println("Message from server: " + message);
         String decodedMessage = message;
+
         try{
             decodedMessage = new String(Base64.decode(message.getBytes("UTF-8"), Base64.DEFAULT));
         }catch (Exception e){

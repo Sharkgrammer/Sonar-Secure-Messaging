@@ -9,7 +9,7 @@ import com.shark.sonar.data.Bridge;
 import com.shark.sonar.data.Colour;
 import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.Profile;
-import com.shark.sonar.utility.readFile;
+import com.shark.sonar.utility.ReadFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class ConvoDbControl extends DbControl {
         final int SELECT_ALL = 0, SELECT_PROFILE = 1, SELECT_CONVO = 2;
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String[] sqlFileAll = readFile.returnAssetAsString(name +".sql").split(";");
             Cursor cursor;
@@ -95,7 +95,7 @@ public class ConvoDbControl extends DbControl {
         String name = "deleteConvo";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -112,7 +112,7 @@ public class ConvoDbControl extends DbControl {
         String name = "insertConvo";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -131,7 +131,7 @@ public class ConvoDbControl extends DbControl {
         String name = "updateConvo";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
