@@ -1,13 +1,7 @@
 package com.shark.sonar.controller;
 
 import android.DataContainer;
-import android.app.Activity;
 import android.os.AsyncTask;
-import android.widget.TextView;
-
-import com.shark.sonar.R;
-
-import java.net.Socket;
 
 import send.MessageHandler;
 
@@ -18,7 +12,7 @@ public class NetControlAsyncTask extends AsyncTask<Boolean, Void, Void> {
     private MessageHandler client;
     private byte[] toID;
 
-    NetControlAsyncTask(DataContainer data) {
+    public NetControlAsyncTask(DataContainer data) {
         if (!data.isAuth()){
             this.message = data.getMessage();
             this.toID = data.getToID();

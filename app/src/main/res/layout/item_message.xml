@@ -8,6 +8,11 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/lblID"
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
+
     <LinearLayout
         android:id="@+id/linLayoutInside"
         android:layout_width="match_parent"
@@ -40,7 +45,7 @@
                     android:foreground="@drawable/circle"
                     android:padding="15dp"
                     android:scaleType="centerCrop"
-                    tools:src="@drawable/ic_person_black" />
+                    tools:src="@drawable/ic_person1" />
 
             </android.support.v7.widget.CardView>
 

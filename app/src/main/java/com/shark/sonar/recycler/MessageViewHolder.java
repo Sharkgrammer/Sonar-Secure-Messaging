@@ -9,17 +9,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shark.sonar.R;
+import com.shark.sonar.controller.ConvoDbControl;
+import com.shark.sonar.data.Conversation;
+import com.shark.sonar.data.History;
+import com.shark.sonar.data.Message;
 
-class MessageViewHolder extends RecyclerView.ViewHolder {
+import java.util.List;
+
+public class MessageViewHolder extends RecyclerView.ViewHolder {
 
     private ImageView imgPerson;
-    private TextView lblMessage;
+    private TextView lblMessage, lblID;
     private LinearLayout layoutin, layouttop, layoutmessage, layoutwrapper;
     private Context context;
     private boolean userFrom;
     private int LTR = View.LAYOUT_DIRECTION_LTR, RTL = View.LAYOUT_DIRECTION_RTL;
 
-    public MessageViewHolder(View itemView, Context context) {
+    public MessageViewHolder(View itemView, final Context context) {
         super(itemView);
 
         this.imgPerson = itemView.findViewById(R.id.imgPerson);
@@ -28,24 +34,22 @@ class MessageViewHolder extends RecyclerView.ViewHolder {
         this.layoutin = itemView.findViewById(R.id.linLayoutInside);
         this.layoutmessage = itemView.findViewById(R.id.linLayoutMessages);
         this.layoutwrapper = itemView.findViewById(R.id.linLayoutMessageWrapper);
+        this.lblID = itemView.findViewById(R.id.lblID);
         this.context = context;
-
-        layouttop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addNewMessage("I also said this! And through speaking like this i made this message much larger then it was");
-            }
-        });
     }
 
-    // layouttop.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-
     public void setImgPerson(int drawable) {
+        System.out.println(drawable);
+
         imgPerson.setImageResource(drawable);
     }
 
     public void setTextMessage(String message) {
         lblMessage.setText(message);
+    }
+
+    public void setID(int ID) {
+        lblID.setText(String.valueOf(ID));
     }
 
     public void addNewMessage(String message) {

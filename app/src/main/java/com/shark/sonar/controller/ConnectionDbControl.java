@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.shark.sonar.data.Connection;
-import com.shark.sonar.utility.readFile;
+import com.shark.sonar.utility.ReadFile;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class ConnectionDbControl extends DbControl {
         String name = "selectConnection";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name +".sql");
             Cursor cursor = db.rawQuery(sqlFile, new String[] {String.valueOf(bridge_ID)});
@@ -57,7 +57,7 @@ public class ConnectionDbControl extends DbControl {
         String name = "deleteConnection";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -74,7 +74,7 @@ public class ConnectionDbControl extends DbControl {
         String name = "insertConnection";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -93,7 +93,7 @@ public class ConnectionDbControl extends DbControl {
         String name = "updateConnection";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 

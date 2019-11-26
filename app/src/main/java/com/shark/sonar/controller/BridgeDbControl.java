@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.shark.sonar.data.Bridge;
-import com.shark.sonar.utility.readFile;
+import com.shark.sonar.utility.ReadFile;
 import java.sql.SQLException;
 
 public class BridgeDbControl extends DbControl {
@@ -20,7 +20,7 @@ public class BridgeDbControl extends DbControl {
         String name = "selectBridge";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name +".sql");
             Cursor cursor;
@@ -48,7 +48,7 @@ public class BridgeDbControl extends DbControl {
         String name = "deleteBridge";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -65,7 +65,7 @@ public class BridgeDbControl extends DbControl {
         String name = "insertBridge";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -84,7 +84,7 @@ public class BridgeDbControl extends DbControl {
         String name = "updateBridge";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 

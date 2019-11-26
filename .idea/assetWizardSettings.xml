@@ -57,10 +57,11 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="imageAsset" value="C:\Users\gills\Documents\Sonar\person.png" />
-                                      <entry key="outputName" value="ic_arrow_back" />
+                                      <entry key="assetType" value="IMAGE" />
+                                      <entry key="imageAsset" value="C:\Users\gills\Documents\Sonar\star.png" />
+                                      <entry key="outputName" value="ic_star6" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="ffffff" />
+                                      <entry key="themeColor" value="23ff00" />
                                     </map>
                                   </option>
                                 </PersistentState>

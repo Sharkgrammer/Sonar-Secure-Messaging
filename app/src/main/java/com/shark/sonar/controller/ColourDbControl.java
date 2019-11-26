@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.shark.sonar.data.Colour;
-import com.shark.sonar.utility.readFile;
+import com.shark.sonar.utility.ReadFile;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,7 +23,11 @@ public class ColourDbControl extends DbControl {
     }
 
     public Colour selectSingleColour(int Colour_ID){
-        return selectColour(Colour_ID).get(0);
+        try{
+            return selectColour(Colour_ID).get(0);
+        }catch (Exception e){
+            return null;
+        }
     }
 
     private List<Colour> selectColour(Integer colour_ID){
@@ -32,7 +36,7 @@ public class ColourDbControl extends DbControl {
         final int SELECT_ALL = 0, SELECT_SINGLE = 1;
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String[] sqlFileAll = readFile.returnAssetAsString(name +".sql").split(";");
             Cursor cursor;
@@ -79,7 +83,7 @@ public class ColourDbControl extends DbControl {
         String name = "deleteColour";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -96,7 +100,7 @@ public class ColourDbControl extends DbControl {
         String name = "insertColour";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -115,7 +119,7 @@ public class ColourDbControl extends DbControl {
         String name = "updateColour";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 

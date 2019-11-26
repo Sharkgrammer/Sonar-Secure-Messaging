@@ -5,8 +5,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import com.shark.sonar.data.Bridge;
+import com.shark.sonar.data.Colour;
 import com.shark.sonar.data.Conversation;
-import com.shark.sonar.utility.readFile;
+import com.shark.sonar.data.Profile;
+import com.shark.sonar.utility.ReadFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +34,11 @@ public class ConvoDbControl extends DbControl {
 
     private List<Conversation> selectConversation(Integer profile_ID, Integer convo_ID){
         List<Conversation> result = new ArrayList<>();
-        String name = "selectProfile", sqlFile;
+        String name = "selectConvo", sqlFile;
         final int SELECT_ALL = 0, SELECT_PROFILE = 1, SELECT_CONVO = 2;
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String[] sqlFileAll = readFile.returnAssetAsString(name +".sql").split(";");
             Cursor cursor;
@@ -57,16 +60,23 @@ public class ConvoDbControl extends DbControl {
 
             }
 
+            System.out.println(sqlFile);
+
             cursor.moveToFirst();
 
             Conversation c;
             do{
-                c = new Conversation();
+                c = new Conversation(context);
 
                 c.setConversation_ID(cursor.getInt(0));
-                c.setColour(cursor.getInt(1));
-                c.setBridge(cursor.getInt(2));
-                c.setProfile(cursor.getInt(3));
+
+                Colour col = new ColourDbControl(context).selectSingleColour(cursor.getInt(1));
+                Bridge brid = new BridgeDbControl(context).selectBridge(cursor.getInt(2));
+                Profile prof = new ProfileDbControl(context).selectSingleProfile(cursor.getInt(3));
+
+                c.setColour(col);
+                c.setBridge(brid);
+                c.setProfile(prof);
 
                 result.add(c);
 
@@ -85,7 +95,7 @@ public class ConvoDbControl extends DbControl {
         String name = "deleteConvo";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -102,7 +112,7 @@ public class ConvoDbControl extends DbControl {
         String name = "insertConvo";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -121,7 +131,7 @@ public class ConvoDbControl extends DbControl {
         String name = "updateConvo";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -137,14 +147,18 @@ public class ConvoDbControl extends DbControl {
 
     private void insertUpdate(Integer ConvoID, Conversation convo, String sqlFile){
         SQLiteStatement queryState = db.compileStatement(sqlFile);
-
-        queryState.bindDouble(1, convo.getConversation_ID());
-        queryState.bindDouble(2, convo.getColour().getColour_ID());
-        queryState.bindDouble(3, convo.getBridge().getBridge_ID());
-        queryState.bindDouble(4, convo.getProfile().getProfile_ID());
+        int num = 1;
 
         if (ConvoID != null){
-            queryState.bindDouble(5, ConvoID);
+            queryState.bindDouble(num++, convo.getConversation_ID());
+        }
+
+        queryState.bindDouble(num++, convo.getColour().getColour_ID());
+        queryState.bindDouble(num++, convo.getBridge().getBridge_ID());
+        queryState.bindDouble(num++, convo.getProfile().getProfile_ID());
+
+        if (ConvoID != null){
+            queryState.bindDouble(num, ConvoID);
             queryState.executeUpdateDelete();
         }else{
             queryState.executeInsert();

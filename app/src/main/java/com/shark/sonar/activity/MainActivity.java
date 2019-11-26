@@ -1,26 +1,31 @@
 package com.shark.sonar.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
+
 import com.shark.sonar.R;
-import com.shark.sonar.controller.NetControl;
-import com.shark.sonar.data.MainMessage;
+import com.shark.sonar.controller.ConvoDbControl;
+import com.shark.sonar.controller.DbControl;
+import com.shark.sonar.controller.ProfileDbControl;
+import com.shark.sonar.data.Conversation;
+import com.shark.sonar.data.Profile;
 import com.shark.sonar.recycler.MainAdapter;
+
+import java.util.List;
 
 import util.DataHolder;
 
 public class MainActivity extends AppCompatActivity {
 
-    private NetControl client;
     private DataHolder server;
-    private String ID = "";
     private EditText txtIDto, txtMessage, txtIDfrom;
 
     @Override
@@ -28,56 +33,62 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ImageView mainView = findViewById(R.id.imgPersonMain);
-        mainView.setImageDrawable(getResources().getDrawable(R.drawable.ic_person_black, null));
-        //DbControl con = new DbControl(this);
+        DbControl con = new DbControl(this);
 
-       // if (!con.databaseExists()){
-         //   con.createTables();
-      //  }
+        //con.deleteTables();
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.toolbar);
+        if (!con.databaseExists()) {
+            con.createTables();
 
-        //REF https://www.javatpoint.com/android-recyclerview-list-example
-        MainMessage[] data = new MainMessage[] {
-                new MainMessage(R.drawable.ic_star_black, "Shark", "", "eh"),
-                new MainMessage(R.drawable.ic_person_black, "Person", "Fuck you boi", "eh"),
-                new MainMessage(R.drawable.ic_star_blue, "Kate", "I love sharks!", "eh"),
-                new MainMessage(R.drawable.ic_person_red, "Not Kate", "I hate sharks", "eh"),
-                new MainMessage(R.drawable.ic_person_orange, "Hmm", "This is one long fucking message, its wednesday my dudes", "eh"),
-                new MainMessage(R.drawable.ic_star_orange, "This is one longer name then normal", "But whatever eh?", "eh"),
-                new MainMessage(R.drawable.ic_star_red, "Pizza", "Nom da pizza", "eh"),
-                new MainMessage(R.drawable.ic_person_purple, "Boop", "Boop the snoop", "eh"),
-                new MainMessage(R.drawable.ic_star_yellow, "Shark", "Shark shark shark", "eh"),
-                new MainMessage(R.drawable.ic_person_green, "Pizza boop shark", "Interesting...", "eh")
-        };
+            con.initialise();
+        }
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        MainAdapter adapter = new MainAdapter(data, this);
+        ProfileDbControl ProfCon = new ProfileDbControl(this);
+        Profile ProfUser = ProfCon.selectUserProfile();
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        if (ProfUser == null) {
+            startActivity(new Intent(this, SplashActivity.class));
+            this.finish();
+        } else {
+
+            ImageView mainView = findViewById(R.id.imgPersonMain);
+            mainView.setImageDrawable(ProfUser.getIcon().getIcon());
+              /*
+        ProfileDbControl control = new ProfileDbControl(this);
+        Icon icon = new Icon(R.drawable.ic_star_yellow, this);
+        Profile prof = new Profile(null, "Sharkie", icon, "shark".getBytes(), "shark".getBytes(), "shark".getBytes());
+        control.makeUserProfile(prof);
+        //*/
+
+            //ProfileDbControl control = new ProfileDbControl(this);
+            //Profile prof = control.selectSingleProfile(1);
+            //System.out.println("OLD PROFILE " + prof.getName());
+
+            List<Conversation> conversations = new ConvoDbControl(this).selectAllConvo();
+
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle(getResources().getString(R.string.toolbar) + ": " + ProfUser.getName());
+
+            //REF https://www.javatpoint.com/android-recyclerview-list-example
+            RecyclerView recyclerView = findViewById(R.id.recyclerView);
+            MainAdapter adapter = new MainAdapter(conversations, this);
+
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapter);
+        }
+
     }
 
-    public void setID(View v){
-        //if (!ID.equals("")) client.stop();
 
-        ID = txtIDfrom.getText().toString();
-        client = new NetControl(this, server, ID);
-
-        client.sendAuthMessage();
-
-        Toast.makeText(this, "ID set to " + ID, Toast.LENGTH_SHORT).show();
+    public void gotoScan(View v) {
+        startActivity(new Intent(this, ScanActivity.class));
     }
 
-
-    public void sendMessage(View v){
-        String message = txtMessage.getText().toString(), to = txtIDto.getText().toString();
-        client.sendMessage(message, to.getBytes());
-        Toast.makeText(this, "Message: " + message + " sent to " + to, Toast.LENGTH_SHORT).show();
+    public void gotoProfile(View v) {
+        startActivity(new Intent(this, ProfileActivity.class));
     }
+
 
 }

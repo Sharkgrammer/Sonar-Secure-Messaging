@@ -1,1 +1,1 @@
-INSERT INTO Icon("icon_loc") VALUES (?);
+INSERT INTO Icon("icon_id") VALUES (?);

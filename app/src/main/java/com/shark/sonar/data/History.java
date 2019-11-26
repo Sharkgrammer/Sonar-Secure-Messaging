@@ -4,7 +4,7 @@ public class History {
 
     private int History_ID;
     private int Conversation_ID;
-    private TextItem messageObj;
+    private Message messageObj;
     private String end_date;
     private Profile user_from;
 
@@ -24,11 +24,11 @@ public class History {
         Conversation_ID = conversation_ID;
     }
 
-    public TextItem getMessageObj() {
+    public Message getMessageObj() {
         return messageObj;
     }
 
-    public void setMessageObj(TextItem messageObj) {
+    public void setMessageObj(Message messageObj) {
         this.messageObj = messageObj;
     }
 
@@ -50,5 +50,15 @@ public class History {
 
     public void setUser_from(int user_from) {
         //TODO fix this pls
+    }
+
+    public History returnMostRecent(){
+        //TODO do stuff
+
+        History his = new History();
+        his.setUser_from(1);
+        his.setMessageObj(new Message(0, false, "", ""));
+
+        return his;
     }
 }

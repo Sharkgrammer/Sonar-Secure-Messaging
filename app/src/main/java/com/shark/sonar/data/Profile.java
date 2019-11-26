@@ -1,5 +1,9 @@
 package com.shark.sonar.data;
 
+import android.content.Context;
+
+import com.shark.sonar.controller.IconDbControl;
+
 public class Profile {
 
     private int Profile_ID;
@@ -8,6 +12,25 @@ public class Profile {
     private byte[] user_key_public;
     private byte[] user_key_private;
     private byte[] user_ID_key;
+    private Context context;
+
+    public Profile(){}
+
+    public Profile(Context context){
+        this.context =  context;
+    }
+
+    public Profile(Integer ID, String Name, Icon icon, byte[] publicKey, byte[] privateKey, byte[] userKey){
+        if (ID != null){
+            this.Profile_ID = ID;
+        }
+
+        this.Name = Name;
+        this.Icon = icon;
+        this.user_key_public = publicKey;
+        this.user_key_private = privateKey;
+        this.user_ID_key = userKey;
+    }
 
     public int getProfile_ID() {
         return Profile_ID;
@@ -34,7 +57,9 @@ public class Profile {
     }
 
     public void setIcon(int Icon_ID) {
-        //TODO fix this pls
+        IconDbControl con = new IconDbControl(context);
+
+        Icon = con.selectSingleIcon(Icon_ID);
     }
 
     public byte[] getUser_key_public() {

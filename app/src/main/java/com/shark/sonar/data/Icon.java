@@ -1,34 +1,33 @@
 package com.shark.sonar.data;
 
-import android.graphics.Bitmap;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 
 public class Icon {
 
     private int Icon_ID;
-    private Bitmap Icon;
-    private String Icon_Loc;
+    private Drawable Icon;
+
+    public Icon(){
+    }
+
+    public Icon(int Icon){
+        this.Icon_ID = Icon;
+    }
+
+
+    public Icon(int Icon, Context context){
+        this.Icon_ID = Icon;
+        System.out.println("ICON " + Icon);
+        this.Icon = context.getResources().getDrawable(Icon, null);
+    }
 
     public int getIcon_ID() {
         return Icon_ID;
     }
 
-    public void setIcon_ID(int icon_ID) {
-        this.Icon_ID = icon_ID;
-    }
-
-    public Bitmap getIcon() {
+    public Drawable getIcon() {
         return Icon;
     }
 
-    public void setIcon(Bitmap icon) {
-        Icon = icon;
-    }
-
-    public String getIcon_Loc() {
-        return Icon_Loc;
-    }
-
-    public void setIcon_Loc(String icon_Loc) {
-        Icon_Loc = icon_Loc;
-    }
 }

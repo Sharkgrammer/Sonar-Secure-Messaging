@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.shark.sonar.data.Icon;
-import com.shark.sonar.utility.readFile;
+import com.shark.sonar.utility.ReadFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class IconDbControl extends DbControl {
         final int SELECT_ALL = 0, SELECT_SINGLE = 1;
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String[] sqlFileAll = readFile.returnAssetAsString(name +".sql").split(";");
             Cursor cursor;
@@ -52,10 +52,7 @@ public class IconDbControl extends DbControl {
 
             Icon i;
             do{
-                i = new Icon();
-
-                i.setIcon_ID(cursor.getInt(0));
-                i.setIcon_Loc(cursor.getString(1));
+                i = new Icon(cursor.getInt(0), context);
 
                 result.add(i);
 
@@ -74,7 +71,7 @@ public class IconDbControl extends DbControl {
         String name = "deleteIcon";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -91,7 +88,7 @@ public class IconDbControl extends DbControl {
         String name = "insertIcon";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -110,7 +107,7 @@ public class IconDbControl extends DbControl {
         String name = "updateIcon";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -128,10 +125,9 @@ public class IconDbControl extends DbControl {
         SQLiteStatement queryState = db.compileStatement(sqlFile);
 
         queryState.bindDouble(1, icon.getIcon_ID());
-        queryState.bindString(2, icon.getIcon_Loc());
 
         if (iconID != null){
-            queryState.bindDouble(7, iconID);
+            queryState.bindDouble(2, iconID);
             queryState.executeUpdateDelete();
         }else{
             queryState.executeInsert();

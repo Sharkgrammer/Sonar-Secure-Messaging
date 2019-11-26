@@ -5,8 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.Profile;
-import com.shark.sonar.utility.readFile;
+import com.shark.sonar.utility.ReadFile;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,50 +15,61 @@ import java.util.List;
 
 public class ProfileDbControl extends DbControl {
 
-    public ProfileDbControl(Context c){
+    public ProfileDbControl(Context c) {
         super(c);
     }
 
-    public List<Profile> selectAllprofile(){
+    public List<Profile> selectAllProfiles() {
         return selectProfile(null);
     }
 
-    public Profile selectSingleProfile(int Profile_ID){
+    public Profile selectSingleProfile(int Profile_ID) {
+
+        System.out.println("SELECT SINGLE PROFILE " + Profile_ID);
+
         return selectProfile(Profile_ID).get(0);
     }
 
-    public Profile selectUserProfile(){
-        return selectProfile(0).get(0);
+    public Profile selectUserProfile() {
+        List<Profile> profs = selectProfile(1);
+
+        if (profs.isEmpty()) {
+            return null;
+        } else {
+            return selectProfile(1).get(0);
+        }
     }
 
-    private List<Profile> selectProfile(Integer profile_ID){
+    private List<Profile> selectProfile(Integer profile_ID) {
         List<Profile> result = new ArrayList<>();
         String name = "selectProfile", sqlFile;
         final int SELECT_ALL = 0, SELECT_USER = 1;
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
-            String[] sqlFileAll = readFile.returnAssetAsString(name +".sql").split(";");
+            String[] sqlFileAll = readFile.returnAssetAsString(name + ".sql").split(";");
             Cursor cursor;
 
-            if (profile_ID != null){
+            if (profile_ID != null) {
 
                 sqlFile = sqlFileAll[SELECT_USER];
-                cursor = db.rawQuery(sqlFile, new String[] {String.valueOf(profile_ID)});
+                cursor = db.rawQuery(sqlFile, new String[]{String.valueOf(profile_ID)});
 
-            }else{
+            } else {
 
                 sqlFile = sqlFileAll[SELECT_ALL];
                 cursor = db.rawQuery(sqlFile, null);
 
             }
 
+            System.out.println("PROFILE ID " + profile_ID);
+
             cursor.moveToFirst();
 
             Profile p;
-            do{
-                p = new Profile();
+            do {
+                p = new Profile(context);
 
                 p.setProfile_ID(cursor.getInt(0));
                 p.setIcon(cursor.getInt(1));
@@ -68,7 +80,7 @@ public class ProfileDbControl extends DbControl {
 
                 result.add(p);
 
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
 
             cursor.close();
 
@@ -79,11 +91,11 @@ public class ProfileDbControl extends DbControl {
         return result;
     }
 
-    public boolean deleteProfile(int profileID){
+    public boolean deleteProfile(int profileID) {
         String name = "deleteProfile";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -96,30 +108,62 @@ public class ProfileDbControl extends DbControl {
         return true;
     }
 
-    public boolean insertProfile(Profile profile){
+    public boolean makeUserProfile(Profile profile) {
+        return insertProfile(profile, true);
+    }
+
+    public boolean insertProfile(Profile profile) {
+        return insertProfile(profile, false);
+    }
+
+    public boolean insertProfile(Profile profile, boolean userProfile) {
         String name = "insertProfile";
+        long ID;
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
-            insertUpdate(null, profile, sqlFile);
+            ID = insertUpdate(null, profile, sqlFile);
 
         } catch (Exception e) {
             Log.wtf("Error in " + name, e.toString());
             return false;
         }
 
+        System.out.println("Insert User " + ID);
+
+
+        if (!userProfile) {
+            System.out.println("oi");
+            Conversation convo = new Conversation(context);
+
+            Profile temp = new Profile();
+            temp.setProfile_ID((int) ID);
+            convo.setProfile(temp);
+
+            convo.setBridge(null);
+            convo.setColour(null);
+            convo.setHistoryArrayList();
+
+            System.out.println("USER PROFILE CONVO " + convo.getProfile().getName());
+
+            System.out.println("CONVERSATION CREATED" + new ConvoDbControl(context).insertConvo(convo));
+        }
+
         return true;
     }
 
+    public boolean updateUserProfile(Profile profile) {
+        return  updateProfile(1, profile);
+    }
 
-    public boolean updateProfile(int profileID, Profile profile){
+    public boolean updateProfile(int profileID, Profile profile) {
         String name = "updateProfile";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -133,24 +177,26 @@ public class ProfileDbControl extends DbControl {
         return true;
     }
 
-    private void insertUpdate(Integer profileID, Profile profile, String sqlFile) throws SQLException {
+    private long insertUpdate(Integer profileID, Profile profile, String sqlFile) throws SQLException {
         SQLiteStatement queryState = db.compileStatement(sqlFile);
+        int num = 1;
 
-        queryState.bindDouble(1, profile.getProfile_ID());
-        queryState.bindDouble(2, profile.getIcon().getIcon_ID());
-        queryState.bindString(3, profile.getName());
-        queryState.bindBlob(4, profile.getUser_key_public());
-        queryState.bindBlob(5, profile.getUser_key_private());
-        queryState.bindBlob(6, profile.getUser_ID_key());
+        queryState.bindDouble(num++, profile.getIcon().getIcon_ID());
+        queryState.bindString(num++, profile.getName());
+        queryState.bindBlob(num++, profile.getUser_key_public());
+        queryState.bindBlob(num++, profile.getUser_key_private());
+        queryState.bindBlob(num++, profile.getUser_ID_key());
 
-        if (profileID != null){
-            queryState.bindDouble(7, profileID);
-            queryState.executeUpdateDelete();
-        }else{
-            queryState.executeInsert();
+        if (profileID != null) {
+            queryState.bindDouble(num, profileID);
+            return queryState.executeUpdateDelete();
+        } else {
+            long temp = queryState.executeInsert();
+
+            return temp;
         }
-    }
 
+    }
 
 
 }

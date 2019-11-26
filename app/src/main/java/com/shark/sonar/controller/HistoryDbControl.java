@@ -6,10 +6,8 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.shark.sonar.data.History;
-import com.shark.sonar.data.TextItem;
-import com.shark.sonar.utility.readFile;
-
-import org.w3c.dom.Text;
+import com.shark.sonar.data.Message;
+import com.shark.sonar.utility.ReadFile;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ public class HistoryDbControl extends DbControl {
         String name = "selectHistory";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name +".sql");
             Cursor cursor;
@@ -43,7 +41,7 @@ public class HistoryDbControl extends DbControl {
                 h.setConversation_ID(cursor.getInt(1));
 
                 int ID = cursor.getInt(5);
-                TextItem item = new TextItem(cursor.getString(2), cursor.getString(3), ID == 0);
+                Message item = new Message(0, ID == 1, cursor.getString(2), cursor.getString(3));
                 h.setMessageObj(item);
 
                 h.setEnd_date(cursor.getString(4));
@@ -66,7 +64,7 @@ public class HistoryDbControl extends DbControl {
         String name = "deleteHistory";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -83,7 +81,7 @@ public class HistoryDbControl extends DbControl {
         String name = "insertHistory";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -102,7 +100,7 @@ public class HistoryDbControl extends DbControl {
         String name = "updateHistory";
 
         try {
-            readFile readFile = new readFile(context);
+            ReadFile readFile = new ReadFile(context);
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
@@ -121,7 +119,7 @@ public class HistoryDbControl extends DbControl {
 
         queryState.bindDouble(1, history.getHistory_ID());
         queryState.bindDouble(2, history.getConversation_ID());
-        queryState.bindString(3, history.getMessageObj().getText());
+        queryState.bindString(3, history.getMessageObj().getMessage());
         queryState.bindString(4, history.getMessageObj().getTime());
         queryState.bindString(5, history.getEnd_date());
         queryState.bindDouble(6, history.getUser_from().getProfile_ID());
