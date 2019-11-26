@@ -20,11 +20,16 @@ import com.shark.sonar.data.Message;
 import com.shark.sonar.data.Profile;
 import com.shark.sonar.recycler.MessageAdapter;
 import com.shark.sonar.recycler.MessageViewHolder;
+import com.shark.sonar.temp;
+import com.shark.sonar.utility.Base64Android;
 
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import crypto.CryptManager;
 import send.MessageHandler;
+import util.Base64Util;
 import util.DataHolder;
 import util.ResultHandler;
 import util.UserHolder;
@@ -38,6 +43,9 @@ public class MessageActivity extends AppCompatActivity implements ResultHandler 
     private MessageAdapter adapter;
     private RecyclerView recyclerView;
     private Profile ProfUser;
+
+    //TODO remove
+    private temp tempkey = new temp();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +61,10 @@ public class MessageActivity extends AppCompatActivity implements ResultHandler 
 
         data.setPort(6000);
         data.setIP("35.235.49.238");
+        Base64Android b = new Base64Android();
+        data.setBase64(b);
 
-        UserHolder user = new UserHolder(ProfUser.getUser_ID_key(), null, null);
+        UserHolder user = new UserHolder(ProfUser.getUser_ID_key(), tempkey.pukey1, tempkey.prkey1);
 
         client = new MessageHandler(data, this, user);
 
@@ -153,28 +163,36 @@ public class MessageActivity extends AppCompatActivity implements ResultHandler 
 
     @Override
     public void messageReceived(final String message, Socket socket, DataHolder dataHolder) {
-        System.out.println("Message from server: " + message);
+        System.out.println("Raw from server: " + message);
         String decodedMessage = message;
+        byte[] decodedBytes = message.getBytes();
 
         try{
-            decodedMessage = new String(Base64.decode(message.getBytes("UTF-8"), Base64.DEFAULT));
+            decodedBytes = (new Base64Android()).fromBase64(message);
         }catch (Exception e){
             System.out.println(e.toString());
         }
 
-        final String finalDecodedMessage = decodedMessage;
+        //TODO remove temp, its only needed for this test
+        CryptManager manager = new CryptManager();
+        System.out.println("Decoded from server: " + decodedMessage);
+
+        System.out.println("HOW FUCKING LONG IS IT: " + decodedBytes.length);
+
+        final String finalMessage = manager.decryptMessage(decodedBytes, tempkey.pukey2);
+
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 MessageViewHolder msgAd = adapter.getRecentViewholder();
                 if (!msgReceived || adapter.getItemCount() == 0){
                     History his = new History();
-                    Message msg2 = new Message(conversation.getProfile().getIcon().getIcon_ID(), false, finalDecodedMessage, "");
+                    Message msg2 = new Message(conversation.getProfile().getIcon().getIcon_ID(), false, finalMessage, "");
                     his.setMessageObj(msg2);
 
                     adapter.add(his);
                 }else{
-                    msgAd.addNewMessage(finalDecodedMessage);
+                    msgAd.addNewMessage(finalMessage);
                 }
                 msgReceived = true;
             }

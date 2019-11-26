@@ -107,4 +107,8 @@ public class Conversation {
         return new History().returnMostRecent();
     }
 
+    public byte[] getPublicKey(){
+        return profile.getUser_key_public();
+    }
+
 }
