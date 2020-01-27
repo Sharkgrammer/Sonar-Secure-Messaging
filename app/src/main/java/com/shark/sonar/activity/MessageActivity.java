@@ -20,8 +20,8 @@ import com.shark.sonar.data.Message;
 import com.shark.sonar.data.Profile;
 import com.shark.sonar.recycler.MessageAdapter;
 import com.shark.sonar.recycler.MessageViewHolder;
-import com.shark.sonar.temp;
 import com.shark.sonar.utility.Base64Android;
+import com.shark.sonar.utility.Client;
 
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -34,18 +34,15 @@ import util.DataHolder;
 import util.ResultHandler;
 import util.UserHolder;
 
-public class MessageActivity extends AppCompatActivity implements ResultHandler {
+public class MessageActivity extends AppCompatActivity {
 
     private EditText sendView;
-    private MessageHandler client;
+    private Client client = MainActivity.client;
     private boolean clientOn = false, msgReceived = false;
     private Conversation conversation;
     private MessageAdapter adapter;
     private RecyclerView recyclerView;
     private Profile ProfUser;
-
-    //TODO remove
-    private temp tempkey = new temp();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,19 +51,8 @@ public class MessageActivity extends AppCompatActivity implements ResultHandler 
 
         sendView = findViewById(R.id.sendView);
 
-        DataHolder data = new DataHolder();
-
         ProfileDbControl ProfCon = new ProfileDbControl(this);
         ProfUser = ProfCon.selectUserProfile();
-
-        data.setPort(6000);
-        data.setIP("35.235.49.238");
-        Base64Android b = new Base64Android();
-        data.setBase64(b);
-
-        UserHolder user = new UserHolder(ProfUser.getUser_ID_key(), tempkey.pukey1, tempkey.prkey1);
-
-        client = new MessageHandler(data, this, user);
 
         ConvoDbControl conDB = new ConvoDbControl(this);
         conversation = conDB.selectConvoByID(Integer.parseInt((String) getIntent().getExtras().get("ID")));
@@ -105,8 +91,7 @@ public class MessageActivity extends AppCompatActivity implements ResultHandler 
         recyclerView.setLayoutManager(lay);
         recyclerView.setAdapter(adapter);
 
-        //TODO just for now
-        sendAuthMessage();
+        client.setCurrentMessageActivity(this);
     }
 
     public void stop(){
@@ -115,7 +100,7 @@ public class MessageActivity extends AppCompatActivity implements ResultHandler 
 
     public void sendMessage(View v){
         String message = sendView.getText().toString();
-        sendMessage(message, conversation.getProfile().getUser_ID_key());
+        client.sendMessage(message, conversation.getProfile().getUser_ID_key());
 
         MessageViewHolder msg = adapter.getRecentViewholder();
         if (msgReceived || adapter.getItemCount() == 0){
@@ -132,54 +117,8 @@ public class MessageActivity extends AppCompatActivity implements ResultHandler 
         sendView.setText("");
     }
 
-    public void sendMessage(String message, byte[] to){
-
-        DataContainer data = new DataContainer();
-
-        data.setMessage(message);
-        data.setToID(to);
-        //TODO set auth as false default
-        data.setAuth(false);
-        data.setHandler(client);
-
-        if (!clientOn){
-            //clientOn = true;
-
-            //TODO there is a worry that client.start is called each time the thing runs, meaning that multiple threads could return 1 message
-            //TODO this needs to be fixed later
-        }
-
-        new NetControlAsyncTask(data).execute(clientOn, false);
-    }
-
-    public void sendAuthMessage(){
-        DataContainer data = new DataContainer();
-
-        data.setAuth(true);
-        data.setHandler(client);
-
-        new NetControlAsyncTask(data).execute(clientOn, true);
-    }
-
-    @Override
-    public void messageReceived(final String message, Socket socket, DataHolder dataHolder) {
-        System.out.println("Raw from server: " + message);
-        String decodedMessage = message;
-        byte[] decodedBytes = message.getBytes();
-
-        try{
-            decodedBytes = (new Base64Android()).fromBase64(message);
-        }catch (Exception e){
-            System.out.println(e.toString());
-        }
-
-        //TODO remove temp, its only needed for this test
-        CryptManager manager = new CryptManager();
-        System.out.println("Decoded from server: " + decodedMessage);
-
-        System.out.println("HOW FUCKING LONG IS IT: " + decodedBytes.length);
-
-        final String finalMessage = manager.decryptMessage(decodedBytes, tempkey.pukey2);
+    public void messageReceived(final String message) {
+        System.out.println("Data from client class: " + message);
 
         this.runOnUiThread(new Runnable() {
             @Override
@@ -187,16 +126,20 @@ public class MessageActivity extends AppCompatActivity implements ResultHandler 
                 MessageViewHolder msgAd = adapter.getRecentViewholder();
                 if (!msgReceived || adapter.getItemCount() == 0){
                     History his = new History();
-                    Message msg2 = new Message(conversation.getProfile().getIcon().getIcon_ID(), false, finalMessage, "");
+                    Message msg2 = new Message(conversation.getProfile().getIcon().getIcon_ID(), false, message, "");
                     his.setMessageObj(msg2);
 
                     adapter.add(his);
                 }else{
-                    msgAd.addNewMessage(finalMessage);
+                    msgAd.addNewMessage(message);
                 }
                 msgReceived = true;
             }
         });
 
+    }
+
+    public Conversation getConversation(){
+        return conversation;
     }
 }

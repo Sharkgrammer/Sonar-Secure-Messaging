@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shark.sonar.R;
+import com.shark.sonar.controller.ConvoDbControl;
 import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.Profile;
 
@@ -58,6 +59,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
         }catch(Exception e){
             return 0;
         }
+    }
+
+    public void updateList(List<Conversation> list){
+        listData = list;
+        this.notifyDataSetChanged();
     }
 
 }

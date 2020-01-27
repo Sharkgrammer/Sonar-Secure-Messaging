@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.shark.sonar.R;
@@ -18,15 +16,15 @@ import com.shark.sonar.controller.ProfileDbControl;
 import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.Profile;
 import com.shark.sonar.recycler.MainAdapter;
+import com.shark.sonar.utility.Client;
 
 import java.util.List;
-
-import util.DataHolder;
+import util.temp;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DataHolder server;
-    private EditText txtIDto, txtMessage, txtIDfrom;
+    public static Client client;
+    private MainAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,18 +49,12 @@ public class MainActivity extends AppCompatActivity {
             this.finish();
         } else {
 
+            temp temp = new temp();
+
+            client = new Client(ProfUser.getUser_ID_key(), temp.pukey1, temp.prkey1);
+
             ImageView mainView = findViewById(R.id.imgPersonMain);
             mainView.setImageDrawable(ProfUser.getIcon().getIcon());
-              /*
-        ProfileDbControl control = new ProfileDbControl(this);
-        Icon icon = new Icon(R.drawable.ic_star_yellow, this);
-        Profile prof = new Profile(null, "Sharkie", icon, "shark".getBytes(), "shark".getBytes(), "shark".getBytes());
-        control.makeUserProfile(prof);
-        //*/
-
-            //ProfileDbControl control = new ProfileDbControl(this);
-            //Profile prof = control.selectSingleProfile(1);
-            //System.out.println("OLD PROFILE " + prof.getName());
 
             List<Conversation> conversations = new ConvoDbControl(this).selectAllConvo();
 
@@ -72,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
 
             //REF https://www.javatpoint.com/android-recyclerview-list-example
             RecyclerView recyclerView = findViewById(R.id.recyclerView);
-            MainAdapter adapter = new MainAdapter(conversations, this);
+            adapter = new MainAdapter(conversations, this);
+
+            client.setMainActivity(this);
 
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -81,6 +75,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    public void updateList(){
+        List<Conversation> conversations = new ConvoDbControl(this).selectAllConvo();
+        adapter.updateList(conversations);
+    }
 
     public void gotoScan(View v) {
         startActivity(new Intent(this, ScanActivity.class));
