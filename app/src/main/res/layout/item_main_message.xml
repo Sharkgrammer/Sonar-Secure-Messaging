@@ -46,15 +46,15 @@
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/lblPerson"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
                 android:fontFamily="sans-serif"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="16sp"
@@ -64,10 +64,11 @@
             <TextView
                 android:id="@+id/lblMessage"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:fontFamily="sans-serif"
+                android:maxLines="2"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="14sp"
                 tools:text="Here goes the most recent message from them! It could be anything!" />

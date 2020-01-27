@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.shark.sonar.controller.HistoryDbControl;
 
+import java.util.List;
+
 public class History {
 
     private int History_ID;
@@ -65,15 +67,5 @@ public class History {
     public boolean insertHistory(){
         HistoryDbControl db = new HistoryDbControl(context);
         return db.insertHistory(this);
-    }
-
-    public History returnMostRecent(){
-        //TODO do stuff
-
-        History his = new History(context);
-        his.setUser_from(1);
-        his.setMessageObj(new Message(0, false, "", ""));
-
-        return his;
     }
 }

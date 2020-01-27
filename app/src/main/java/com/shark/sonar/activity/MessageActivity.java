@@ -86,7 +86,7 @@ public class MessageActivity extends AppCompatActivity {
         //REF https://stackoverflow.com/questions/26580723/how-to-scroll-to-the-bottom-of-a-recyclerview-scrolltoposition-doesnt-work
         LinearLayoutManager lay = new LinearLayoutManager(this);
         //lay.setReverseLayout(true);
-        //lay.setStackFromEnd(true);
+        lay.setStackFromEnd(true);
 
         recyclerView.setLayoutManager(lay);
         recyclerView.setAdapter(adapter);
@@ -112,13 +112,18 @@ public class MessageActivity extends AppCompatActivity {
         System.out.println(temp);
 
         MessageViewHolder msg = adapter.getRecentViewholder();
+
         if (msgReceived || adapter.getItemCount() == 0 || firstRun){
             adapter.add(his);
         }else{
-            msg.addNewMessage(sendView.getText().toString());
+            msg.addNewMessage(message);
         }
+
         msgReceived = false;
         firstRun = false;
+
+        client.refreshMain();
+        recyclerView.scrollToPosition(adapter.getItemCount() - 1);
 
         sendView.setText("");
     }
@@ -146,6 +151,7 @@ public class MessageActivity extends AppCompatActivity {
                     msgAd.addNewMessage(his.getMessageObj().getMessage());
                 }
 
+                recyclerView.scrollToPosition(adapter.getItemCount() - 1);
                 msgReceived = true;
             }
         });

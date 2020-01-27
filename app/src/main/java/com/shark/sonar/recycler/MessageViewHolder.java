@@ -46,6 +46,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
     public void setTextMessage(String message) {
         lblMessage.setText(message);
+        //lblMessage.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));    }
     }
 
     public void setID(int ID) {

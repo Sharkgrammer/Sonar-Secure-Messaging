@@ -31,10 +31,11 @@ public class ProfileDbControl extends DbControl {
     }
 
     public Profile selectSingleProfile(byte[] User_Key) {
+        String key = new String(User_Key);
 
-        System.out.println("SELECT SINGLE PROFILE " + new String(User_Key));
+        System.out.println("SELECT SINGLE PROFILE " + key);
 
-        return selectProfile(null, User_Key).get(0);
+        return selectProfile(null, key).get(0);
     }
 
     public Profile selectUserProfile() {
@@ -47,7 +48,7 @@ public class ProfileDbControl extends DbControl {
         }
     }
 
-    private List<Profile> selectProfile(Integer profile_ID, byte[] user_key) {
+    private List<Profile> selectProfile(Integer profile_ID, String key) {
         List<Profile> result = new ArrayList<>();
         String name = "selectProfile", sqlFile;
         final int SELECT_ALL = 0, SELECT_USER = 1, SELECT_USER_KEY = 2;
@@ -63,10 +64,11 @@ public class ProfileDbControl extends DbControl {
                 sqlFile = sqlFileAll[SELECT_USER];
                 cursor = db.rawQuery(sqlFile, new String[]{String.valueOf(profile_ID)});
 
-            } else if (user_key != null) {
+            } else if (key != null) {
 
+                System.out.println(key + " has been seen");
                 sqlFile = sqlFileAll[SELECT_USER_KEY];
-                cursor = db.rawQuery(sqlFile,  new String[]{new String(user_key)});
+                cursor = db.rawQuery(sqlFile, new String[]{key});
 
             }else{
 
@@ -77,6 +79,8 @@ public class ProfileDbControl extends DbControl {
 
             cursor.moveToFirst();
 
+            System.out.println(cursor.getCount());
+
             Profile p;
             do {
                 p = new Profile(context);
@@ -86,7 +90,7 @@ public class ProfileDbControl extends DbControl {
                 p.setName(cursor.getString(2));
                 p.setUser_key_public(cursor.getBlob(3));
                 p.setUser_key_private(cursor.getBlob(4));
-                p.setUser_ID_key(cursor.getBlob(5));
+                p.setUser_ID_key(cursor.getString(5).getBytes());
 
                 result.add(p);
 
@@ -195,7 +199,7 @@ public class ProfileDbControl extends DbControl {
         queryState.bindString(num++, profile.getName());
         queryState.bindBlob(num++, profile.getUser_key_public());
         queryState.bindBlob(num++, profile.getUser_key_private());
-        queryState.bindBlob(num++, profile.getUser_ID_key());
+        queryState.bindString(num++, new String(profile.getUser_ID_key()));
 
         if (profileID != null) {
             queryState.bindDouble(num, profileID);

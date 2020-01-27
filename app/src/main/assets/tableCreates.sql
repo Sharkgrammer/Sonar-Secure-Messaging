@@ -24,7 +24,7 @@ create table Profile(
 	name varchar(255),
 	user_key_public blob not null,
 	user_key_private blob,
-	user_id_key blob not null
+	user_id_key varchar(255) not null
 );
 
 create table Icon(

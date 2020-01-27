@@ -65,7 +65,14 @@ public class Client implements ResultHandler {
             System.out.println(new String(fromID) + " says " + msg);
 
             //If the Message Activity for this user is open, send it on pls
-            byte[] convoID = currentMessageActivity.getConversation().getProfile().getUser_ID_key();
+            byte[] convoID = new byte[0];
+
+            try{
+                convoID = currentMessageActivity.getConversation().getProfile().getUser_ID_key();
+            }catch (Exception e){
+                Log.wtf("Error in messageRecieved", e.toString());
+            }
+
             if (Arrays.equals(fromID, convoID)){
                 currentMessageActivity.messageReceived(msg);
             }else{
@@ -77,7 +84,7 @@ public class Client implements ResultHandler {
                 Profile prof = profileDbControl.selectSingleProfile(fromID);
                 Conversation conversation = convoDbControl.selectProfileConvo(prof.getProfile_ID());
 
-                Message msg2 = new Message(prof.getIcon().getIcon_ID(), false, message, "");
+                Message msg2 = new Message(prof.getIcon().getIcon_ID(), false, msg, "");
                 his.setConversation_ID(conversation.getConversation_ID());
                 his.setMessageObj(msg2);
                 his.setUser_from(prof);
@@ -85,7 +92,8 @@ public class Client implements ResultHandler {
                 his.insertHistory();
             }
 
-            mainActivity.updateList();
+            refreshMain();
+
         }catch(Exception e) {
             Log.wtf("Error in messageReceived", e.toString());
         }
@@ -125,7 +133,6 @@ public class Client implements ResultHandler {
         this.dataHolder = dataHolder;
     }
 
-
     public void setMainActivity(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
     }
@@ -136,6 +143,10 @@ public class Client implements ResultHandler {
 
     public void setCurrentMessageActivity(MessageActivity currentMessageActivity) {
         this.currentMessageActivity = currentMessageActivity;
+    }
+
+    public void refreshMain(){
+        mainActivity.updateList();
     }
 }
 

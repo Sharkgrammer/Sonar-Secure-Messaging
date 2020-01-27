@@ -2,6 +2,7 @@ package com.shark.sonar.recycler;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import com.shark.sonar.R;
 import com.shark.sonar.controller.ConvoDbControl;
 import com.shark.sonar.data.Conversation;
+import com.shark.sonar.data.Message;
 import com.shark.sonar.data.Profile;
 
 import java.util.List;
@@ -45,7 +47,23 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
         Profile prof = data.getProfile();
 
         holder.setImgPerson(prof.getIcon().getIcon_ID());
-        holder.setTextMessage(data.getLatestMessage().getMessageObj().getMessage());
+
+        String messageStart = "Start a new conversation!";
+        try{
+            Message obj = data.getLatestMessage().getMessageObj();
+
+            if (obj.isFromYou()){
+                messageStart = "You: ";
+            }else{
+                messageStart = "";
+            }
+
+            messageStart += obj.getMessage();
+        }catch (Exception e){
+            Log.wtf("Error", e.toString());
+        }
+
+        holder.setTextMessage(messageStart);
         holder.setTextPerson(prof.getName());
         holder.setID(data.getConversation_ID());
         holder.setOnClick();

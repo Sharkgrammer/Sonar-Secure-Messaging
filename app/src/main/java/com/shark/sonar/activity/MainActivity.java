@@ -42,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ProfileDbControl ProfCon = new ProfileDbControl(this);
+
+        List<Profile> profs = ProfCon.selectAllProfiles();
+
+        for (Profile p : profs){
+            System.out.println(p.getName() + " " + p.getProfile_ID() + " " + new String(p.getUser_ID_key()));;
+        }
+
         Profile ProfUser = ProfCon.selectUserProfile();
 
         if (ProfUser == null) {
@@ -71,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(adapter);
+
+
+            //client.messageReceived("d2&space&hello you", null, client.getDataHolder());
         }
 
     }
