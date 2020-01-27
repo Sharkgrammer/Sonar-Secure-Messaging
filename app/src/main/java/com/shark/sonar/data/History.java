@@ -1,5 +1,9 @@
 package com.shark.sonar.data;
 
+import android.content.Context;
+
+import com.shark.sonar.controller.HistoryDbControl;
+
 public class History {
 
     private int History_ID;
@@ -7,6 +11,12 @@ public class History {
     private Message messageObj;
     private String end_date;
     private Profile user_from;
+    private Context context;
+
+    public History(Context context) {
+        this.context = context;
+        this.end_date = "";
+    }
 
     public int getHistory_ID() {
         return History_ID;
@@ -52,10 +62,15 @@ public class History {
         //TODO fix this pls
     }
 
+    public boolean insertHistory(){
+        HistoryDbControl db = new HistoryDbControl(context);
+        return db.insertHistory(this);
+    }
+
     public History returnMostRecent(){
         //TODO do stuff
 
-        History his = new History();
+        History his = new History(context);
         his.setUser_from(1);
         his.setMessageObj(new Message(0, false, "", ""));
 

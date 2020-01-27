@@ -20,30 +20,37 @@ public class ProfileDbControl extends DbControl {
     }
 
     public List<Profile> selectAllProfiles() {
-        return selectProfile(null);
+        return selectProfile(null, null);
     }
 
     public Profile selectSingleProfile(int Profile_ID) {
 
         System.out.println("SELECT SINGLE PROFILE " + Profile_ID);
 
-        return selectProfile(Profile_ID).get(0);
+        return selectProfile(Profile_ID, null).get(0);
+    }
+
+    public Profile selectSingleProfile(byte[] User_Key) {
+
+        System.out.println("SELECT SINGLE PROFILE " + new String(User_Key));
+
+        return selectProfile(null, User_Key).get(0);
     }
 
     public Profile selectUserProfile() {
-        List<Profile> profs = selectProfile(1);
+        List<Profile> profs = selectProfile(1, null);
 
         if (profs.isEmpty()) {
             return null;
         } else {
-            return selectProfile(1).get(0);
+            return selectProfile(1, null).get(0);
         }
     }
 
-    private List<Profile> selectProfile(Integer profile_ID) {
+    private List<Profile> selectProfile(Integer profile_ID, byte[] user_key) {
         List<Profile> result = new ArrayList<>();
         String name = "selectProfile", sqlFile;
-        final int SELECT_ALL = 0, SELECT_USER = 1;
+        final int SELECT_ALL = 0, SELECT_USER = 1, SELECT_USER_KEY = 2;
 
         try {
             ReadFile readFile = new ReadFile(context);
@@ -56,14 +63,17 @@ public class ProfileDbControl extends DbControl {
                 sqlFile = sqlFileAll[SELECT_USER];
                 cursor = db.rawQuery(sqlFile, new String[]{String.valueOf(profile_ID)});
 
-            } else {
+            } else if (user_key != null) {
+
+                sqlFile = sqlFileAll[SELECT_USER_KEY];
+                cursor = db.rawQuery(sqlFile,  new String[]{new String(user_key)});
+
+            }else{
 
                 sqlFile = sqlFileAll[SELECT_ALL];
                 cursor = db.rawQuery(sqlFile, null);
 
             }
-
-            System.out.println("PROFILE ID " + profile_ID);
 
             cursor.moveToFirst();
 

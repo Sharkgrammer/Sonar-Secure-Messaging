@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.shark.sonar.data.History;
 import com.shark.sonar.data.Message;
+import com.shark.sonar.data.Profile;
 import com.shark.sonar.utility.ReadFile;
 
 import java.sql.SQLException;
@@ -26,8 +27,10 @@ public class HistoryDbControl extends DbControl {
         try {
             ReadFile readFile = new ReadFile(context);
 
-            String sqlFile = readFile.returnAssetAsString(name +".sql");
+            String sqlFile = readFile.returnAssetAsString(name + ".sql");
             Cursor cursor;
+
+            System.out.println(sqlFile + " : " + convo_ID);
 
             cursor = db.rawQuery(sqlFile, new String[] {String.valueOf(convo_ID)});
 
@@ -35,17 +38,21 @@ public class HistoryDbControl extends DbControl {
 
             History h;
             do{
-                h = new History();
+                h = new History(context);
 
                 h.setHistory_ID(cursor.getInt(0));
                 h.setConversation_ID(cursor.getInt(1));
 
                 int ID = cursor.getInt(5);
-                Message item = new Message(0, ID == 1, cursor.getString(2), cursor.getString(3));
+                ProfileDbControl profileDbControl = new ProfileDbControl(context);
+                Profile userProf = profileDbControl.selectSingleProfile(ID);
+
+                Message item = new Message(userProf.getIcon().getIcon_ID(), ID == 1, cursor.getString(2), cursor.getString(3));
                 h.setMessageObj(item);
 
                 h.setEnd_date(cursor.getString(4));
-                h.setUser_from(ID);
+
+                h.setUser_from(userProf);
 
                 result.add(h);
 
@@ -117,15 +124,14 @@ public class HistoryDbControl extends DbControl {
     private void insertUpdate(Integer historyID, History history, String sqlFile) throws SQLException {
         SQLiteStatement queryState = db.compileStatement(sqlFile);
 
-        queryState.bindDouble(1, history.getHistory_ID());
-        queryState.bindDouble(2, history.getConversation_ID());
-        queryState.bindString(3, history.getMessageObj().getMessage());
-        queryState.bindString(4, history.getMessageObj().getTime());
-        queryState.bindString(5, history.getEnd_date());
-        queryState.bindDouble(6, history.getUser_from().getProfile_ID());
+        queryState.bindDouble(1, history.getConversation_ID());
+        queryState.bindString(2, history.getMessageObj().getMessage());
+        queryState.bindString(3, history.getMessageObj().getTime());
+        queryState.bindString(4, history.getEnd_date());
+        queryState.bindDouble(5, history.getUser_from().getProfile_ID());
 
         if (historyID != null){
-            queryState.bindDouble(7, historyID);
+            queryState.bindDouble(6, historyID);
             queryState.executeUpdateDelete();
         }else{
             queryState.executeInsert();

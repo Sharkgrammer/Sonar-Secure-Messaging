@@ -1,6 +1,7 @@
 package com.shark.sonar.activity;
 
 import android.DataContainer;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,7 +39,7 @@ public class MessageActivity extends AppCompatActivity {
 
     private EditText sendView;
     private Client client = MainActivity.client;
-    private boolean clientOn = false, msgReceived = false;
+    private boolean clientOn = false, msgReceived = false, firstRun = true;
     private Conversation conversation;
     private MessageAdapter adapter;
     private RecyclerView recyclerView;
@@ -72,10 +73,9 @@ public class MessageActivity extends AppCompatActivity {
 
         List<History> his = conversation.getHistoryArrayList();
 
-        /*History his2 = new History();
-        Message msg = new Message(conversation.getProfile().getIcon().getIcon_ID(), true, "Hey you!", "");
-        his2.setMessageObj(msg);
-        his.add(his2);*/
+        for (History h : his){
+            System.out.println(h.getUser_from().getName());
+        }
 
         conversation.setHistoryArrayList(his);
 
@@ -102,37 +102,50 @@ public class MessageActivity extends AppCompatActivity {
         String message = sendView.getText().toString();
         client.sendMessage(message, conversation.getProfile().getUser_ID_key());
 
-        MessageViewHolder msg = adapter.getRecentViewholder();
-        if (msgReceived || adapter.getItemCount() == 0){
-            History his = new History();
-            Message msg2 = new Message(ProfUser.getIcon().getIcon_ID(), true, message, "");
-            his.setMessageObj(msg2);
+        History his = new History(this);
+        Message msg2 = new Message(ProfUser.getIcon().getIcon_ID(), true, message, "");;
+        his.setConversation_ID(conversation.getConversation_ID());
+        his.setMessageObj(msg2);
+        his.setUser_from(ProfUser);
 
+        boolean temp = his.insertHistory();
+        System.out.println(temp);
+
+        MessageViewHolder msg = adapter.getRecentViewholder();
+        if (msgReceived || adapter.getItemCount() == 0 || firstRun){
             adapter.add(his);
         }else{
             msg.addNewMessage(sendView.getText().toString());
         }
         msgReceived = false;
+        firstRun = false;
 
         sendView.setText("");
     }
 
     public void messageReceived(final String message) {
         System.out.println("Data from client class: " + message);
+        final Context c = this;
 
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 MessageViewHolder msgAd = adapter.getRecentViewholder();
-                if (!msgReceived || adapter.getItemCount() == 0){
-                    History his = new History();
-                    Message msg2 = new Message(conversation.getProfile().getIcon().getIcon_ID(), false, message, "");
-                    his.setMessageObj(msg2);
+                History his = new History(c);
+                Message msg = new Message(conversation.getProfile().getIcon().getIcon_ID(), false, message, "");
+                his.setConversation_ID(conversation.getConversation_ID());
+                his.setMessageObj(msg);
+                his.setUser_from(conversation.getProfile());
 
+                boolean temp = his.insertHistory();
+
+                System.out.println(temp);
+                if (!msgReceived || adapter.getItemCount() == 0){
                     adapter.add(his);
                 }else{
-                    msgAd.addNewMessage(message);
+                    msgAd.addNewMessage(his.getMessageObj().getMessage());
                 }
+
                 msgReceived = true;
             }
         });

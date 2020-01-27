@@ -11,6 +11,8 @@ import com.shark.sonar.R;
 import com.shark.sonar.controller.ProfileDbControl;
 import com.shark.sonar.data.Profile;
 
+import util.temp;
+
 public class SplashActivity extends AppCompatActivity {
 
     @Override
@@ -30,8 +32,11 @@ public class SplashActivity extends AppCompatActivity {
         user.setName(name.getText().toString());
         user.setUser_ID_key(key.getText().toString().getBytes());
         user.setIcon(R.drawable.ic_person2);
-        user.setUser_key_private("null".getBytes());
-        user.setUser_key_public("null".getBytes());
+
+        //TODO redo when users can connect
+        temp temp = new temp();
+        user.setUser_key_private(temp.prkey1);
+        user.setUser_key_public(temp.pukey1);
 
         boolean result = con.makeUserProfile(user);
 

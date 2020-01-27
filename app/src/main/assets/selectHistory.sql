@@ -1,1 +1,1 @@
-select * from history where "convo_id" = ?;
+select * from History where "convo_id" = ?;

@@ -11,16 +11,15 @@ public class ReadFile {
 
     Context context;
 
-    public ReadFile(Context context){
+    public ReadFile(Context context) {
         this.context = context;
     }
 
     //REF https://stackoverflow.com/questions/30152784/working-with-sql-file-in-android
 
-    InputStream returnAssetAsInputStream(String name) throws IOException {
-        InputStream in = context.getAssets().open(name);
+    private InputStream returnAssetAsInputStream(String name) throws IOException {
 
-        return  in;
+        return context.getAssets().open(name);
     }
 
     //REF https://stackoverflow.com/questions/14825374/reading-a-textfile-using-inputstream
@@ -35,14 +34,14 @@ public class ReadFile {
                 ));
 
         checkStr = bf.readLine();
-        do{
+        do {
             returnStr.append(checkStr);
             checkStr = bf.readLine();
-        }while (checkStr != null);
+        } while (checkStr != null);
 
-        if (returnStr.length() != 0){
+        if (returnStr.length() != 0) {
             return returnStr.toString();
-        }else{
+        } else {
             throw new NullPointerException();
         }
     }

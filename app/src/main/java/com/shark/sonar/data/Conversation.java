@@ -33,8 +33,11 @@ public class Conversation {
 
     public List<History> getHistoryArrayList() {
 
+        HistoryDbControl historyDbControl = new HistoryDbControl(context);
+        historyArrayList = historyDbControl.selectHistory(conversation_ID);
+
         if (historyArrayList == null){
-            historyArrayList = new ArrayList<History>();
+            historyArrayList = new ArrayList<>();
         }
 
         return historyArrayList;
@@ -104,7 +107,7 @@ public class Conversation {
     }
 
     public History getLatestMessage() {
-        return new History().returnMostRecent();
+        return new History(context).returnMostRecent();
     }
 
     public byte[] getPublicKey(){

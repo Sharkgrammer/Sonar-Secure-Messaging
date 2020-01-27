@@ -5,10 +5,13 @@ import android.util.Log;
 
 import com.shark.sonar.activity.MainActivity;
 import com.shark.sonar.activity.MessageActivity;
+import com.shark.sonar.controller.ConvoDbControl;
 import com.shark.sonar.controller.NetControlAsyncTask;
+import com.shark.sonar.controller.ProfileDbControl;
 import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.History;
 import com.shark.sonar.data.Message;
+import com.shark.sonar.data.Profile;
 import com.shark.sonar.recycler.MainAdapter;
 import com.shark.sonar.recycler.MessageAdapter;
 
@@ -38,7 +41,7 @@ public class Client implements ResultHandler {
         dataHolder = new DataHolder();
 
         dataHolder.setPort(6000);
-        dataHolder.setIP("35.235.49.238");
+        dataHolder.setIP("192.168.43.233");
         dataHolder.setBase64(b);
         dataHolder.setServer(false);
 
@@ -66,7 +69,20 @@ public class Client implements ResultHandler {
             if (Arrays.equals(fromID, convoID)){
                 currentMessageActivity.messageReceived(msg);
             }else{
-                //TODO set messages to save into DB
+                History his = new History(mainActivity);
+
+                ConvoDbControl convoDbControl = new ConvoDbControl(mainActivity);
+
+                ProfileDbControl profileDbControl = new ProfileDbControl(mainActivity);
+                Profile prof = profileDbControl.selectSingleProfile(fromID);
+                Conversation conversation = convoDbControl.selectProfileConvo(prof.getProfile_ID());
+
+                Message msg2 = new Message(prof.getIcon().getIcon_ID(), false, message, "");
+                his.setConversation_ID(conversation.getConversation_ID());
+                his.setMessageObj(msg2);
+                his.setUser_from(prof);
+
+                his.insertHistory();
             }
 
             mainActivity.updateList();
@@ -94,7 +110,7 @@ public class Client implements ResultHandler {
         data.setAuth(true);
         data.setHandler(client);
 
-        new NetControlAsyncTask(data).execute(true, true);
+        new NetControlAsyncTask(data).execute(false, true);
     }
 
     public void stop() {
