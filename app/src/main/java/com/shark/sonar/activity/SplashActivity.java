@@ -40,7 +40,8 @@ public class SplashActivity extends AppCompatActivity {
 
         boolean result = con.makeUserProfile(user);
 
-        Toast.makeText(this, result ? "Profile Created!" : "Profile Create failed", Toast.LENGTH_LONG).show();
+        //TODO undo for non-API level 21 test
+        //Toast.makeText(this, result ? "Profile Created!" : "Profile Create failed", Toast.LENGTH_LONG).show();
 
         startActivity(new Intent(this, MainActivity.class));
 
