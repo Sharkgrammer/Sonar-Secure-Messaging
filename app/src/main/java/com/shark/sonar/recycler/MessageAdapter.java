@@ -1,6 +1,7 @@
 package com.shark.sonar.recycler;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,7 @@ import java.util.List;
 //REF https://www.javatpoint.com/android-recyclerview-list-example
 public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
-    private List<History>  listData;
+    private List<History> listData;
     private Conversation convo;
     private Context context;
     private MessageViewHolder recentViewHolder;
@@ -36,13 +37,28 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(MessageViewHolder holder, int pos) {
+    public void onBindViewHolder(@NonNull MessageViewHolder holder, int pos) {
         final Message data = listData.get(pos).getMessageObj();
+        int ID = convo.getConversation_ID();
 
+        System.out.println(pos + " " + data.getMessage());
+
+        if (pos > 0) {
+            Message prevData = listData.get(pos - 1).getMessageObj();
+
+            if (prevData.isFromYou() == data.isFromYou()) {
+                holder.addToCurrent(data, ID);
+            } else {
+                holder.makeNew(data, ID);
+            }
+        } else {
+            holder.makeNew(data, ID);
+        }
+
+        /*holder.setImgPerson(data.getImage());
         holder.setID(convo.getConversation_ID());
-        holder.setImgPerson(data.getImage());
         holder.setTextMessage(data.getMessage());
-        holder.isFromYou(data.isFromYou());
+        holder.isFromYou(data.isFromYou());*/
 
         recentViewHolder = holder;
     }
@@ -56,13 +72,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         }
     }
 
-    public void add(History his){
+    public void add(History his) {
         listData.add(his);
 
         this.notifyItemInserted(listData.size() - 1);
     }
 
-    public MessageViewHolder getRecentViewholder(){
+    public MessageViewHolder getRecentViewholder() {
         return recentViewHolder;
     }
 }

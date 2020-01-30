@@ -25,6 +25,7 @@
             android:layout_height="match_parent">
 
             <android.support.v7.widget.CardView
+                android:id="@+id/imgCard"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"

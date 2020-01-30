@@ -111,16 +111,7 @@ public class MessageActivity extends AppCompatActivity {
         boolean temp = his.insertHistory();
         System.out.println(temp);
 
-        MessageViewHolder msg = adapter.getRecentViewholder();
-
-        if (msgReceived || adapter.getItemCount() == 0 || firstRun){
-            adapter.add(his);
-        }else{
-            msg.addNewMessage(message);
-        }
-
-        msgReceived = false;
-        firstRun = false;
+        adapter.add(his);
 
         client.refreshMain();
         recyclerView.scrollToPosition(adapter.getItemCount() - 1);
@@ -145,11 +136,8 @@ public class MessageActivity extends AppCompatActivity {
                 boolean temp = his.insertHistory();
 
                 System.out.println(temp);
-                if (!msgReceived || adapter.getItemCount() == 0){
-                    adapter.add(his);
-                }else{
-                    msgAd.addNewMessage(his.getMessageObj().getMessage());
-                }
+
+                adapter.add(his);
 
                 recyclerView.scrollToPosition(adapter.getItemCount() - 1);
                 msgReceived = true;
