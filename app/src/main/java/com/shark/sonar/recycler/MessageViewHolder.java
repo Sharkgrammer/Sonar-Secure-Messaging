@@ -51,8 +51,8 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
         if (addToCurrent) {
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layoutwrapper.getLayoutParams();
-            layoutParams.topMargin = 2;
-            layoutParams.bottomMargin = 2;
+            layoutParams.topMargin = 3;
+            layoutParams.bottomMargin = 3;
 
             layoutwrapper.setLayoutParams(layoutParams);
         }
