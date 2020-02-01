@@ -38,7 +38,7 @@ public class Client implements ResultHandler {
         UserHolder user = new UserHolder(ID, publicKey, privateKey);
         Base64Android b = new Base64Android();
 
-        dataHolder = new DataHolder();
+        dataHolder = new DataHolder(publicKey, privateKey);
 
         dataHolder.setPort(6002);
         dataHolder.setIP("192.168.43.53");

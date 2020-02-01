@@ -6,6 +6,10 @@ android {
         applicationId "com.shark.sonar"
         minSdkVersion 21
         targetSdkVersion 28
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -24,7 +28,6 @@ dependencies {
     implementation "org.igniterealtime.smack:smack-android-extensions:4.3.0"
     implementation "org.igniterealtime.smack:smack-tcp:4.3.0"
     implementation 'com.android.support:cardview-v7:28.0.0'
-    implementation 'com.scottyab:aescrypt:0.0.1'
 
     implementation 'com.android.support:support-v4:28.0.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
