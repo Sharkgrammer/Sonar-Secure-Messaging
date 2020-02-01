@@ -2,14 +2,23 @@ package com.shark.sonar.activity;
 
 import android.DataContainer;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shark.sonar.R;
 import com.shark.sonar.controller.ConvoDbControl;
@@ -23,6 +32,8 @@ import com.shark.sonar.recycler.MessageAdapter;
 import com.shark.sonar.recycler.MessageViewHolder;
 import com.shark.sonar.utility.Base64Android;
 import com.shark.sonar.utility.Client;
+
+import org.w3c.dom.Text;
 
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -73,7 +84,7 @@ public class MessageActivity extends AppCompatActivity {
 
         List<History> his = conversation.getHistoryArrayList();
 
-        for (History h : his){
+        for (History h : his) {
             System.out.println(h.getUser_from().getName());
         }
 
@@ -94,16 +105,17 @@ public class MessageActivity extends AppCompatActivity {
         client.setCurrentMessageActivity(this);
     }
 
-    public void stop(){
+    public void stop() {
         client.stop();
     }
 
-    public void sendMessage(View v){
+    public void sendMessage(View v) {
         String message = sendView.getText().toString();
         client.sendMessage(message, conversation.getProfile().getUser_ID_key());
 
         History his = new History(this);
-        Message msg2 = new Message(ProfUser.getIcon().getIcon_ID(), true, message, "");;
+        Message msg2 = new Message(ProfUser.getIcon().getIcon_ID(), true, message, "");
+        ;
         his.setConversation_ID(conversation.getConversation_ID());
         his.setMessageObj(msg2);
         his.setUser_from(ProfUser);
@@ -146,7 +158,62 @@ public class MessageActivity extends AppCompatActivity {
 
     }
 
-    public Conversation getConversation(){
+    public Conversation getConversation() {
         return conversation;
+    }
+
+    //REF https://stackoverflow.com/questions/37944528/add-options-in-an-option-menu-of-main-toolbar-in-android-studio
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.message_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        boolean result = false;
+
+        switch (id) {
+
+            case R.id.theme:
+                showThemeDialog();
+                result = true;
+                break;
+
+        }
+
+        return result;
+    }
+
+    private void showThemeDialog() {
+
+        LayoutInflater li = LayoutInflater.from(this);
+        View dialog = li.inflate(R.layout.colour_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(dialog);
+
+        LinearLayout content = dialog.findViewById(R.id.colDialogContent);
+        Button save = (Button) dialog.findViewById(R.id.dialogBtnSave);
+
+        for (int x = 0; x < 10; x++){
+            View child = li.inflate(R.layout.item_single_colour, null);
+
+            TextView title = child.findViewById(R.id.colHeader);
+            title.setText("Test colour " + String.valueOf(x));
+            content.addView(child);
+        }
+
+        //alertDialogBuilder.setTitle(getResources().getString(R.string.colourDialog));
+
+        final AlertDialog alert = alertDialogBuilder.show();
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //save
+                alert.dismiss();
+            }
+        });
     }
 }

@@ -15,6 +15,13 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
+    <style name="AccentRaisedButton" parent="Theme.AppCompat.Light">
+        <item name="android:buttonStyle">@style/Widget.AppCompat.Button.Colored</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorTextLight</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
     <style name="PrimaryRaisedButton" parent="Theme.AppCompat.Light">
         <item name="android:buttonStyle">@style/Widget.AppCompat.Button.Colored</item>
         <item name="colorControlHighlight">@color/colorAccent</item>

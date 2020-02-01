@@ -2,7 +2,13 @@
     <string name="app_name">Sonar</string>
     <string name="toolbar">@string/app_name</string>
     <string name="send">Send message</string>
+    <string name="save">Save</string>
     <string name="mainText">Add new friends with the plus button!</string>
+    <string name="colourTo">Them</string>
+    <string name="colourFrom">You</string>
+    <string name="colourBack">Background</string>
+    <string name="colourDialog">Theme chooser</string>
+    <string name="menuColour">Change theme</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

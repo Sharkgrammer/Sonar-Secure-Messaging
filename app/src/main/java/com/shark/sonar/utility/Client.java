@@ -40,8 +40,8 @@ public class Client implements ResultHandler {
 
         dataHolder = new DataHolder(publicKey, privateKey);
 
-        dataHolder.setPort(6002);
-        dataHolder.setIP("192.168.43.53");
+        dataHolder.setPort(80);
+        dataHolder.setIP("10.241.225.24");
         dataHolder.setBase64(b);
         dataHolder.setServer(false);
 
