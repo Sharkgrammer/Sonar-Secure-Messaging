@@ -1,14 +1,15 @@
 package com.shark.sonar.activity;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.ContextCompat;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,12 +18,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shark.sonar.R;
 import com.shark.sonar.controller.ColourDbControl;
@@ -72,13 +71,7 @@ public class MessageActivity extends AppCompatActivity {
         HandleColours();
 
         //REF https://freakycoder.com/android-notes-24-how-to-add-back-button-at-toolbar-941e6577418e
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         List<History> his = conversation.getHistoryArrayList();
 
@@ -113,7 +106,6 @@ public class MessageActivity extends AppCompatActivity {
 
         History his = new History(this);
         Message msg2 = new Message(ProfUser.getIcon().getIcon_ID(), true, message, "");
-        ;
         his.setConversation_ID(conversation.getConversation_ID());
         his.setMessageObj(msg2);
         his.setUser_from(ProfUser);
@@ -163,6 +155,14 @@ public class MessageActivity extends AppCompatActivity {
         toolbar.setBackgroundColor(Color.parseColor(colour.getPrimary_Col()));
         toolbar.setTitleTextColor(Color.parseColor(colour.getText_Col()));
 
+        Drawable back = getResources().getDrawable(R.drawable.ic_arrow_back);
+        back.setColorFilter(Color.parseColor(colour.getText_Col()), PorterDuff.Mode.SRC_ATOP);
+        toolbar.setNavigationIcon(back);
+
+        Drawable menu = getResources().getDrawable(R.drawable.ic_menu_black);
+        menu.setColorFilter(Color.parseColor(colour.getText_Col()), PorterDuff.Mode.SRC_ATOP);
+        toolbar.setOverflowIcon(menu);
+
         sendView.setTextColor(Color.parseColor(colour.getText_Background_Col()));
         sendView.setHintTextColor(Color.parseColor(colour.getHint_Col()));
         Drawable d = this.getDrawable(R.drawable.text_border);
@@ -172,6 +172,10 @@ public class MessageActivity extends AppCompatActivity {
         this.getWindow().setStatusBarColor(Color.parseColor(colour.getPrimary_Col_Dark()));
         LinearLayout lay = findViewById(R.id.messageLayOverSendView);
         lay.setBackgroundColor(Color.parseColor(colour.getPrimary_Col()));
+        FloatingActionButton fab = findViewById(R.id.msgFab);
+        fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(colour.getChat_Col_From())));
+        fab.setImageTintList(ColorStateList.valueOf(Color.parseColor(colour.getText_Col())));
+
     }
 
     public Conversation getConversation() {
