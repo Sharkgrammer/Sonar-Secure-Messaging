@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             con.initialise();
         }
 
-        //new ColourDbControl(this).makeSampleColours();
+        //new ColourDbControl(this).makeSampleColours(false);
 
         ProfileDbControl ProfCon = new ProfileDbControl(this);
 

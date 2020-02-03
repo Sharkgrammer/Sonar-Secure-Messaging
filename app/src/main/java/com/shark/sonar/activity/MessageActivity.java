@@ -2,6 +2,8 @@ package com.shark.sonar.activity;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -97,7 +100,7 @@ public class MessageActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(lay);
         recyclerView.setAdapter(adapter);
 
-        client.setCurrentMessageActivity(this);
+        MainActivity.client.setCurrentMessageActivity(this);
     }
 
     public void stop() {
@@ -158,12 +161,21 @@ public class MessageActivity extends AppCompatActivity {
         ConstraintLayout mainBackground = findViewById(R.id.msgOverall);
         mainBackground.setBackgroundColor(Color.parseColor(colour.getChat_Col_Background()));
         toolbar.setBackgroundColor(Color.parseColor(colour.getPrimary_Col()));
+        toolbar.setTitleTextColor(Color.parseColor(colour.getText_Col()));
+
         sendView.setTextColor(Color.parseColor(colour.getText_Background_Col()));
         sendView.setHintTextColor(Color.parseColor(colour.getHint_Col()));
+        Drawable d = this.getDrawable(R.drawable.text_border);
+        d.setColorFilter(Color.parseColor(colour.getChat_Col_Background()), PorterDuff.Mode.MULTIPLY);
+        sendView.setBackground(d);
+
         this.getWindow().setStatusBarColor(Color.parseColor(colour.getPrimary_Col_Dark()));
+        LinearLayout lay = findViewById(R.id.messageLayOverSendView);
+        lay.setBackgroundColor(Color.parseColor(colour.getPrimary_Col()));
     }
 
     public Conversation getConversation() {
+        Log.wtf("Error in getConversation", String.valueOf((conversation == null)));
         return conversation;
     }
 
