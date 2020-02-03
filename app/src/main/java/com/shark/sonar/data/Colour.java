@@ -7,7 +7,8 @@ public class Colour {
     private String Chat_Col_To;
     private String Chat_Col_From;
     private String Chat_Col_Background;
-    private String Chat_Col_Accent;
+    private String Text_Background_Col;
+    private String Col_Name;
 
     public int getColour_ID() {
         return Colour_ID;
@@ -49,11 +50,19 @@ public class Colour {
         Chat_Col_Background = chat_Col_Background;
     }
 
-    public String getChat_Col_Accent() {
-        return Chat_Col_Accent;
+    public String getText_Background_Col() {
+        return Text_Background_Col;
     }
 
-    public void setChat_Col_Accent(String chat_Col_Accent) {
-        Chat_Col_Accent = chat_Col_Accent;
+    public void setText_Background_Col(String text_Background_Col) {
+        Text_Background_Col = text_Background_Col;
+    }
+
+    public String getCol_Name() {
+        return Col_Name;
+    }
+
+    public void setCol_Name(String col_Name) {
+        Col_Name = col_Name;
     }
 }

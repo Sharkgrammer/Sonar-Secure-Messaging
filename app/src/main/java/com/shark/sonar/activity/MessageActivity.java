@@ -1,15 +1,14 @@
 package com.shark.sonar.activity;
 
-import android.DataContainer;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Color;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,30 +20,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shark.sonar.R;
+import com.shark.sonar.controller.ColourDbControl;
 import com.shark.sonar.controller.ConvoDbControl;
-import com.shark.sonar.controller.NetControlAsyncTask;
 import com.shark.sonar.controller.ProfileDbControl;
+import com.shark.sonar.data.Colour;
 import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.History;
 import com.shark.sonar.data.Message;
 import com.shark.sonar.data.Profile;
 import com.shark.sonar.recycler.MessageAdapter;
 import com.shark.sonar.recycler.MessageViewHolder;
-import com.shark.sonar.utility.Base64Android;
 import com.shark.sonar.utility.Client;
 
-import org.w3c.dom.Text;
-
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-
-import crypto.CryptManager;
-import send.MessageHandler;
-import util.Base64Util;
-import util.DataHolder;
-import util.ResultHandler;
-import util.UserHolder;
 
 public class MessageActivity extends AppCompatActivity {
 
@@ -61,6 +49,7 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
+        //new ColourDbControl(this).makeSampleColours();
         sendView = findViewById(R.id.sendView);
 
         ProfileDbControl ProfCon = new ProfileDbControl(this);
@@ -181,6 +170,8 @@ public class MessageActivity extends AppCompatActivity {
                 result = true;
                 break;
 
+            default:
+                throw new IllegalStateException("Unexpected value: " + id);
         }
 
         return result;
@@ -194,13 +185,49 @@ public class MessageActivity extends AppCompatActivity {
         alertDialogBuilder.setView(dialog);
 
         LinearLayout content = dialog.findViewById(R.id.colDialogContent);
-        Button save = (Button) dialog.findViewById(R.id.dialogBtnSave);
+        Button save = dialog.findViewById(R.id.dialogBtnSave);
 
-        for (int x = 0; x < 10; x++){
+        ColourDbControl dbControl = new ColourDbControl(this);
+
+        List<Colour> colourList = dbControl.selectAllColours();
+
+        ConstraintLayout layThem, layYou, layBack, layOverall;
+        TextView txtThem, txtYou, txtBack, txtID, txtTitle;
+
+        for (Colour c : colourList){
             View child = li.inflate(R.layout.item_single_colour, null);
 
-            TextView title = child.findViewById(R.id.colHeader);
-            title.setText("Test colour " + String.valueOf(x));
+            txtTitle = child.findViewById(R.id.colHeader);
+            txtID = child.findViewById(R.id.colD);
+            txtBack = child.findViewById(R.id.colTxtBack);
+            txtYou = child.findViewById(R.id.colTxtFrom);
+            txtThem = child.findViewById(R.id.colTxtTo);
+            layYou = child.findViewById(R.id.colLayFrom);
+            layThem = child.findViewById(R.id.colLayTo);
+            layBack = child.findViewById(R.id.colLayBack);
+            layOverall = child.findViewById(R.id.colLayOverall);
+
+            txtTitle.setText(c.getCol_Name());
+            txtID.setText(String.valueOf(c.getColour_ID()));
+            txtYou.setTextColor(Color.parseColor(c.getText_Col()));
+            txtThem.setTextColor(Color.parseColor(c.getText_Col()));
+            txtBack.setTextColor(Color.parseColor(c.getText_Background_Col()));
+
+            layBack.setBackgroundColor(Color.parseColor(c.getChat_Col_Background()));
+            layYou.setBackgroundColor(Color.parseColor(c.getChat_Col_From()));
+            layThem.setBackgroundColor(Color.parseColor(c.getChat_Col_To()));
+
+            final String name = c.getCol_Name();
+            final Context con = this;
+
+            layOverall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //save
+                    Toast.makeText(con, "Colour " + name + " clicked", Toast.LENGTH_SHORT).show();
+                }
+            });
+
             content.addView(child);
         }
 

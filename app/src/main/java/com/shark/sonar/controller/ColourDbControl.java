@@ -18,7 +18,7 @@ public class ColourDbControl extends DbControl {
         super(c);
     }
 
-    public List<Colour> selectAllcolour(){
+    public List<Colour> selectAllColours(){
         return selectColour(null);
     }
 
@@ -64,7 +64,8 @@ public class ColourDbControl extends DbControl {
                 c.setChat_Col_From(cursor.getString(2));
                 c.setText_Col(cursor.getString(3));
                 c.setChat_Col_Background(cursor.getString(4));
-                c.setChat_Col_Accent(cursor.getString(5));
+                c.setText_Background_Col(cursor.getString(5));
+                c.setCol_Name(cursor.getString(6));
 
                 result.add(c);
 
@@ -136,12 +137,12 @@ public class ColourDbControl extends DbControl {
     private void insertUpdate(Integer colourID, Colour colour, String sqlFile) throws SQLException {
         SQLiteStatement queryState = db.compileStatement(sqlFile);
 
-        queryState.bindDouble(1, colour.getColour_ID());
-        queryState.bindString(2, colour.getChat_Col_To());
-        queryState.bindString(3, colour.getChat_Col_From());
-        queryState.bindString(4, colour.getText_Col());
-        queryState.bindString(5, colour.getChat_Col_Background());
-        queryState.bindString(6, colour.getChat_Col_Accent());
+        queryState.bindString(1, colour.getChat_Col_To());
+        queryState.bindString(2, colour.getChat_Col_From());
+        queryState.bindString(3, colour.getText_Col());
+        queryState.bindString(4, colour.getChat_Col_Background());
+        queryState.bindString(5, colour.getText_Background_Col());
+        queryState.bindString(6, colour.getCol_Name());
 
         if (colourID != null){
             queryState.bindDouble(7, colourID);
@@ -149,6 +150,37 @@ public class ColourDbControl extends DbControl {
         }else{
             queryState.executeInsert();
         }
+    }
+
+
+
+    public void makeSampleColours(){
+
+        Colour colour = new Colour();
+
+        colour.setCol_Name("Default Colour");
+        colour.setChat_Col_Background("#E8E8E8");
+        colour.setText_Background_Col("#ffffff");
+        colour.setChat_Col_From("#EB5600");
+        colour.setChat_Col_To("#008080");
+        colour.setColour_ID(1);
+        colour.setText_Col("#000000");
+
+        this.insertColour(colour);
+
+        colour = new Colour();
+
+        colour.setCol_Name("Inverted!");
+        colour.setChat_Col_Background("#ffffff");
+        colour.setText_Background_Col("#000000");
+        colour.setChat_Col_From("#008080");
+        colour.setChat_Col_To("#EB5600");
+        colour.setColour_ID(2);
+        colour.setText_Col("#ffffff");
+
+        this.insertColour(colour);
+
+
     }
 
 
