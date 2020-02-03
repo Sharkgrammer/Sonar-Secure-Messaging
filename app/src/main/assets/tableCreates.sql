@@ -47,6 +47,9 @@ create table Colour(
 	text_col varchar(20) not null,
 	background_col varchar(20) not null,
 	background_text_col varchar(20) not null,
-	colour_name varchar(40) not null
+	colour_name varchar(40) not null,
+	primary_col varchar(20) not null,
+	primary_col_dark varchar(20) not null,
+	hint_col varchar(20) not null
 );
 

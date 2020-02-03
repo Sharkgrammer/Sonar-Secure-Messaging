@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.shark.sonar.controller.BridgeDbControl;
 import com.shark.sonar.controller.ColourDbControl;
+import com.shark.sonar.controller.ConvoDbControl;
 import com.shark.sonar.controller.HistoryDbControl;
 import com.shark.sonar.controller.ProfileDbControl;
 
@@ -50,14 +51,17 @@ public class Conversation {
     }
 
     public Colour getColour() {
+        if (colour == null){
+            ColourDbControl db = new ColourDbControl(context);
+            colour = db.selectSingleColour(1);
+        }
         return colour;
     }
 
     public void setColour(Colour colour) {
-        if (colour == null) {
-            Colour col = new Colour();
-            col.setColour_ID(0);
-            colour = col;
+        if (colour == null){
+            ColourDbControl db = new ColourDbControl(context);
+            colour = db.selectSingleColour(1);
         }
         this.colour = colour;
     }
@@ -67,6 +71,12 @@ public class Conversation {
 
         colour = con.selectSingleColour(Colour_ID);
 
+    }
+
+    public void updateColour(){
+        ConvoDbControl db = new ConvoDbControl(context);
+
+        db.updateConvo(this.conversation_ID, this);
     }
 
     public Bridge getBridge() {

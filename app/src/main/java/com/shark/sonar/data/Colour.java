@@ -9,6 +9,9 @@ public class Colour {
     private String Chat_Col_Background;
     private String Text_Background_Col;
     private String Col_Name;
+    private String Primary_Col;
+    private String Primary_Col_Dark;
+    private String Hint_Col;
 
     public int getColour_ID() {
         return Colour_ID;
@@ -64,5 +67,29 @@ public class Colour {
 
     public void setCol_Name(String col_Name) {
         Col_Name = col_Name;
+    }
+
+    public String getPrimary_Col() {
+        return Primary_Col;
+    }
+
+    public void setPrimary_Col(String primary_Col) {
+        Primary_Col = primary_Col;
+    }
+
+    public String getPrimary_Col_Dark() {
+        return Primary_Col_Dark;
+    }
+
+    public void setPrimary_Col_Dark(String primary_Col_Dark) {
+        Primary_Col_Dark = primary_Col_Dark;
+    }
+
+    public String getHint_Col() {
+        return Hint_Col;
+    }
+
+    public void setHint_Col(String hint_Col) {
+        Hint_Col = hint_Col;
     }
 }

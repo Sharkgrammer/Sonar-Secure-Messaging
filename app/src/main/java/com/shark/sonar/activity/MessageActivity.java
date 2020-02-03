@@ -3,6 +3,7 @@ package com.shark.sonar.activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -43,6 +45,7 @@ public class MessageActivity extends AppCompatActivity {
     private MessageAdapter adapter;
     private RecyclerView recyclerView;
     private Profile ProfUser;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +59,14 @@ public class MessageActivity extends AppCompatActivity {
         ProfUser = ProfCon.selectUserProfile();
 
         ConvoDbControl conDB = new ConvoDbControl(this);
-        conversation = conDB.selectConvoByID(Integer.parseInt((String) getIntent().getExtras().get("ID")));
+        String ID = (String) getIntent().getExtras().get("ID");
+        conversation = conDB.selectConvoByID(Integer.parseInt(ID));
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(conversation.getProfile().getName());
+
+        HandleColours();
 
         //REF https://freakycoder.com/android-notes-24-how-to-add-back-button-at-toolbar-941e6577418e
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
@@ -147,6 +153,16 @@ public class MessageActivity extends AppCompatActivity {
 
     }
 
+    public void HandleColours(){
+        Colour colour = conversation.getColour();
+        ConstraintLayout mainBackground = findViewById(R.id.msgOverall);
+        mainBackground.setBackgroundColor(Color.parseColor(colour.getChat_Col_Background()));
+        toolbar.setBackgroundColor(Color.parseColor(colour.getPrimary_Col()));
+        sendView.setTextColor(Color.parseColor(colour.getText_Background_Col()));
+        sendView.setHintTextColor(Color.parseColor(colour.getHint_Col()));
+        this.getWindow().setStatusBarColor(Color.parseColor(colour.getPrimary_Col_Dark()));
+    }
+
     public Conversation getConversation() {
         return conversation;
     }
@@ -217,15 +233,13 @@ public class MessageActivity extends AppCompatActivity {
             layYou.setBackgroundColor(Color.parseColor(c.getChat_Col_From()));
             layThem.setBackgroundColor(Color.parseColor(c.getChat_Col_To()));
 
-            final String name = c.getCol_Name();
-            final Context con = this;
+            final Colour col = c;
+            layOverall.setOnClickListener(view -> {
+                conversation.setColour(col);
+                adapter.changeColours(conversation);
+                HandleColours();
 
-            layOverall.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //save
-                    Toast.makeText(con, "Colour " + name + " clicked", Toast.LENGTH_SHORT).show();
-                }
+                conversation.updateColour();
             });
 
             content.addView(child);
@@ -235,12 +249,6 @@ public class MessageActivity extends AppCompatActivity {
 
         final AlertDialog alert = alertDialogBuilder.show();
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //save
-                alert.dismiss();
-            }
-        });
+        save.setOnClickListener(view -> alert.dismiss());
     }
 }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.shark.sonar.R;
+import com.shark.sonar.controller.ColourDbControl;
 import com.shark.sonar.controller.ConvoDbControl;
 import com.shark.sonar.controller.DbControl;
 import com.shark.sonar.controller.ProfileDbControl;
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
             con.initialise();
         }
+
+        //new ColourDbControl(this).makeSampleColours();
 
         ProfileDbControl ProfCon = new ProfileDbControl(this);
 

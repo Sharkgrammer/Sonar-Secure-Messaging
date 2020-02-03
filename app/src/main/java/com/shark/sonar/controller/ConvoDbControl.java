@@ -149,10 +149,6 @@ public class ConvoDbControl extends DbControl {
         SQLiteStatement queryState = db.compileStatement(sqlFile);
         int num = 1;
 
-        if (ConvoID != null){
-            queryState.bindDouble(num++, convo.getConversation_ID());
-        }
-
         queryState.bindDouble(num++, convo.getColour().getColour_ID());
         queryState.bindDouble(num++, convo.getBridge().getBridge_ID());
         queryState.bindDouble(num++, convo.getProfile().getProfile_ID());

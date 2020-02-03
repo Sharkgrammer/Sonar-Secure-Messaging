@@ -158,7 +158,7 @@ public class ProfileDbControl extends DbControl {
             convo.setProfile(temp);
 
             convo.setBridge(null);
-            convo.setColour(null);
+            convo.setColour(1);
             convo.setHistoryArrayList();
 
             System.out.println("USER PROFILE CONVO " + convo.getProfile().getName());

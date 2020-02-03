@@ -1,6 +1,9 @@
 package com.shark.sonar.recycler;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +14,7 @@ import android.widget.TextView;
 
 import com.shark.sonar.R;
 import com.shark.sonar.controller.ConvoDbControl;
+import com.shark.sonar.data.Colour;
 import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.History;
 import com.shark.sonar.data.Message;
@@ -24,6 +28,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     private TextView lblMessage, lblID;
     private LinearLayout layoutin, layouttop, layoutmessage, layoutwrapper;
     private Context context;
+    private Colour colour;
     private boolean userFrom;
     private int LTR = View.LAYOUT_DIRECTION_LTR, RTL = View.LAYOUT_DIRECTION_RTL;
 
@@ -57,6 +62,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             layoutwrapper.setLayoutParams(layoutParams);
         }
 
+        lblMessage.setTextColor(Color.parseColor(colour.getText_Col()));
         lblMessage.setText(data.getMessage());
 
     }
@@ -72,13 +78,22 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     private void isFromYou(LinearLayout in, LinearLayout message, Boolean fromUser) {
 
         this.userFrom = fromUser;
+        Drawable d;
 
         if (fromUser) {
             in.setLayoutDirection(RTL);
-            message.setBackground(context.getDrawable(R.drawable.outgoing_message));
+
+            d = context.getDrawable(R.drawable.outgoing_message);
+            d.setColorFilter(Color.parseColor(colour.getChat_Col_From()), PorterDuff.Mode.MULTIPLY);
+
+            message.setBackground(d);
         } else {
             in.setLayoutDirection(LTR);
-            message.setBackground(context.getDrawable(R.drawable.incoming_message));
+
+            d = context.getDrawable(R.drawable.outgoing_message);
+            d.setColorFilter(Color.parseColor(colour.getChat_Col_To()), PorterDuff.Mode.MULTIPLY);
+
+            message.setBackground(d);
         }
     }
 
@@ -101,5 +116,8 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         setImgVis(View.VISIBLE);
     }
 
+    public void setColour(Colour c){
+        this.colour = c;
+    }
 
 }

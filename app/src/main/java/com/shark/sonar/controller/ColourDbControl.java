@@ -43,6 +43,8 @@ public class ColourDbControl extends DbControl {
 
             if (colour_ID != null){
 
+                System.out.println("SELECT SINGLE COLOUR: " + colour_ID);
+
                 sqlFile = sqlFileAll[SELECT_SINGLE];
                 cursor = db.rawQuery(sqlFile, new String[] {String.valueOf(colour_ID)});
 
@@ -52,6 +54,9 @@ public class ColourDbControl extends DbControl {
                 cursor = db.rawQuery(sqlFile, null);
 
             }
+
+
+            System.out.println("SELECT COLOURS: " + sqlFile);
 
             cursor.moveToFirst();
 
@@ -66,6 +71,9 @@ public class ColourDbControl extends DbControl {
                 c.setChat_Col_Background(cursor.getString(4));
                 c.setText_Background_Col(cursor.getString(5));
                 c.setCol_Name(cursor.getString(6));
+                c.setPrimary_Col(cursor.getString(7));
+                c.setPrimary_Col_Dark(cursor.getString(8));
+                c.setHint_Col(cursor.getString(9));
 
                 result.add(c);
 
@@ -143,16 +151,17 @@ public class ColourDbControl extends DbControl {
         queryState.bindString(4, colour.getChat_Col_Background());
         queryState.bindString(5, colour.getText_Background_Col());
         queryState.bindString(6, colour.getCol_Name());
+        queryState.bindString(7, colour.getPrimary_Col());
+        queryState.bindString(8, colour.getPrimary_Col_Dark());
+        queryState.bindString(9, colour.getHint_Col());
 
         if (colourID != null){
-            queryState.bindDouble(7, colourID);
+            queryState.bindDouble(10, colourID);
             queryState.executeUpdateDelete();
         }else{
             queryState.executeInsert();
         }
     }
-
-
 
     public void makeSampleColours(){
 
@@ -160,25 +169,45 @@ public class ColourDbControl extends DbControl {
 
         colour.setCol_Name("Default Colour");
         colour.setChat_Col_Background("#E8E8E8");
-        colour.setText_Background_Col("#ffffff");
+        colour.setText_Background_Col("#000000");
         colour.setChat_Col_From("#EB5600");
         colour.setChat_Col_To("#008080");
         colour.setColour_ID(1);
-        colour.setText_Col("#000000");
+        colour.setText_Col("#ffffff");
+        colour.setPrimary_Col("#008080");
+        colour.setPrimary_Col_Dark("#006363");
+        colour.setHint_Col("#808080");
 
         this.insertColour(colour);
 
         colour = new Colour();
 
-        colour.setCol_Name("Inverted!");
+        colour.setCol_Name("Inverted");
         colour.setChat_Col_Background("#ffffff");
         colour.setText_Background_Col("#000000");
         colour.setChat_Col_From("#008080");
         colour.setChat_Col_To("#EB5600");
-        colour.setColour_ID(2);
         colour.setText_Col("#ffffff");
+        colour.setPrimary_Col("#118080");
+        colour.setPrimary_Col_Dark("#116363");
+        colour.setHint_Col("#808080");
 
         this.insertColour(colour);
+
+        colour = new Colour();
+        colour.setCol_Name("Dark mode");
+        colour.setChat_Col_Background("#000000");
+        colour.setText_Background_Col("#ffffff");
+        colour.setChat_Col_From("#D23641");
+        colour.setChat_Col_To("#A45209");
+        colour.setText_Col("#ffffff");
+        colour.setPrimary_Col("#000000");
+        colour.setPrimary_Col_Dark("#000000");
+        colour.setHint_Col("#808080");
+
+        this.insertColour(colour);
+
+        //*/
 
 
     }

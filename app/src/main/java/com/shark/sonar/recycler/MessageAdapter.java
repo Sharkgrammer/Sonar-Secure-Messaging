@@ -43,6 +43,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
         System.out.println(pos + " " + data.getMessage());
 
+        holder.setColour(convo.getColour());
+
         if (pos > 0) {
             Message prevData = listData.get(pos - 1).getMessageObj();
 
@@ -54,11 +56,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         } else {
             holder.makeNew(data, ID);
         }
-
-        /*holder.setImgPerson(data.getImage());
-        holder.setID(convo.getConversation_ID());
-        holder.setTextMessage(data.getMessage());
-        holder.isFromYou(data.isFromYou());*/
 
         recentViewHolder = holder;
     }
@@ -80,5 +77,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     public MessageViewHolder getRecentViewholder() {
         return recentViewHolder;
+    }
+
+    public void changeColours(Conversation convo){
+        this.convo = convo;
+        this.notifyDataSetChanged();
     }
 }
