@@ -40,7 +40,7 @@ public class Client implements ResultHandler {
 
         dataHolder = new DataHolder(publicKey, privateKey);
 
-        dataHolder.setPort(6000);
+        dataHolder.setPort(6002);
         dataHolder.setIP("192.168.43.53");
         dataHolder.setBase64(b);
         dataHolder.setServer(false);
@@ -70,7 +70,7 @@ public class Client implements ResultHandler {
             try{
                 convoID = currentMessageActivity.getConversation().getProfile().getUser_ID_key();
             }catch (Exception e){
-                Log.wtf("Error in messageReceived", e.toString());
+                Log.wtf("Error in messageRecieved", e.toString());
             }
 
             if (Arrays.equals(fromID, convoID)){
@@ -125,8 +125,20 @@ public class Client implements ResultHandler {
         client.stop();
     }
 
+    public DataHolder getDataHolder() {
+        return dataHolder;
+    }
+
+    public void setDataHolder(DataHolder dataHolder) {
+        this.dataHolder = dataHolder;
+    }
+
     public void setMainActivity(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
+    }
+
+    public MessageActivity getCurrentMessageActivity() {
+        return currentMessageActivity;
     }
 
     public void setCurrentMessageActivity(MessageActivity currentMessageActivity) {

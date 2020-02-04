@@ -22,7 +22,8 @@
         android:id="@+id/scannerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_button"
         android:foreground="@drawable/ripple"
         android:onClick="addUser"
@@ -31,7 +32,9 @@
         android:textColor="@color/colorTextLight"
         app:layout_constraintBottom_toTopOf="@+id/YourQRcode"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/scannerImg"
@@ -52,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/scanText"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -65,12 +68,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/scanExplain"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scannerImg" />
+        app:layout_constraintTop_toBottomOf="@+id/scannerImg"
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

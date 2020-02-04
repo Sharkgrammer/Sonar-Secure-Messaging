@@ -1,9 +1,14 @@
 package com.shark.sonar.activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +22,7 @@ import com.google.zxing.integration.android.IntentResult;
 import com.shark.sonar.R;
 import com.shark.sonar.controller.ProfileDbControl;
 import com.shark.sonar.data.Icon;
+import com.shark.sonar.data.Message;
 import com.shark.sonar.data.Profile;
 import com.shark.sonar.utility.Base64Android;
 
@@ -34,11 +40,25 @@ public class ScanActivity extends AppCompatActivity {
 
         Button mainBut = findViewById(R.id.scannerButton);
 
-        qrScan = new IntentIntegrator(this);
+        final Context context = this;
+        final ScanActivity act = this;
         mainBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                qrScan.initiateScan();
+                int perm = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+
+                Log.wtf("CHECK", String.valueOf(perm == PackageManager.PERMISSION_GRANTED));
+
+                if (perm != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(act, new String[] {Manifest.permission.CAMERA},50);
+                }else{
+                    qrScan = new IntentIntegrator(act);
+                    qrScan.setPrompt("Scan a QR code");
+                    qrScan.setOrientationLocked(false);
+                    qrScan.setBeepEnabled(true);
+                    qrScan.initiateScan();
+                }
+
             }
         });
 
@@ -47,7 +67,7 @@ public class ScanActivity extends AppCompatActivity {
         Profile currentUser = control.selectUserProfile();
 
         ImageView view = findViewById(R.id.scannerImg);
-        int smallerDimension = 1000;
+        int smallerDimension = 600;
 
         String input = compileQRData(currentUser);
 
@@ -102,8 +122,11 @@ public class ScanActivity extends AppCompatActivity {
                 try {
                     Log.wtf("QR RESULT", result.getContents());
 
+                    Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+
                 }
             }
         } else {
