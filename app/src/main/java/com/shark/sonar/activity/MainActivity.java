@@ -27,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static Client client;
     private MainAdapter adapter;
+    private Profile ProfUser;
+    private ProfileDbControl ProfCon;
+    private ImageView mainView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +47,14 @@ public class MainActivity extends AppCompatActivity {
             con.initialise();
         }
 
-        ProfileDbControl ProfCon = new ProfileDbControl(this);
-
+        ProfCon = new ProfileDbControl(this);
         List<Profile> profs = ProfCon.selectAllProfiles();
 
         for (Profile p : profs){
             System.out.println(p.getName() + " " + p.getProfile_ID() + " " + new String(p.getUser_ID_key()));
         }
 
-        Profile ProfUser = ProfCon.selectUserProfile();
+        ProfUser = ProfCon.selectUserProfile();
 
         if (ProfUser == null) {
             startActivity(new Intent(this, SplashActivity.class));
@@ -62,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
             client = new Client(ProfUser.getUser_ID_key(), temp.pukey1, temp.prkey1);
 
-            ImageView mainView = findViewById(R.id.imgPersonMain);
+            mainView = findViewById(R.id.imgPersonMain);
             mainView.setImageDrawable(ProfUser.getIcon().getIcon());
 
             List<Conversation> conversations = new ConvoDbControl(this).selectAllConvo();
@@ -103,5 +106,18 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, ProfileActivity.class));
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Profile temp = ProfCon.selectUserProfile();
+
+        if (!temp.equals(ProfUser)) {
+            //Update screen for new details
+            ProfUser = temp;
+            getSupportActionBar().setTitle(getResources().getString(R.string.toolbar) + ": " + ProfUser.getName());
+            mainView.setImageDrawable(ProfUser.getIcon().getIcon());
+        }
+    }
 
 }

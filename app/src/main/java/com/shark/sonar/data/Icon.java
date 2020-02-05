@@ -22,6 +22,11 @@ public class Icon {
         this.Icon = context.getResources().getDrawable(Icon, null);
     }
 
+    public Icon(Drawable drawable) {
+        Icon = drawable;
+        Icon_ID = Integer.parseInt(String.valueOf(drawable));
+    }
+
     public int getIcon_ID() {
         return Icon_ID;
     }
