@@ -11,8 +11,8 @@
     <string name="menuColour">Change theme</string>
     <string name="buttonScan">Scan a friends QR code</string>
     <string name="scanText">Have your friend scan this QR code</string>
-    <string name="scanExplain">You both need to scan each others codes to be able to chat to each other.
-    This is for secure reasons</string>
+    <string name="scanExplain">You both need to scan each others codes to be able to chat for security</string>
+    <string name="toolbarScanner">Add friends</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -2,6 +2,7 @@ package com.shark.sonar.controller;
 
 import android.DataContainer;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import send.MessageHandler;
 
@@ -24,15 +25,20 @@ public class NetControlAsyncTask extends AsyncTask<Boolean, Void, Void> {
     @Override
     protected Void doInBackground(Boolean... clientOn) {
 
-        if (!clientOn[0]) {
-            client.start();
+        try{
+            if (!clientOn[0]) {
+                client.start();
+            }
+
+            if (clientOn[1]) {
+                client.auth();
+            } else {
+                client.send(message, toID);
+            }
+        }catch(Exception e){
+            Log.wtf("Network issue", e.toString());
         }
 
-        if (clientOn[1]) {
-            client.auth();
-        } else {
-            client.send(message, toID);
-        }
 
         return null;
     }

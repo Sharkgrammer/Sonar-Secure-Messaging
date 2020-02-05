@@ -147,23 +147,24 @@ public class ProfileDbControl extends DbControl {
         }
 
         System.out.println("Insert User " + ID);
-
+        profile.setProfile_ID((int) ID);
 
         if (!userProfile) {
             System.out.println("oi");
             Conversation convo = new Conversation(context);
 
-            Profile temp = new Profile();
-            temp.setProfile_ID((int) ID);
-            convo.setProfile(temp);
+            convo.setProfile(profile);
 
             convo.setBridge(null);
             convo.setColour(1);
             convo.setHistoryArrayList();
 
-            System.out.println("USER PROFILE CONVO " + convo.getProfile().getName());
+            ConvoDbControl con = new ConvoDbControl(context);
 
-            System.out.println("CONVERSATION CREATED" + new ConvoDbControl(context).insertConvo(convo));
+            boolean result = con.insertConvo(convo);
+
+            System.out.println("USER PROFILE CONVO " + convo.getProfile().getName());
+            System.out.println("CONVERSATION CREATED " + result);
         }
 
         return true;

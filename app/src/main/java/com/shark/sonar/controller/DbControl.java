@@ -118,20 +118,12 @@ public class DbControl extends SQLiteOpenHelper {
         for (String name : names){
             for (int x = 1; x <= noOfIcons; x++){
                 icon = new Icon(context.getResources().getIdentifier("ic_" + name + x, "drawable" , context.getPackageName()));
-
-                System.out.println(icon.getIcon_ID());
-
                 con.insertIcon(icon);
             }
         }
 
 
-        IconDbControl connnn = new IconDbControl(context);
-        List<Icon> iconn = connnn.selectAllIcons();
-
-        for (Icon p : iconn){
-            Log.wtf("ICON", String.valueOf(p.getIcon_ID()));
-        }
+        new ColourDbControl(context).makeSampleColours(false);
     }
 
     public void runDatabaseTest() {

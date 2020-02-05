@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -17,18 +18,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        android:hardwareAccelerated="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".activity.SplashActivity"
-            android:noHistory="true"/>
+        <activity
+            android:name=".activity.SplashActivity"
+            android:noHistory="true" />
         <activity
             android:name=".activity.ProfileActivity"
             android:noHistory="true" />
-        <activity
-            android:name=".activity.ScanActivity"
-            android:noHistory="true"
-            android:screenOrientation="fullSensor"
-            tools:replace="screenOrientation"/>
+        <activity android:name=".activity.ScanActivity" />
         <activity android:name=".activity.MessageActivity" />
         <activity android:name=".activity.MainActivity">
             <intent-filter>

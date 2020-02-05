@@ -12,6 +12,7 @@ import com.shark.sonar.data.Profile;
 import com.shark.sonar.utility.ReadFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ConvoDbControl extends DbControl {
@@ -64,6 +65,8 @@ public class ConvoDbControl extends DbControl {
 
             cursor.moveToFirst();
 
+            Log.wtf("CONVO CURSOR", String.valueOf(cursor.getCount()));
+
             Conversation c;
             do{
                 c = new Conversation(context);
@@ -85,7 +88,7 @@ public class ConvoDbControl extends DbControl {
             cursor.close();
 
         } catch (Exception e) {
-            Log.wtf("Error in " + name, e.toString());
+            Log.wtf("Error in " + name, e.toString() + "  " + Arrays.toString(e.getStackTrace()));
         }
 
         return result;

@@ -11,6 +11,7 @@ import com.shark.sonar.R;
 import com.shark.sonar.controller.ProfileDbControl;
 import com.shark.sonar.data.Profile;
 
+import crypto.CryptManager;
 import util.temp;
 
 public class SplashActivity extends AppCompatActivity {
@@ -23,15 +24,16 @@ public class SplashActivity extends AppCompatActivity {
 
     public void CreateUser(View v){
         TextView name = findViewById(R.id.txtName);
-        TextView key = findViewById(R.id.txtIDKey);
 
         ProfileDbControl con = new ProfileDbControl(this);
         Profile user = new Profile(this);
 
+        CryptManager man = new CryptManager();
+
         user.setProfile_ID(1);
         user.setName(name.getText().toString());
-        user.setUser_ID_key(key.getText().toString().getBytes());
-        user.setIcon(R.drawable.ic_person2);
+        user.setUser_ID_key(man.getUserKey().getBytes());
+        user.setIcon(R.drawable.ic_person6);
 
         //TODO redo when users can connect
         temp temp = new temp();
@@ -40,12 +42,12 @@ public class SplashActivity extends AppCompatActivity {
 
         boolean result = con.makeUserProfile(user);
 
-        //TODO undo for non-API level 21 test
+        if (result){
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
+
         Toast.makeText(this, result ? "Profile Created!" : "Profile Create failed", Toast.LENGTH_LONG).show();
-
-        startActivity(new Intent(this, MainActivity.class));
-
-        finish();
 
     }
 }

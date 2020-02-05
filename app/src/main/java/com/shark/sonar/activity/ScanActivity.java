@@ -1,14 +1,18 @@
 package com.shark.sonar.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,14 +21,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blikoon.qrcodescanner.QrCodeActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.shark.sonar.R;
+import com.shark.sonar.controller.IconDbControl;
 import com.shark.sonar.controller.ProfileDbControl;
 import com.shark.sonar.data.Icon;
 import com.shark.sonar.data.Message;
 import com.shark.sonar.data.Profile;
 import com.shark.sonar.utility.Base64Android;
+
+import java.util.Arrays;
+import java.util.List;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -32,11 +41,14 @@ import androidmads.library.qrgenearator.QRGEncoder;
 public class ScanActivity extends AppCompatActivity {
     private ProfileDbControl control;
     private IntentIntegrator qrScan;
+    private static final int REQUEST_CODE_QR_SCAN = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
+
+        //getSupportActionBar().setTitle(getResources().getString(R.string.toolbarScanner));
 
         Button mainBut = findViewById(R.id.scannerButton);
 
@@ -50,17 +62,18 @@ public class ScanActivity extends AppCompatActivity {
                 Log.wtf("CHECK", String.valueOf(perm == PackageManager.PERMISSION_GRANTED));
 
                 if (perm != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(act, new String[] {Manifest.permission.CAMERA},50);
-                }else{
-                    qrScan = new IntentIntegrator(act);
-                    qrScan.setPrompt("Scan a QR code");
-                    qrScan.setOrientationLocked(false);
-                    qrScan.setBeepEnabled(true);
-                    qrScan.initiateScan();
+                    ActivityCompat.requestPermissions(act, new String[]{Manifest.permission.CAMERA}, 50);
+                    perm = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+                }
+
+                if (perm == PackageManager.PERMISSION_GRANTED) {
+                    Intent i = new Intent(ScanActivity.this, QrCodeActivity.class);
+                    startActivityForResult(i, REQUEST_CODE_QR_SCAN);
                 }
 
             }
         });
+
 
         control = new ProfileDbControl(this);
 
@@ -85,7 +98,7 @@ public class ScanActivity extends AppCompatActivity {
     }
 
     public String compileQRData(Profile user) {
-        String result, SpaceDel = "&space&",
+        String result, SpaceDel = "&space&", name = user.getName(),
                 ID = new String(user.getUser_ID_key()), key, icon;
 
         Base64Android base64 = new Base64Android();
@@ -93,44 +106,82 @@ public class ScanActivity extends AppCompatActivity {
 
         icon = String.valueOf(user.getIcon().getIcon_ID());
 
-        result = ID + SpaceDel + icon + SpaceDel + key;
+        result = name + SpaceDel + ID + SpaceDel + icon + SpaceDel + key;
 
         return result;
     }
 
-    public void addUser(View v) {
-        TextView name = findViewById(R.id.txtName);
-        TextView key = findViewById(R.id.txtIDKey);
+    public void addUser(String name, String IDKey, String IconID, String publicKey) {
 
-        Icon icon = new Icon(R.drawable.ic_star3, this);
-        Profile prof = new Profile(null, name.getText().toString(), icon, "shark".getBytes(),
-                "shark".getBytes(), key.getText().toString().getBytes());
+       ///*
+        Base64Android base64 = new Base64Android();
 
-        control.insertProfile(prof);
+        byte[] pub = base64.fromBase64(publicKey);
 
-        startActivity(new Intent(this, MainActivity.class));
+        Log.wtf("CHECKING ICONS", "CHECKING");
+
+        int iconID = Integer.parseInt(IconID);
+        IconDbControl db = new IconDbControl(this);
+
+        List<Icon> list = db.selectAllIcons();
+
+        for (Icon i : list){
+
+            if (i.getIcon_ID() == iconID){
+                Log.wtf("CHECKING ICONS", "Found a match with " + i.getIcon_ID());
+            }
+
+        }
+
+
+        Log.wtf("CHECKING ICONS", "Complete");
+
+
+        Icon icon = new Icon(Integer.parseInt(IconID), this);
+        Profile prof = new Profile(null, name, icon, pub, pub, IDKey.getBytes());
+
+        boolean res = control.insertProfile(prof);
+
+        if (res){
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }else{
+            Toast.makeText(this, "Error, please try again", Toast.LENGTH_SHORT).show();
+        }//*/
+
+        /*Icon icon = new Icon(R.drawable.ic_star3, this);
+        Profile prof = new Profile(null, name, icon, "shark".getBytes(),
+                "shark".getBytes(), IDKey.getBytes());*/
     }
 
+    //REF https://github.com/blikoon/QRCodeScanner
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
 
-            if (result.getContents() == null) {
-                Toast.makeText(this, "QR code unread", Toast.LENGTH_LONG).show();
-            } else {
-                try {
-                    Log.wtf("QR RESULT", result.getContents());
+        if (resultCode != Activity.RESULT_OK) {
+           Toast.makeText(this, "Error, please try again", Toast.LENGTH_SHORT).show();
+        }
+        if (requestCode == REQUEST_CODE_QR_SCAN) {
+            if (data == null)  return;
 
-                    Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+            String spaceDel = "&space&";
 
-                }
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
+            //I hate this, but its needed to get the QR data back
+            String[] result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult").split(spaceDel);
+
+            Toast.makeText(this, Arrays.toString(result), Toast.LENGTH_LONG).show();
+
+
+            Log.wtf("RESULT", Arrays.toString(result));
+
+            String name, userID, key, iconID;
+            name = result[0];
+            userID = result[1];
+            iconID = result[2];
+            key = result[3];
+
+            addUser(name, userID, iconID, key);
+
         }
     }
 

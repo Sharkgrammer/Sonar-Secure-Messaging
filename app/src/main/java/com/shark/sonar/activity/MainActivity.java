@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -42,14 +43,12 @@ public class MainActivity extends AppCompatActivity {
             con.initialise();
         }
 
-        //new ColourDbControl(this).makeSampleColours(false);
-
         ProfileDbControl ProfCon = new ProfileDbControl(this);
 
         List<Profile> profs = ProfCon.selectAllProfiles();
 
         for (Profile p : profs){
-            System.out.println(p.getName() + " " + p.getProfile_ID() + " " + new String(p.getUser_ID_key()));;
+            System.out.println(p.getName() + " " + p.getProfile_ID() + " " + new String(p.getUser_ID_key()));
         }
 
         Profile ProfUser = ProfCon.selectUserProfile();
@@ -67,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
             mainView.setImageDrawable(ProfUser.getIcon().getIcon());
 
             List<Conversation> conversations = new ConvoDbControl(this).selectAllConvo();
+
+            Log.wtf("CONVERSATION SIZE", String.valueOf(conversations.size()));
 
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
