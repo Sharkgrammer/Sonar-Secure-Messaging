@@ -17,7 +17,8 @@
     <string name="splashWelcome">Welcome to Sonar</string>
     <string name="splashHint">Username</string>
     <string name="splashChosen">Icon chosen</string>
-
+    <string name="channelName">Sonar-Channel-Name</string>
+    <string name="channelDesc">Sonar-Channel-Desc</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

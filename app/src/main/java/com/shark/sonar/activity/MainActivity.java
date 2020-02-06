@@ -1,8 +1,8 @@
 package com.shark.sonar.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.shark.sonar.R;
-import com.shark.sonar.controller.ColourDbControl;
 import com.shark.sonar.controller.ConvoDbControl;
 import com.shark.sonar.controller.DbControl;
 import com.shark.sonar.controller.ProfileDbControl;
@@ -21,6 +20,7 @@ import com.shark.sonar.recycler.MainAdapter;
 import com.shark.sonar.utility.Client;
 
 import java.util.List;
+
 import util.temp;
 
 public class MainActivity extends AppCompatActivity {
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
             temp temp = new temp();
 
-            client = new Client(ProfUser.getUser_ID_key(), temp.pukey1, temp.prkey1);
+            client = new Client(ProfUser.getUser_ID_key(), temp.pukey1, temp.prkey1, this);
 
             mainView = findViewById(R.id.imgPersonMain);
             mainView.setImageDrawable(ProfUser.getIcon().getIcon());
@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
+        client.isActive(true);
         Profile temp = ProfCon.selectUserProfile();
 
         if (!temp.equals(ProfUser)) {
@@ -118,6 +119,12 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(getResources().getString(R.string.toolbar) + ": " + ProfUser.getName());
             mainView.setImageDrawable(ProfUser.getIcon().getIcon());
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        client.isActive(false);
     }
 
 }

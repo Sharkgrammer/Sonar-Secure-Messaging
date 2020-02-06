@@ -95,7 +95,7 @@ public class MessageActivity extends AppCompatActivity {
 
         MessageActivity act = this;
         client.setCurrentMessageActivity(act);
-        MainActivity.client.setCurrentMessageActivity(this);
+        MainActivity.client.setCurrentMessageActivity(act);
     }
 
     public void stop() {
@@ -268,5 +268,17 @@ public class MessageActivity extends AppCompatActivity {
         final AlertDialog alert = alertDialogBuilder.show();
 
         save.setOnClickListener(view -> alert.dismiss());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        client.isActive(true);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        client.isActive(false);
     }
 }

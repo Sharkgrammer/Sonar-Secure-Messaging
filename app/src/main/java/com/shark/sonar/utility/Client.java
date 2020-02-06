@@ -1,8 +1,17 @@
 package com.shark.sonar.utility;
 
 import android.DataContainer;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
+import com.shark.sonar.R;
 import com.shark.sonar.activity.MainActivity;
 import com.shark.sonar.activity.MessageActivity;
 import com.shark.sonar.controller.ConvoDbControl;
@@ -12,17 +21,12 @@ import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.History;
 import com.shark.sonar.data.Message;
 import com.shark.sonar.data.Profile;
-import com.shark.sonar.recycler.MainAdapter;
-import com.shark.sonar.recycler.MessageAdapter;
 
 import java.net.Socket;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 import crypto.CryptManager;
 import send.MessageHandler;
-import util.Base64Util;
 import util.DataHolder;
 import util.ResultHandler;
 import util.UserHolder;
@@ -33,8 +37,15 @@ public class Client implements ResultHandler {
     private DataHolder dataHolder;
     private MainActivity mainActivity;
     private MessageActivity currentMessageActivity;
+    private Context c;
+    private boolean isActive;
+    private int notificationId = 0;
+    private String CHANNEL_ID = "Sonar-Notification_Channel";
 
-    public Client(byte[] ID, byte[] publicKey, byte[] privateKey) {
+    public Client(byte[] ID, byte[] publicKey, byte[] privateKey, Context c) {
+        this.c = c;
+        setUpNotificationChannel();
+
         UserHolder user = new UserHolder(ID, publicKey, privateKey);
         Base64Android b = new Base64Android();
 
@@ -58,7 +69,7 @@ public class Client implements ResultHandler {
     public void messageReceived(final String message, Socket socket, DataHolder dataHolder) {
         System.out.println("Raw from server: " + message);
 
-        try{
+        try {
             byte[] fromID = message.split("&space&")[0].getBytes();
             String msg = message.split("&space&")[1];
 
@@ -67,21 +78,21 @@ public class Client implements ResultHandler {
             //If the Message Activity for this user is open, send it on pls
             byte[] convoID = new byte[0];
 
-            try{
+            try {
                 convoID = currentMessageActivity.getConversation().getProfile().getUser_ID_key();
-            }catch (Exception e){
-                Log.wtf("Error in messageRecieved", e.toString());
+            } catch (Exception e) {
+                Log.wtf("Error in messageReceived", e.toString());
             }
 
-            if (Arrays.equals(fromID, convoID)){
+            ProfileDbControl profileDbControl = new ProfileDbControl(mainActivity);
+            Profile prof = profileDbControl.selectSingleProfile(fromID);
+
+            if (Arrays.equals(fromID, convoID)) {
                 currentMessageActivity.messageReceived(msg);
-            }else{
+            } else {
                 History his = new History(mainActivity);
 
                 ConvoDbControl convoDbControl = new ConvoDbControl(mainActivity);
-
-                ProfileDbControl profileDbControl = new ProfileDbControl(mainActivity);
-                Profile prof = profileDbControl.selectSingleProfile(fromID);
                 Conversation conversation = convoDbControl.selectProfileConvo(prof.getProfile_ID());
 
                 Message msg2 = new Message(prof.getIcon().getIcon_ID(), false, msg, "");
@@ -92,9 +103,13 @@ public class Client implements ResultHandler {
                 his.insertHistory();
             }
 
+            if (!isActive) {
+                notifyUser("Message from :" + prof.getName(), msg);
+            }
+
             refreshMain();
 
-        }catch(Exception e) {
+        } catch (Exception e) {
             Log.wtf("Error in messageReceived", e.toString());
         }
     }
@@ -145,8 +160,47 @@ public class Client implements ResultHandler {
         this.currentMessageActivity = currentMessageActivity;
     }
 
-    public void refreshMain(){
+    public void refreshMain() {
         mainActivity.updateList();
+    }
+
+    //REF https://developer.android.com/training/notify-user/build-notification
+    private void setUpNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = c.getResources().getString(R.string.channelName);
+            String description = c.getResources().getString(R.string.channelDesc);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = c.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+    }
+
+    private void notifyUser(String title, String content) {
+        Intent intent = new Intent(c, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, intent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(c, CHANNEL_ID)
+                .setSmallIcon(R.drawable.sonar_alone)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                .setOnlyAlertOnce(true)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(c);
+        notificationManager.notify(0, builder.build());
+    }
+
+    public void isActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 }
 
