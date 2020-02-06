@@ -93,6 +93,8 @@ public class MessageActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(lay);
         recyclerView.setAdapter(adapter);
 
+        MessageActivity act = this;
+        client.setCurrentMessageActivity(act);
         MainActivity.client.setCurrentMessageActivity(this);
     }
 
