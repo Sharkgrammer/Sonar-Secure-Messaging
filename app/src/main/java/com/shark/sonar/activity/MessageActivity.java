@@ -158,6 +158,7 @@ public class MessageActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(Color.parseColor(colour.getText_Col()));
 
         Drawable back = getResources().getDrawable(R.drawable.ic_arrow_back);
+        //REF https://stackoverflow.com/a/31953613/11480852
         back.setColorFilter(Color.parseColor(colour.getText_Col()), PorterDuff.Mode.SRC_ATOP);
         toolbar.setNavigationIcon(back);
 
@@ -171,9 +172,12 @@ public class MessageActivity extends AppCompatActivity {
         d.setColorFilter(Color.parseColor(colour.getChat_Col_Background()), PorterDuff.Mode.MULTIPLY);
         sendView.setBackground(d);
 
+        //REF https://stackoverflow.com/a/22192691/11480852
         this.getWindow().setStatusBarColor(Color.parseColor(colour.getPrimary_Col_Dark()));
         LinearLayout lay = findViewById(R.id.messageLayOverSendView);
         lay.setBackgroundColor(Color.parseColor(colour.getPrimary_Col()));
+
+        //REF https://stackoverflow.com/a/32031019/11480852
         FloatingActionButton fab = findViewById(R.id.msgFab);
         fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(colour.getChat_Col_From())));
         fab.setImageTintList(ColorStateList.valueOf(Color.parseColor(colour.getText_Col())));

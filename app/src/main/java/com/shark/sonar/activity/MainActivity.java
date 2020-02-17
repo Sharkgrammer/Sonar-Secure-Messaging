@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     public void updateList(){
         List<Conversation> conversations = new ConvoDbControl(this).selectAllConvo();
         adapter.updateList(conversations);
