@@ -41,6 +41,7 @@ public class Client implements ResultHandler {
     private boolean isActive;
     private int notificationId = 0;
     private String CHANNEL_ID = "Sonar-Notification_Channel";
+    boolean auth = false;
 
     public Client(byte[] ID, byte[] publicKey, byte[] privateKey, Context c) {
         this.c = c;
@@ -52,7 +53,7 @@ public class Client implements ResultHandler {
         dataHolder = new DataHolder(publicKey, privateKey);
 
         dataHolder.setPort(6000);
-        dataHolder.setIP("192.168.43.53");
+        dataHolder.setIP("192.168.43.233");
         dataHolder.setBase64(b);
         dataHolder.setServer(false);
 
@@ -62,7 +63,10 @@ public class Client implements ResultHandler {
 
         client = new MessageHandler(dataHolder, this, user);
 
-        sendAuthMessage();
+        if (!auth) {
+            sendAuthMessage();
+            auth = true;
+        }
     }
 
     @Override
@@ -76,10 +80,10 @@ public class Client implements ResultHandler {
             System.out.println(new String(fromID) + " says " + msg);
 
             //If the Message Activity for this user is open, send it on pls
-            byte[] convoID = new byte[0];
+            byte[] convoUserID = new byte[0];
 
             try {
-                convoID = currentMessageActivity.getConversation().getProfile().getUser_ID_key();
+                convoUserID = currentMessageActivity.getConversation().getProfile().getUser_ID_key();
             } catch (Exception e) {
                 Log.wtf("Error in messageReceived", e.toString());
             }
@@ -87,7 +91,10 @@ public class Client implements ResultHandler {
             ProfileDbControl profileDbControl = new ProfileDbControl(mainActivity);
             Profile prof = profileDbControl.selectSingleProfile(fromID);
 
-            if (Arrays.equals(fromID, convoID)) {
+            System.out.println(Arrays.toString(fromID));
+            System.out.println(Arrays.toString(convoUserID));
+
+            if (Arrays.equals(fromID, convoUserID)) {
                 currentMessageActivity.messageReceived(msg);
             } else {
                 History his = new History(mainActivity);

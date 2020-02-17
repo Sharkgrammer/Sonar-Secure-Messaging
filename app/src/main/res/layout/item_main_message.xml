@@ -20,6 +20,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
+        <!-- REF https://stackoverflow.com/questions/43378223/circular-imageview-in-android/49355649#49355649 -->
         <android.support.v7.widget.CardView
             android:layout_width="75dp"
             android:layout_height="75dp"

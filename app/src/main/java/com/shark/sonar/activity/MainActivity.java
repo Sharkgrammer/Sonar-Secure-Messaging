@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private Profile ProfUser;
     private ProfileDbControl ProfCon;
     private ImageView mainView;
+    private boolean auth = false;
 
 
     @Override
