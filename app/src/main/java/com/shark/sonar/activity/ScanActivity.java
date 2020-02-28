@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -22,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.blikoon.qrcodescanner.QrCodeActivity;
-import com.google.zxing.qrcode.encoder.QRCode;
 import com.shark.sonar.R;
 import com.shark.sonar.controller.ConvoDbControl;
 import com.shark.sonar.controller.ProfileDbControl;
@@ -32,9 +30,6 @@ import com.shark.sonar.data.Profile;
 import com.shark.sonar.utility.Base64Android;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.nio.file.Files;
 import java.util.Arrays;
 
 import androidmads.library.qrgenearator.QRGContents;

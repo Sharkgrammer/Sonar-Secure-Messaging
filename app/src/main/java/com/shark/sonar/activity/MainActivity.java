@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         if (!temp.equals(ProfUser)) {
             //Update screen for new details
             ProfUser = temp;
-            getSupportActionBar().setTitle(getResources().getString(R.string.toolbar) + ": " + ProfUser.getName());
+            getSupportActionBar().setTitle(ProfUser.getName());
             mainView.setImageDrawable(ProfUser.getIcon().getIcon());
         }
     }
