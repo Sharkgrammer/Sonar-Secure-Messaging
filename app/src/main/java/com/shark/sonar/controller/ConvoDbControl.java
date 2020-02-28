@@ -35,7 +35,7 @@ public class ConvoDbControl extends DbControl {
             ProfileDbControl prof = new ProfileDbControl(context);
 
             Profile p = prof.selectSingleProfile(Profile_ID);
-            
+
             return selectConversation(p.getProfile_ID(), null).get(0);
         }catch (Exception e){
             return null;
@@ -108,6 +108,16 @@ public class ConvoDbControl extends DbControl {
         return result;
     }
 
+    public boolean deleteConvo(Conversation c){
+        ProfileDbControl prof = new ProfileDbControl(context);
+        prof.deleteProfile(c.getProfile().getProfile_ID());
+
+        HistoryDbControl his = new HistoryDbControl(context);
+        his.deleteHistory(c.getConversation_ID(), true);
+
+        return deleteConvo(c.getConversation_ID());
+    }
+
     public boolean deleteConvo(int ConvoID){
         String name = "deleteConvo";
 
@@ -116,7 +126,7 @@ public class ConvoDbControl extends DbControl {
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
-            db.execSQL(sqlFile);
+            db.execSQL(sqlFile, new String[] {String.valueOf(ConvoID)});
         } catch (Exception e) {
             Log.wtf("Error in " + name, e.toString());
             return false;

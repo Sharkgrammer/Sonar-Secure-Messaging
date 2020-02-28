@@ -67,15 +67,23 @@ public class HistoryDbControl extends DbControl {
         return result;
     }
 
-    public boolean deleteHistory(int historyID){
+    public boolean deleteHistory(int ID, boolean convo){
         String name = "deleteHistory";
 
         try {
             ReadFile readFile = new ReadFile(context);
 
-            String sqlFile = readFile.returnAssetAsString(name + ".sql");
+            String[] sqlFile = readFile.returnAssetAsString(name + ".sql").split(";");
 
-            db.execSQL(sqlFile);
+            int mode = 0;
+
+            if (convo){
+                mode = 1;
+            }
+
+            db.execSQL(sqlFile[mode], new String[] {String.valueOf(ID)});
+
+
         } catch (Exception e) {
             Log.wtf("Error in " + name, e.toString());
             return false;

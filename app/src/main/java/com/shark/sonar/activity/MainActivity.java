@@ -27,10 +27,12 @@ import util.temp;
 public class MainActivity extends AppCompatActivity {
 
     public static Client client;
+    private int ConversationSize;
     private MainAdapter adapter;
     private Profile ProfUser;
     private ProfileDbControl ProfCon;
     private ImageView mainView;
+    private TextView txtMainAddDesc;
     private boolean auth = false;
 
 
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
             con.initialise();
         }
+
+        txtMainAddDesc = findViewById(R.id.txtMainAddDesc);
 
         ProfCon = new ProfileDbControl(this);
         List<Profile> profs = ProfCon.selectAllProfiles();
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-            getSupportActionBar().setTitle(getResources().getString(R.string.toolbar) + ": " + ProfUser.getName());
+            getSupportActionBar().setTitle(ProfUser.getName());
 
             //REF https://www.javatpoint.com/android-recyclerview-list-example
             RecyclerView recyclerView = findViewById(R.id.recyclerView);
@@ -92,11 +96,8 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(adapter);
 
-            if (conversations.size() == 0){
-                TextView txtMainAddDesc = findViewById(R.id.txtMainAddDesc);
-                txtMainAddDesc.setVisibility(View.VISIBLE);
-            }
-
+            ConversationSize = conversations.size();
+            updateMainDesc(false);
 
             //client.messageReceived("d2&space&hello you", null, client.getDataHolder());
         }
@@ -119,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
+        updateMainDesc(false);
+
         client.isActive(true);
         Profile temp = ProfCon.selectUserProfile();
 
@@ -139,6 +142,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onNewIntent(Intent i){
         init();
+    }
+
+    public void updateMainDesc(Boolean CalledByAdapter){
+        if (CalledByAdapter){
+            ConversationSize = 0;
+        }
+
+        if (ConversationSize == 0){
+            txtMainAddDesc.setVisibility(View.VISIBLE);
+        }else{
+            txtMainAddDesc.setVisibility(View.GONE);
+        }
     }
 
 }

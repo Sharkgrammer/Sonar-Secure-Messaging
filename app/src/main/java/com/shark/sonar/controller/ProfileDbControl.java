@@ -113,7 +113,7 @@ public class ProfileDbControl extends DbControl {
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
-            db.execSQL(sqlFile);
+            db.execSQL(sqlFile, new String[] {String.valueOf(profileID)});
         } catch (Exception e) {
             Log.wtf("Error in " + name, e.toString());
             return false;

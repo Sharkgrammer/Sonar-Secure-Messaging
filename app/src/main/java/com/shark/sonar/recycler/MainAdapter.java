@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shark.sonar.R;
+import com.shark.sonar.activity.MainActivity;
 import com.shark.sonar.controller.ConvoDbControl;
 import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.Message;
@@ -20,10 +21,12 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
 
     private List<Conversation> listData;
     private Context context;
+    private MainActivity act;
 
-    public MainAdapter(List<Conversation> listData, Context context) {
+    public MainAdapter(List<Conversation> listData, MainActivity act) {
         this.listData = listData;
-        this.context = context;
+        this.context = act;
+        this.act = act;
     }
 
     //REF https://stackoverflow.com/a/39678755/11480852
@@ -31,12 +34,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View Child = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_message, null, false);
         Child.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-        return new MainViewHolder(Child, context);
+        return new MainViewHolder(Child, context, this);
     }
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, int pos) {
         final Conversation data = listData.get(pos);
+        holder.setPos(pos);
 
         if (getItemCount() - 1 != pos){
             holder.addSpace();
@@ -48,7 +52,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
 
         holder.setImgPerson(prof.getIcon().getIcon_ID());
 
-        String messageStart = "Start a new conversation!";
+        String messageStart = "Say hello to your friend!!";
         try{
             Message obj = data.getLatestMessage().getMessageObj();
 
@@ -66,7 +70,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
         holder.setTextMessage(messageStart);
         holder.setTextPerson(prof.getName());
         holder.setID(data.getConversation_ID());
-        holder.setOnClick();
+        holder.setOnClick(data);
 
     }
 
@@ -76,6 +80,15 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
             return listData.size();
         }catch(Exception e){
             return 0;
+        }
+    }
+
+    public void ViewHolderUpdate(int pos){
+        listData.remove(pos);
+        this.notifyDataSetChanged();
+
+        if (listData.size() == 0){
+            act.updateMainDesc(true);
         }
     }
 
