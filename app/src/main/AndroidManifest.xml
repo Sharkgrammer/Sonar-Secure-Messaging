@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        tools:ignore="AllowBackup, GoogleAppIndexingWarning">
         <activity
             android:name=".activity.SplashActivity"
             android:noHistory="true" />
@@ -27,7 +27,8 @@
             android:noHistory="true" />
         <activity android:name=".activity.ScanActivity" />
         <activity android:name=".activity.MessageActivity" />
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

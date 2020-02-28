@@ -104,6 +104,11 @@ public class MessageActivity extends AppCompatActivity {
 
     public void sendMessage(View v) {
         String message = sendView.getText().toString();
+
+        if (message.equals("")){
+            return;
+        }
+
         client.sendMessage(message, conversation.getProfile().getUser_ID_key());
 
         History his = new History(this);
@@ -127,25 +132,22 @@ public class MessageActivity extends AppCompatActivity {
         System.out.println("Data from client class: " + message);
         final Context c = this;
 
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                MessageViewHolder msgAd = adapter.getRecentViewholder();
-                History his = new History(c);
-                Message msg = new Message(conversation.getProfile().getIcon().getIcon_ID(), false, message, "");
-                his.setConversation_ID(conversation.getConversation_ID());
-                his.setMessageObj(msg);
-                his.setUser_from(conversation.getProfile());
+        this.runOnUiThread(() -> {
+            MessageViewHolder msgAd = adapter.getRecentViewholder();
+            History his = new History(c);
+            Message msg = new Message(conversation.getProfile().getIcon().getIcon_ID(), false, message, "");
+            his.setConversation_ID(conversation.getConversation_ID());
+            his.setMessageObj(msg);
+            his.setUser_from(conversation.getProfile());
 
-                boolean temp = his.insertHistory();
+            boolean temp = his.insertHistory();
 
-                System.out.println(temp);
+            System.out.println(temp);
 
-                adapter.add(his);
+            adapter.add(his);
 
-                recyclerView.scrollToPosition(adapter.getItemCount() - 1);
-                msgReceived = true;
-            }
+            recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+            msgReceived = true;
         });
 
     }

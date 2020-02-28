@@ -40,6 +40,11 @@ public class SplashActivity extends AppCompatActivity {
     public void CreateUser(View v){
         TextView name = findViewById(R.id.txtName);
 
+        if (name.getText().toString().equals("")){
+            Toast.makeText(this, "Name cannot be blank", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         ProfileDbControl con = new ProfileDbControl(this);
         Profile user = new Profile(this);
 
@@ -64,7 +69,7 @@ public class SplashActivity extends AppCompatActivity {
             finish();
         }
 
-        Toast.makeText(this, result ? "Profile Created!" : "Profile Create failed", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, result ? "Profile Created!" : "Profile Create failed", Toast.LENGTH_LONG).show();
 
     }
 }

@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.shark.sonar.R;
 import com.shark.sonar.controller.ConvoDbControl;
@@ -38,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        init();
+    }
+
+    public void init(){
         DbControl con = new DbControl(this);
 
         //con.deleteTables();
@@ -87,10 +92,14 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(adapter);
 
+            if (conversations.size() == 0){
+                TextView txtMainAddDesc = findViewById(R.id.txtMainAddDesc);
+                txtMainAddDesc.setVisibility(View.VISIBLE);
+            }
+
 
             //client.messageReceived("d2&space&hello you", null, client.getDataHolder());
         }
-
     }
 
     public void updateList(){
@@ -125,6 +134,11 @@ public class MainActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         client.isActive(false);
+    }
+
+    @Override
+    public void onNewIntent(Intent i){
+        init();
     }
 
 }

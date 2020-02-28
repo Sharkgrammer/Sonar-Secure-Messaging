@@ -43,6 +43,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void UpdateUser(View v){
+
+        if (name.getText().toString().equals("")){
+            Toast.makeText(this, "Name cannot be blank", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         user.setName(name.getText().toString());
         Icon icon = new Icon(Integer.parseInt(view.getText().toString()));
         user.setIcon(icon);

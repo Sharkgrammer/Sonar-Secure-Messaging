@@ -25,8 +25,10 @@ import com.blikoon.qrcodescanner.QrCodeActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.shark.sonar.R;
+import com.shark.sonar.controller.ConvoDbControl;
 import com.shark.sonar.controller.IconDbControl;
 import com.shark.sonar.controller.ProfileDbControl;
+import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.Icon;
 import com.shark.sonar.data.Message;
 import com.shark.sonar.data.Profile;
@@ -40,8 +42,9 @@ import androidmads.library.qrgenearator.QRGEncoder;
 
 public class ScanActivity extends AppCompatActivity {
     private ProfileDbControl control;
-    private IntentIntegrator qrScan;
     private static final int REQUEST_CODE_QR_SCAN = 101;
+    private final int CAMARA_REQ = 500;
+    private Button mainBut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,28 +53,27 @@ public class ScanActivity extends AppCompatActivity {
 
         //getSupportActionBar().setTitle(getResources().getString(R.string.toolbarScanner));
 
-        Button mainBut = findViewById(R.id.scannerButton);
+        mainBut = findViewById(R.id.scannerButton);
 
         final Context context = this;
         final ScanActivity act = this;
-        mainBut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int perm = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+        mainBut.setOnClickListener(view -> {
 
-                Log.wtf("CHECK", String.valueOf(perm == PackageManager.PERMISSION_GRANTED));
+            //REF https://developer.android.com/training/permissions/requesting.html
+            int perm = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
 
-                if (perm != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(act, new String[]{Manifest.permission.CAMERA}, 50);
-                    perm = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
-                }
+            Log.wtf("CHECK", String.valueOf(perm == PackageManager.PERMISSION_GRANTED));
 
-                if (perm == PackageManager.PERMISSION_GRANTED) {
-                    Intent i = new Intent(ScanActivity.this, QrCodeActivity.class);
-                    startActivityForResult(i, REQUEST_CODE_QR_SCAN);
-                }
-
+            if (perm != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(act, new String[]{Manifest.permission.CAMERA}, CAMARA_REQ);
+                perm = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
             }
+
+            if (perm == PackageManager.PERMISSION_GRANTED) {
+                Intent i = new Intent(ScanActivity.this, QrCodeActivity.class);
+                startActivityForResult(i, REQUEST_CODE_QR_SCAN);
+            }
+
         });
 
 
@@ -86,6 +88,7 @@ public class ScanActivity extends AppCompatActivity {
 
         Bitmap bitmap;
 
+        //REF https://github.com/androidmads/QRGenerator
         QRGEncoder qrgEncoder = new QRGEncoder(input, null, QRGContents.Type.TEXT, smallerDimension);
         qrgEncoder.setColorBlack(getResources().getColor(R.color.colorPrimary));
         qrgEncoder.setColorWhite(Color.WHITE);
@@ -96,6 +99,22 @@ public class ScanActivity extends AppCompatActivity {
             Log.v("ERROR", e.toString());
         }
     }
+
+    //REF https://developer.android.com/training/permissions/requesting.html
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case CAMARA_REQ: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mainBut.callOnClick();
+                } else {
+                    Toast.makeText(this, "Please enable camara to add friends", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
 
     public String compileQRData(Profile user) {
         String result, SpaceDel = "&space&", name = user.getName(),
@@ -113,29 +132,18 @@ public class ScanActivity extends AppCompatActivity {
 
     public void addUser(String name, String IDKey, String IconID, String publicKey) {
 
-       ///*
+        ConvoDbControl convoDbControl = new ConvoDbControl(this);
+
+        Conversation c = convoDbControl.selectProfileConvo(IDKey.getBytes());
+
+        if (c != null){
+            Toast.makeText(this, "Cannot make a conversation that already exists", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Base64Android base64 = new Base64Android();
 
         byte[] pub = base64.fromBase64(publicKey);
-
-        Log.wtf("CHECKING ICONS", "CHECKING");
-
-        int iconID = Integer.parseInt(IconID);
-        IconDbControl db = new IconDbControl(this);
-
-        List<Icon> list = db.selectAllIcons();
-
-        for (Icon i : list){
-
-            if (i.getIcon_ID() == iconID){
-                Log.wtf("CHECKING ICONS", "Found a match with " + i.getIcon_ID());
-            }
-
-        }
-
-
-        Log.wtf("CHECKING ICONS", "Complete");
-
 
         Icon icon = new Icon(Integer.parseInt(IconID), this);
         Profile prof = new Profile(null, name, icon, pub, pub, IDKey.getBytes());
@@ -147,11 +155,8 @@ public class ScanActivity extends AppCompatActivity {
             finish();
         }else{
             Toast.makeText(this, "Error, please try again", Toast.LENGTH_SHORT).show();
-        }//*/
+        }
 
-        /*Icon icon = new Icon(R.drawable.ic_star3, this);
-        Profile prof = new Profile(null, name, icon, "shark".getBytes(),
-                "shark".getBytes(), IDKey.getBytes());*/
     }
 
     //REF https://github.com/blikoon/QRCodeScanner
@@ -169,7 +174,7 @@ public class ScanActivity extends AppCompatActivity {
             //I hate this, but its needed to get the QR data back
             String[] result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult").split(spaceDel);
 
-            Toast.makeText(this, Arrays.toString(result), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, Arrays.toString(result), Toast.LENGTH_LONG).show();
 
 
             Log.wtf("RESULT", Arrays.toString(result));

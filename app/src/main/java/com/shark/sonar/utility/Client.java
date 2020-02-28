@@ -91,6 +91,10 @@ public class Client implements ResultHandler {
             ProfileDbControl profileDbControl = new ProfileDbControl(mainActivity);
             Profile prof = profileDbControl.selectSingleProfile(fromID);
 
+            //TODO test this pls
+            System.out.println(new String(fromID));
+            System.out.println(new String(convoUserID));
+
             System.out.println(Arrays.toString(fromID));
             System.out.println(Arrays.toString(convoUserID));
 
@@ -111,7 +115,7 @@ public class Client implements ResultHandler {
             }
 
             if (!isActive) {
-                notifyUser("Message from :" + prof.getName(), msg);
+                notifyUser("Message from: " + prof.getName(), msg);
             }
 
             refreshMain();

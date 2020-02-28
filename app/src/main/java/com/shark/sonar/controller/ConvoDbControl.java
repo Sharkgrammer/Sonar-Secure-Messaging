@@ -29,6 +29,20 @@ public class ConvoDbControl extends DbControl {
         return selectConversation(Profile_ID, null).get(0);
     }
 
+    public Conversation selectProfileConvo(byte[] Profile_ID){
+
+        try{
+            ProfileDbControl prof = new ProfileDbControl(context);
+
+            Profile p = prof.selectSingleProfile(Profile_ID);
+            
+            return selectConversation(p.getProfile_ID(), null).get(0);
+        }catch (Exception e){
+            return null;
+        }
+
+    }
+
     public Conversation selectConvoByID(int Convo_ID){
         return selectConversation(null, Convo_ID).get(0);
     }
