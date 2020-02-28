@@ -92,7 +92,7 @@ public class HistoryDbControl extends DbControl {
         return true;
     }
 
-    public boolean insertHistory(History history){
+    public long insertHistory(History history){
         String name = "insertHistory";
 
         try {
@@ -100,14 +100,13 @@ public class HistoryDbControl extends DbControl {
 
             String sqlFile = readFile.returnAssetAsString(name + ".sql");
 
-            insertUpdate(null, history, sqlFile);
+            return insertUpdate(null, history, sqlFile);
 
         } catch (Exception e) {
             Log.wtf("Error in " + name, e.toString());
-            return false;
+            return 0;
         }
 
-        return true;
     }
 
 
@@ -129,7 +128,7 @@ public class HistoryDbControl extends DbControl {
         return true;
     }
 
-    private void insertUpdate(Integer historyID, History history, String sqlFile) throws SQLException {
+    private long insertUpdate(Integer historyID, History history, String sqlFile) throws SQLException {
         SQLiteStatement queryState = db.compileStatement(sqlFile);
 
         queryState.bindDouble(1, history.getConversation_ID());
@@ -140,9 +139,9 @@ public class HistoryDbControl extends DbControl {
 
         if (historyID != null){
             queryState.bindDouble(6, historyID);
-            queryState.executeUpdateDelete();
+            return queryState.executeUpdateDelete();
         }else{
-            queryState.executeInsert();
+            return  queryState.executeInsert();
         }
     }
 

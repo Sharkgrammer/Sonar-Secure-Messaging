@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shark.sonar.R;
+import com.shark.sonar.activity.MessageActivity;
 import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.History;
 import com.shark.sonar.data.Message;
@@ -20,12 +21,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     private List<History> listData;
     private Conversation convo;
     private Context context;
+    private MessageActivity act;
     private MessageViewHolder recentViewHolder;
 
-    public MessageAdapter(Conversation convo, Context context) {
+    public MessageAdapter(Conversation convo, MessageActivity act) {
         this.convo = convo;
         this.listData = convo.getHistoryArrayList();
-        this.context = context;
+        this.context = act;
+        this.act = act;
     }
 
     //REF https://stackoverflow.com/a/39678755/11480852
@@ -89,6 +92,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     public void ViewHolderUpdate(int pos){
         listData.remove(pos);
+        act.AdapterUpdate(listData);
         this.notifyDataSetChanged();
     }
 

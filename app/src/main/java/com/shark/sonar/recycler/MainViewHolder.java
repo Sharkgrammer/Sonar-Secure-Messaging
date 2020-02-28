@@ -83,7 +83,7 @@ class MainViewHolder extends RecyclerView.ViewHolder {
                 boolean done = dbControl.deleteConvo(c);
 
                 Toast.makeText(context, "Delete " + (done ? "Success" : "Failure"), Toast.LENGTH_LONG).show();
-                adapter.ViewHolderUpdate(pos);
+                if (done) adapter.ViewHolderUpdate(pos);
             });
 
             builder.setNegativeButton(android.R.string.no, null);

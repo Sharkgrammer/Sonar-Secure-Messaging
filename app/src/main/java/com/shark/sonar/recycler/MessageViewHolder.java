@@ -81,11 +81,12 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
             builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
 
+                System.out.println(h.getMessageObj().getMessage() + "   " + h.getHistory_ID());
                 HistoryDbControl dbControl = new HistoryDbControl(context);
                 boolean done = dbControl.deleteHistory(h.getHistory_ID(), false);
 
                 Toast.makeText(context, "Delete " + (done ? "Success" : "Failure"), Toast.LENGTH_LONG).show();
-                adapter.ViewHolderUpdate(pos);
+                if (done) adapter.ViewHolderUpdate(pos);
             });
 
             builder.setNegativeButton(android.R.string.no, null);

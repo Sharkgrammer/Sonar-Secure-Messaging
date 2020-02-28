@@ -110,16 +110,16 @@ public class MessageActivity extends AppCompatActivity {
             return;
         }
 
-        client.sendMessage(message, conversation.getProfile().getUser_ID_key());
-
         History his = new History(this);
         Message msg2 = new Message(ProfUser.getIcon().getIcon_ID(), true, message, "");
         his.setConversation_ID(conversation.getConversation_ID());
         his.setMessageObj(msg2);
         his.setUser_from(ProfUser);
 
-        boolean temp = his.insertHistory();
-        System.out.println(temp);
+        int ID = his.insertHistory();
+        his.setHistory_ID(ID);
+
+        client.sendMessage(message, conversation.getProfile().getUser_ID_key());
 
         adapter.add(his);
 
@@ -134,16 +134,14 @@ public class MessageActivity extends AppCompatActivity {
         final Context c = this;
 
         this.runOnUiThread(() -> {
-            MessageViewHolder msgAd = adapter.getRecentViewholder();
             History his = new History(c);
             Message msg = new Message(conversation.getProfile().getIcon().getIcon_ID(), false, message, "");
             his.setConversation_ID(conversation.getConversation_ID());
             his.setMessageObj(msg);
             his.setUser_from(conversation.getProfile());
 
-            boolean temp = his.insertHistory();
-
-            System.out.println(temp);
+            int ID = his.insertHistory();
+            his.setHistory_ID(ID);
 
             adapter.add(his);
 
@@ -287,5 +285,10 @@ public class MessageActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         client.isActive(false);
+    }
+
+    public void AdapterUpdate(List<History> h){
+        conversation.setHistoryArrayList(h);
+        client.refreshMain();
     }
 }

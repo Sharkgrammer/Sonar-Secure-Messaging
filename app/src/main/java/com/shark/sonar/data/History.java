@@ -64,8 +64,8 @@ public class History {
         //TODO fix this pls
     }
 
-    public boolean insertHistory(){
+    public int insertHistory(){
         HistoryDbControl db = new HistoryDbControl(context);
-        return db.insertHistory(this);
+        return (int) db.insertHistory(this);
     }
 }
