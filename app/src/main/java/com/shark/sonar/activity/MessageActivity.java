@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shark.sonar.R;
 import com.shark.sonar.controller.ColourDbControl;
@@ -264,13 +265,13 @@ public class MessageActivity extends AppCompatActivity {
                 HandleColours();
 
                 conversation.updateColour();
+                Toast.makeText(this, c.getCol_Name() + " chosen", Toast.LENGTH_LONG).show();
             });
 
             content.addView(child);
         }
 
         //alertDialogBuilder.setTitle(getResources().getString(R.string.colourDialog));
-
         final AlertDialog alert = alertDialogBuilder.show();
 
         save.setOnClickListener(view -> alert.dismiss());
