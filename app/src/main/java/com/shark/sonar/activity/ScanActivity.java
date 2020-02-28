@@ -42,6 +42,7 @@ import androidmads.library.qrgenearator.QRGEncoder;
 
 public class ScanActivity extends AppCompatActivity {
     private ProfileDbControl control;
+    private Profile currentUser;
     private static final int REQUEST_CODE_QR_SCAN = 101;
     private final int CAMERA_REQ = 500, IO_REQ = 600;
     private Button mainBut, mainShare;
@@ -83,7 +84,7 @@ public class ScanActivity extends AppCompatActivity {
 
         control = new ProfileDbControl(this);
 
-        Profile currentUser = control.selectUserProfile();
+        currentUser = control.selectUserProfile();
 
         ImageView imageView = findViewById(R.id.scannerImg);
         int smallerDimension = 500;
@@ -171,8 +172,12 @@ public class ScanActivity extends AppCompatActivity {
 
     public void addUser(String name, String IDKey, String IconID, String publicKey) {
 
-        ConvoDbControl convoDbControl = new ConvoDbControl(this);
+        if (Arrays.equals(IDKey.getBytes(), currentUser.getUser_ID_key())){
+            Toast.makeText(this, "Cannot make a conversation with youtself", Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        ConvoDbControl convoDbControl = new ConvoDbControl(this);
         Conversation c = convoDbControl.selectProfileConvo(IDKey.getBytes());
 
         if (c != null) {
