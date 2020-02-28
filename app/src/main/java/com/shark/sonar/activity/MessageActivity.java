@@ -1,6 +1,7 @@
 package com.shark.sonar.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -200,20 +201,25 @@ public class MessageActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        boolean result = false;
 
         switch (id) {
 
             case R.id.theme:
                 showThemeDialog();
-                result = true;
+                break;
+
+            case R.id.profile:
+                Intent i = new Intent(this, ProfileActivity.class);
+                i.putExtra("UserID", conversation.getProfile().getProfile_ID());
+
+                startActivity(i);
                 break;
 
             default:
                 throw new IllegalStateException("Unexpected value: " + id);
         }
 
-        return result;
+        return true;
     }
 
     private void showThemeDialog() {
@@ -279,6 +285,18 @@ public class MessageActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         client.isActive(true);
+
+        System.out.println("onResume in message");
+
+        Profile old = conversation.getProfile();
+        conversation.refreshProfile();
+
+        if (!old.toString().equals(conversation.getProfile().toString())){
+            adapter.updateUserIcon(conversation.getProfile().getIcon().getIcon_ID());
+
+            getSupportActionBar().setTitle(conversation.getProfile().getName());
+        }
+
     }
 
     @Override

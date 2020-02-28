@@ -27,13 +27,23 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+
+
         name = findViewById(R.id.txtName);
         LinearLayout lay = findViewById(R.id.profileInnerIcons);
         ImageView img = findViewById(R.id.profileFinalImageView);
         view = findViewById(R.id.profileNewImageID);
 
         con = new ProfileDbControl(this);
-        user = con.selectUserProfile();
+
+        int ID;
+        try{
+            ID = getIntent().getExtras().getInt("UserID");
+
+            user = con.selectSingleProfile(ID);
+        }catch (Exception e){
+            user = con.selectUserProfile();
+        }
 
         name.setText(user.getName());
         img.setImageDrawable(user.getIcon().getIcon());
@@ -53,7 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
         Icon icon = new Icon(Integer.parseInt(view.getText().toString()));
         user.setIcon(icon);
 
-        boolean result = con.updateUserProfile(user);
+        boolean result = con.updateProfile(user.getProfile_ID(), user);
 
         Toast.makeText(this, result ? "Profile Updated!" : "Profile Update failed", Toast.LENGTH_LONG).show();
 

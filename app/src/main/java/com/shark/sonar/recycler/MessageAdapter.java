@@ -96,4 +96,18 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         this.notifyDataSetChanged();
     }
 
+    public void updateUserIcon(int iconID){
+        Message tempMsg;
+        for (History h : listData){
+            tempMsg = h.getMessageObj();
+
+            if (!tempMsg.isFromYou()){
+                tempMsg.setImage(iconID);
+                h.setMessageObj(tempMsg);
+            }
+        }
+
+        this.notifyDataSetChanged();
+    }
+
 }

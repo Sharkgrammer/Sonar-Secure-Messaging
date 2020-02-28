@@ -103,6 +103,12 @@ public class Conversation {
         return profile;
     }
 
+    public void refreshProfile(){
+        ProfileDbControl con = new ProfileDbControl(context);
+
+        profile = con.selectSingleProfile(profile.getProfile_ID());
+    }
+
     public void setProfile(Profile profile) {
         this.profile = profile;
     }

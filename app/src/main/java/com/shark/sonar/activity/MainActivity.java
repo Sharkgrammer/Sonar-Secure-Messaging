@@ -113,7 +113,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void gotoProfile(View v) {
-        startActivity(new Intent(this, ProfileActivity.class));
+        Intent i = new Intent(this, ProfileActivity.class);
+        i.putExtra("UserID", 0);
+
+        startActivity(i);
     }
 
     @Override
@@ -123,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
         updateMainDesc(false);
 
         client.isActive(true);
+        client.refreshMain();
+
         Profile temp = ProfCon.selectUserProfile();
 
         if (!temp.equals(ProfUser)) {
