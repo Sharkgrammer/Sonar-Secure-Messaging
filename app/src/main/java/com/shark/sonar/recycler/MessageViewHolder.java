@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,9 +12,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shark.sonar.R;
 import com.shark.sonar.controller.ConvoDbControl;
+import com.shark.sonar.controller.HistoryDbControl;
 import com.shark.sonar.data.Colour;
 import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.History;
@@ -30,9 +33,10 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     private Context context;
     private Colour colour;
     private boolean userFrom;
-    private int LTR = View.LAYOUT_DIRECTION_LTR, RTL = View.LAYOUT_DIRECTION_RTL;
+    private MessageAdapter adapter;
+    private int LTR = View.LAYOUT_DIRECTION_LTR, RTL = View.LAYOUT_DIRECTION_RTL, pos;
 
-    public MessageViewHolder(View itemView, final Context context) {
+    public MessageViewHolder(View itemView, final Context context, MessageAdapter adapter) {
         super(itemView);
 
         this.imgPerson = itemView.findViewById(R.id.imgPerson);
@@ -44,6 +48,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         this.layoutwrapper = itemView.findViewById(R.id.linLayoutMessageWrapper);
         this.lblID = itemView.findViewById(R.id.lblID);
         this.context = context;
+        this.adapter = adapter;
     }
 
     public void setImgPerson(int drawable) {
@@ -67,8 +72,36 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
     }
 
+    public void onClick(History h){
+        layoutmessage.setOnLongClickListener(view -> {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Delete Conversation");
+            builder.setMessage("'" + lblMessage.getText().toString() + "' will be deleted. Are you sure?\nThis cannot be undone");
+
+            builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+
+                HistoryDbControl dbControl = new HistoryDbControl(context);
+                boolean done = dbControl.deleteHistory(h.getHistory_ID(), false);
+
+                Toast.makeText(context, "Delete " + (done ? "Success" : "Failure"), Toast.LENGTH_LONG).show();
+                adapter.ViewHolderUpdate(pos);
+            });
+
+            builder.setNegativeButton(android.R.string.no, null);
+            builder.setIcon(imgPerson.getDrawable());
+            builder.show();
+
+            return true;
+        });
+    }
+
     public void setID(int ID) {
         lblID.setText(String.valueOf(ID));
+    }
+
+    public void setPos(int pos) {
+        this.pos = pos;
     }
 
     public void isFromYou(boolean fromUser) {

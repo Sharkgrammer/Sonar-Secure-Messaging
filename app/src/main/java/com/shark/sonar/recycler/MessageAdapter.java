@@ -33,17 +33,20 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View Child = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, null, false);
         Child.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-        return new MessageViewHolder(Child, context);
+        return new MessageViewHolder(Child, context, this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int pos) {
         final Message data = listData.get(pos).getMessageObj();
+        final History h = listData.get(pos);
         int ID = convo.getConversation_ID();
 
         System.out.println(pos + " " + data.getMessage());
 
         holder.setColour(convo.getColour());
+        holder.onClick(h);
+        holder.setPos(pos);
 
         if (pos > 0) {
             Message prevData = listData.get(pos - 1).getMessageObj();
@@ -83,4 +86,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         this.convo = convo;
         this.notifyDataSetChanged();
     }
+
+    public void ViewHolderUpdate(int pos){
+        listData.remove(pos);
+        this.notifyDataSetChanged();
+    }
+
 }
