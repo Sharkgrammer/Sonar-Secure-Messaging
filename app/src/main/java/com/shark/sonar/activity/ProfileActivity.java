@@ -1,5 +1,6 @@
 package com.shark.sonar.activity;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.shark.sonar.R;
 import com.shark.sonar.controller.ProfileDbControl;
@@ -27,8 +29,6 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-
-
         name = findViewById(R.id.txtName);
         LinearLayout lay = findViewById(R.id.profileInnerIcons);
         ImageView img = findViewById(R.id.profileFinalImageView);
@@ -36,14 +36,28 @@ public class ProfileActivity extends AppCompatActivity {
 
         con = new ProfileDbControl(this);
 
+        String title;
         int ID;
         try{
             ID = getIntent().getExtras().getInt("UserID");
 
             user = con.selectSingleProfile(ID);
+
+            title = "Update profile for " + user.getName();
         }catch (Exception e){
             user = con.selectUserProfile();
+            title = "Update your profile";
         }
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(title);
+
+        Drawable back = getResources().getDrawable(R.drawable.ic_arrow_back);
+        toolbar.setNavigationIcon(back);
+
+        //REF https://freakycoder.com/android-notes-24-how-to-add-back-button-at-toolbar-941e6577418e
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         name.setText(user.getName());
         img.setImageDrawable(user.getIcon().getIcon());

@@ -3,39 +3,39 @@ package com.shark.sonar.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blikoon.qrcodescanner.QrCodeActivity;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
+import com.google.zxing.qrcode.encoder.QRCode;
 import com.shark.sonar.R;
 import com.shark.sonar.controller.ConvoDbControl;
-import com.shark.sonar.controller.IconDbControl;
 import com.shark.sonar.controller.ProfileDbControl;
 import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.Icon;
-import com.shark.sonar.data.Message;
 import com.shark.sonar.data.Profile;
 import com.shark.sonar.utility.Base64Android;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
 import java.util.Arrays;
-import java.util.List;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -43,17 +43,17 @@ import androidmads.library.qrgenearator.QRGEncoder;
 public class ScanActivity extends AppCompatActivity {
     private ProfileDbControl control;
     private static final int REQUEST_CODE_QR_SCAN = 101;
-    private final int CAMARA_REQ = 500;
-    private Button mainBut;
+    private final int CAMERA_REQ = 500, IO_REQ = 600;
+    private Button mainBut, mainShare;
+    private Bitmap QRCodeBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
-        //getSupportActionBar().setTitle(getResources().getString(R.string.toolbarScanner));
-
         mainBut = findViewById(R.id.scannerButton);
+        mainShare = findViewById(R.id.shareButton);
 
         final Context context = this;
         final ScanActivity act = this;
@@ -62,54 +62,93 @@ public class ScanActivity extends AppCompatActivity {
             //REF https://developer.android.com/training/permissions/requesting.html
             int perm = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
 
-            Log.wtf("CHECK", String.valueOf(perm == PackageManager.PERMISSION_GRANTED));
-
             if (perm != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(act, new String[]{Manifest.permission.CAMERA}, CAMARA_REQ);
-                perm = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
-            }
-
-            if (perm == PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(act, new String[]{Manifest.permission.CAMERA}, CAMERA_REQ);
+            } else {
                 Intent i = new Intent(ScanActivity.this, QrCodeActivity.class);
                 startActivityForResult(i, REQUEST_CODE_QR_SCAN);
             }
 
         });
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Your QR code");
+
+        Drawable back = getResources().getDrawable(R.drawable.ic_arrow_back);
+        toolbar.setNavigationIcon(back);
+
+        //REF https://freakycoder.com/android-notes-24-how-to-add-back-button-at-toolbar-941e6577418e
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         control = new ProfileDbControl(this);
 
         Profile currentUser = control.selectUserProfile();
 
-        ImageView view = findViewById(R.id.scannerImg);
-        int smallerDimension = 600;
+        ImageView imageView = findViewById(R.id.scannerImg);
+        int smallerDimension = 500;
 
         String input = compileQRData(currentUser);
 
-        Bitmap bitmap;
+        QRCodeBitmap = null;
 
         //REF https://github.com/androidmads/QRGenerator
         QRGEncoder qrgEncoder = new QRGEncoder(input, null, QRGContents.Type.TEXT, smallerDimension);
         qrgEncoder.setColorBlack(getResources().getColor(R.color.colorPrimary));
         qrgEncoder.setColorWhite(Color.WHITE);
         try {
-            bitmap = qrgEncoder.getBitmap();
-            view.setImageBitmap(bitmap);
+            QRCodeBitmap = qrgEncoder.getBitmap();
+            imageView.setImageBitmap(QRCodeBitmap);
         } catch (Exception e) {
             Log.v("ERROR", e.toString());
         }
+
+
+        mainShare.setOnClickListener(view -> {
+
+            //REF https://developer.android.com/training/permissions/requesting.html
+            int perm = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+            if (perm != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(act, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, IO_REQ);
+            } else {
+
+                //REF https://stackoverflow.com/a/30096845/11480852
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("image/jpeg");
+
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                QRCodeBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                String path = MediaStore.Images.Media.insertImage(getContentResolver(), QRCodeBitmap, "Sonar_QR_Code", null);
+
+                Uri imageUri =  Uri.parse(path);
+                share.putExtra(Intent.EXTRA_STREAM, imageUri);
+                startActivity(Intent.createChooser(share, "Share QR Code"));
+            }
+
+        });
     }
 
     //REF https://developer.android.com/training/permissions/requesting.html
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case CAMARA_REQ: {
+            case CAMERA_REQ: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mainBut.callOnClick();
                 } else {
-                    Toast.makeText(this, "Please enable camara to add friends", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Please enable camera to add friends", Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+
+            case IO_REQ: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mainShare.callOnClick();
+                } else {
+                    Toast.makeText(this, "Please accept to be able to share your QR code", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -136,7 +175,7 @@ public class ScanActivity extends AppCompatActivity {
 
         Conversation c = convoDbControl.selectProfileConvo(IDKey.getBytes());
 
-        if (c != null){
+        if (c != null) {
             Toast.makeText(this, "Cannot make a conversation that already exists", Toast.LENGTH_LONG).show();
             return;
         }
@@ -150,10 +189,10 @@ public class ScanActivity extends AppCompatActivity {
 
         boolean res = control.insertProfile(prof);
 
-        if (res){
+        if (res) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
-        }else{
+        } else {
             Toast.makeText(this, "Error, please try again", Toast.LENGTH_SHORT).show();
         }
 
@@ -164,10 +203,9 @@ public class ScanActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode != Activity.RESULT_OK) {
-           Toast.makeText(this, "Error, please try again", Toast.LENGTH_SHORT).show();
-        }
-        if (requestCode == REQUEST_CODE_QR_SCAN) {
-            if (data == null)  return;
+            Toast.makeText(this, "Error, please try again", Toast.LENGTH_SHORT).show();
+        } else if (requestCode == REQUEST_CODE_QR_SCAN) {
+            if (data == null) return;
 
             String spaceDel = "&space&";
 
