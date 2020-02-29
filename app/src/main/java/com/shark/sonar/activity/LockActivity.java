@@ -17,7 +17,6 @@ public class LockActivity extends AppCompatActivity {
 
     private TextView pinView, attemptView;
     private StringBuilder currentPin;
-    private final int maxPinSize = 10, minPinSize = 4;
     private Fingerprinter fp;
     protected String pin;
     private int attempts = 3;
@@ -31,6 +30,13 @@ public class LockActivity extends AppCompatActivity {
         pref = this.getSharedPreferences("com.shark.sonar", Context.MODE_PRIVATE);
 
         pin = pref.getString("pin", "");
+
+        if (pin.equals("")){
+            pref.edit().putBoolean("unlocked", true).apply();
+            startActivity(new Intent(this, MainActivity.class));
+            this.finish();
+        }
+
         boolean useFinger = pref.getBoolean("fingerprint", false);
         boolean isLocked = pref.getBoolean("locked", false);
 
@@ -144,14 +150,6 @@ public class LockActivity extends AppCompatActivity {
                     currentPin.delete(len - 1, len);
                 }
                 break;
-        }
-
-        len = currentPin.length();
-
-        if (len > maxPinSize) {
-            currentPin.delete(len - 1, len);
-
-            Toast.makeText(this, "Pin cannot be longer then " + maxPinSize + " figures", Toast.LENGTH_LONG).show();
         }
 
         pinView.setText(currentPin.toString());

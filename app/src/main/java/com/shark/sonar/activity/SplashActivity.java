@@ -105,7 +105,7 @@ public class SplashActivity extends AppCompatActivity {
     public void Save(View v) {
 
         if (currentPin.length() < minPinSize){
-            Toast.makeText(this, "Pin must be longer then 4 figures", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Pin must be longer then " + minPinSize + " figures", Toast.LENGTH_LONG).show();
             return;
         }
 

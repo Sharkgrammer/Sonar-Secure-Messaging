@@ -32,6 +32,10 @@
     <string name="lockSec">Attempts Remaining: </string>
     <string name="lockBut">Unlock</string>
     <string name="lockButSensor">Re-Activate Fingerprint Sensor</string>
+    <string name="settingPassword">Protect Sonar with a PIN</string>
+    <string name="settingPinBut">Change PIN</string>
+    <string name="settingFinger">Allow fingerprint unlocking</string>
+
 
 
 
