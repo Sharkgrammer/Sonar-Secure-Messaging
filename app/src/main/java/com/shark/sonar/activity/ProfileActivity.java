@@ -48,7 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
         LinearLayout lay = findViewById(R.id.profileInnerIcons);
         ImageView img = findViewById(R.id.profileFinalImageView);
         view = findViewById(R.id.profileNewImageID);
-        ConstraintLayout include = findViewById(R.id.userSettingsConstraint);
+        ConstraintLayout include = findViewById(R.id.userSettingsProfile);
 
         con = new ProfileDbControl(this);
 
@@ -60,7 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
             user = con.selectSingleProfile(ID);
 
             title = "Update profile for " + user.getName();
-            include.setVisibility(View.INVISIBLE);
+            include.setVisibility(View.GONE);
         } catch (Exception e) {
             user = con.selectUserProfile();
             title = "Update your profile";

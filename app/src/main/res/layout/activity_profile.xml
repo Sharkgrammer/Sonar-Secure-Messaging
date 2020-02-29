@@ -77,7 +77,7 @@
             android:id="@+id/txtName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="Name"
             android:inputType="textPersonName"
@@ -89,7 +89,7 @@
             android:id="@+id/scannerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_button"
             android:foreground="@drawable/ripple"
@@ -103,11 +103,11 @@
             app:layout_constraintTop_toBottomOf="@+id/userSettingsProfile" />
 
         <include
-            layout="@layout/settings"
             android:id="@+id/userSettingsProfile"
+            layout="@layout/settings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:background="@color/colorMessageMainClicked"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
