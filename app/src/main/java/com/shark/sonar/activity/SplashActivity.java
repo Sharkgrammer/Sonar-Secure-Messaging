@@ -27,6 +27,7 @@ import com.shark.sonar.controller.ProfileDbControl;
 import com.shark.sonar.data.Icon;
 import com.shark.sonar.data.Profile;
 import com.shark.sonar.utility.FingerprintHelper;
+import com.shark.sonar.utility.Fingerprinter;
 import com.shark.sonar.utility.IconPicker;
 
 import java.security.KeyStore;
@@ -43,10 +44,8 @@ public class SplashActivity extends AppCompatActivity {
     private TextView view, pinView;
     private StringBuilder currentPin;
     private final int maxPinSize = 10, minPinSize = 4;
-    private static final String KEY_NAME = "SonarFingerKey";
-    private Cipher cipher;
-    private KeyStore keyStore;
     private ConstraintLayout profile, lockSetup, start;
+    private Fingerprinter fp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,73 +194,11 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void FingerTest(View v) {
-        setupFingerprinting();
-    }
-
-    //REF https://www.androidauthority.com/how-to-add-fingerprint-authentication-to-your-android-app-747304/
-    //This ref applies for pretty much the rest of the file
-    public void setupFingerprinting() {
-        KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
-        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
-
-        if ((!fingerprintManager.isHardwareDetected()) ||
-                (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT)
-                        != PackageManager.PERMISSION_GRANTED) ||
-                (!fingerprintManager.hasEnrolledFingerprints()) || (!keyguardManager.isKeyguardSecure())) {
-
-            Toast.makeText(this, "Your device may not support fingerprint unlocking", Toast.LENGTH_LONG).show();
-        } else {
-            try {
-                generateKey();
-            } catch (Exception e) {
-                Log.wtf("GenerateKey", e.toString());
-            }
-
-            if (initCipher()) {
-                FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
-
-                FingerprintHelper helper = new FingerprintHelper(this);
-                helper.startAuth(fingerprintManager, cryptoObject);
-
-                Toast.makeText(this, "Touch your fingerprint sensor", Toast.LENGTH_SHORT).show();
-            }
+        if (fp == null){
+            fp = new Fingerprinter(this);
         }
+
+        fp.setupFingerprinting();
     }
 
-    private void generateKey() {
-        try {
-            keyStore = KeyStore.getInstance("AndroidKeyStore");
-
-            KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
-            keyStore.load(null);
-            keyGenerator.init(new
-                    KeyGenParameterSpec.Builder(KEY_NAME, KeyProperties.PURPOSE_ENCRYPT |
-                    KeyProperties.PURPOSE_DECRYPT)
-                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                    .setUserAuthenticationRequired(true)
-                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                    .build());
-
-            keyGenerator.generateKey();
-
-        } catch (Exception e) {
-            Log.wtf("GenerateKey", e.toString());
-        }
-    }
-
-    public boolean initCipher() {
-        try {
-            cipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
-                    + KeyProperties.BLOCK_MODE_CBC + "/" + KeyProperties.ENCRYPTION_PADDING_PKCS7);
-
-            keyStore.load(null);
-            SecretKey key = (SecretKey) keyStore.getKey(KEY_NAME, null);
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-            return true;
-        } catch (Exception e) {
-            Log.wtf("initCipher", e.toString());
-
-            return false;
-        }
-    }
 }

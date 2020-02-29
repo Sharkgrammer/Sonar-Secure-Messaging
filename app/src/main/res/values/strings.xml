@@ -27,6 +27,12 @@
     <string name="splashChosen">Icon chosen</string>
     <string name="channelName">Sonar-Channel-Name</string>
     <string name="channelDesc">Sonar-Channel-Desc</string>
+    <string name="lockMain">Sonar is locked</string>
+    <string name="lockMain2">Login with PIN or Fingerprint</string>
+    <string name="lockSec">Attempts Remaining: </string>
+    <string name="lockBut">Unlock</string>
+    <string name="lockButSensor">Re-Activate Fingerprint Sensor</string>
+
 
 
     <!-- For pin.xml -->
