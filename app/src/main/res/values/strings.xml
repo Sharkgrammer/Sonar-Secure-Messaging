@@ -21,7 +21,7 @@
     <string name="splashWelcomeBut">Get Started</string>
     <string name="splashSecurity">Protect your messages with a pin and/or fingerprint</string>
     <string name="splashFingerButton">Allow Fingerprint usage</string>
-    <string name="splashProfile">Setup profile details</string>
+    <string name="splashProfile">Setup your profile details</string>
     <string name="splashSkip">Skip</string>
     <string name="splashHint">Username</string>
     <string name="splashChosen">Icon chosen</string>

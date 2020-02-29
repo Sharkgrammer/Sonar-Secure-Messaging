@@ -26,9 +26,11 @@ public class Fingerprinter {
     private Cipher cipher;
     private KeyStore keyStore;
     private Context c;
+    private boolean setup;
 
-    public Fingerprinter(Context c){
+    public Fingerprinter(Context c, boolean setup){
         this.c = c;
+        this.setup = setup;
     }
 
     //REF https://www.androidauthority.com/how-to-add-fingerprint-authentication-to-your-android-app-747304/
@@ -42,7 +44,7 @@ public class Fingerprinter {
                         != PackageManager.PERMISSION_GRANTED) ||
                 (!fingerprintManager.hasEnrolledFingerprints()) || (!keyguardManager.isKeyguardSecure())) {
 
-            Toast.makeText(c, "Your device may not support fingerprint unlocking", Toast.LENGTH_LONG).show();
+            if (setup) Toast.makeText(c, "Your device may not support fingerprint unlocking", Toast.LENGTH_LONG).show();
         } else {
             try {
                 generateKey();
@@ -53,10 +55,10 @@ public class Fingerprinter {
             if (initCipher()) {
                 FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
 
-                FingerprintHelper helper = new FingerprintHelper(c);
+                FingerprintHelper helper = new FingerprintHelper(c, setup);
                 helper.startAuth(fingerprintManager, cryptoObject);
 
-                Toast.makeText(c, "Touch your fingerprint sensor", Toast.LENGTH_SHORT).show();
+                if (setup) Toast.makeText(c, "Touch your fingerprint sensor", Toast.LENGTH_SHORT).show();
             }
         }
     }

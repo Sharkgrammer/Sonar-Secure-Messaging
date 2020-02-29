@@ -1,6 +1,8 @@
 package com.shark.sonar.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private ProfileDbControl ProfCon;
     private ImageView mainView;
     private TextView txtMainAddDesc;
-    private boolean auth = false;
+    private SharedPreferences prefs;
+    private boolean setPin = true;
 
 
     @Override
@@ -55,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
             con.initialise();
         }
 
+        prefs = this.getSharedPreferences("com.shark.sonar", Context.MODE_PRIVATE);
+        setPin = !prefs.getString("pin", "").equals("");
+
         txtMainAddDesc = findViewById(R.id.txtMainAddDesc);
 
         ProfCon = new ProfileDbControl(this);
@@ -67,8 +73,15 @@ public class MainActivity extends AppCompatActivity {
         ProfUser = ProfCon.selectUserProfile();
 
         if (ProfUser == null) {
+
             startActivity(new Intent(this, SplashActivity.class));
             this.finish();
+
+        } else if (!prefs.getBoolean("unlocked", true)){
+
+            startActivity(new Intent(this, LockActivity.class));
+            this.finish();
+
         } else {
 
             temp temp = new temp();
@@ -159,6 +172,12 @@ public class MainActivity extends AppCompatActivity {
         }else{
             txtMainAddDesc.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if (setPin) prefs.edit().putBoolean("unlocked", false).apply();
     }
 
 }

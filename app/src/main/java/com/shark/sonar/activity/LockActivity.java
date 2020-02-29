@@ -1,10 +1,12 @@
 package com.shark.sonar.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,40 +21,61 @@ public class LockActivity extends AppCompatActivity {
     private Fingerprinter fp;
     protected String pin;
     private int attempts = 3;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lock);
 
-        SharedPreferences pref = this.getSharedPreferences("com.shark.sonar", Context.MODE_PRIVATE);
+        pref = this.getSharedPreferences("com.shark.sonar", Context.MODE_PRIVATE);
 
         pin = pref.getString("pin", "");
+        boolean useFinger = pref.getBoolean("fingerprint", false);
+        boolean isLocked = pref.getBoolean("locked", false);
+
+        if (isLocked) {
+            attempts = 0;
+            useFinger = false;
+        }
+
         attemptView = findViewById(R.id.lockAttemptView);
 
         currentPin = new StringBuilder();
         pinView = findViewById(R.id.txtSplashPin);
 
-        fp = new Fingerprinter(this);
-        fp.setupFingerprinting();
+        if (useFinger){
+            fp = new Fingerprinter(this, false);
+            fp.setupFingerprinting();
+        }else{
+            Button btn = findViewById(R.id.btnFingerSensor);
+            btn.setVisibility(View.GONE);
+        }
+
         setViewText();
 
     }
 
-    public void redoFinger(){
+    public void redoFinger(View v) {
         fp.setupFingerprinting();
     }
 
-    public void Unlock(View v){
+    public void Unlock(View v) {
 
-        if (attempts <= 0){
+        if (attempts <= 0) {
+            pref.edit().putBoolean("locked", true).apply();
             Toast.makeText(this, "Device locked", Toast.LENGTH_LONG).show();
             return;
         }
 
-        if (currentPin.toString().equals(pin)){
+        if (currentPin.toString().equals(pin)) {
 
-        }else{
+            Toast.makeText(this, "Correct Pin", Toast.LENGTH_LONG).show();
+            pref.edit().putBoolean("unlocked", true).apply();
+            startActivity(new Intent(this, MainActivity.class));
+            this.finish();
+
+        } else {
             Toast.makeText(this, "Incorrect pin", Toast.LENGTH_LONG).show();
             attempts--;
 
@@ -60,8 +83,8 @@ public class LockActivity extends AppCompatActivity {
         }
     }
 
-    public void setViewText(){
-        String temp = getResources().getString(R.string.lockSec) + attempts;
+    public void setViewText() {
+        String temp = getResources().getString(R.string.lockSec) + " " + attempts;
         attemptView.setText(temp);
     }
 

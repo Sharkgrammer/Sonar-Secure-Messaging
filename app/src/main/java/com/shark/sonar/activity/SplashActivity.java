@@ -111,6 +111,7 @@ public class SplashActivity extends AppCompatActivity {
 
         SharedPreferences pref = this.getSharedPreferences("com.shark.sonar", Context.MODE_PRIVATE);
         pref.edit().putString("pin", currentPin.toString()).apply();
+        pref.edit().putBoolean("unlocked", true).apply();
         Skip(v);
     }
 
@@ -195,7 +196,7 @@ public class SplashActivity extends AppCompatActivity {
 
     public void FingerTest(View v) {
         if (fp == null){
-            fp = new Fingerprinter(this);
+            fp = new Fingerprinter(this, true);
         }
 
         fp.setupFingerprinting();
