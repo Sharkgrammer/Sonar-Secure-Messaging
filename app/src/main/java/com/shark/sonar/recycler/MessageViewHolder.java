@@ -76,8 +76,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         layoutmessage.setOnLongClickListener(view -> {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Delete Conversation");
-            builder.setMessage("'" + lblMessage.getText().toString() + "' will be deleted. Are you sure?\nThis cannot be undone");
+            builder.setTitle("Delete " + lblMessage.getText().toString() + "?");
 
             builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
 
@@ -90,7 +89,6 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             });
 
             builder.setNegativeButton(android.R.string.no, null);
-            builder.setIcon(imgPerson.getDrawable());
             builder.show();
 
             return true;

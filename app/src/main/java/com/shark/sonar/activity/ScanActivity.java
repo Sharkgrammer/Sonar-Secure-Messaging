@@ -59,9 +59,12 @@ public class ScanActivity extends AppCompatActivity {
 
             //REF https://developer.android.com/training/permissions/requesting.html
             int perm = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+            int perm2 = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
             if (perm != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(act, new String[]{Manifest.permission.CAMERA}, CAMERA_REQ);
+            } else if (perm2 != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(act, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_REQ);
             } else {
                 Intent i = new Intent(ScanActivity.this, QrCodeActivity.class);
                 startActivityForResult(i, REQUEST_CODE_QR_SCAN);
@@ -119,7 +122,7 @@ public class ScanActivity extends AppCompatActivity {
                 QRCodeBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
                 String path = MediaStore.Images.Media.insertImage(getContentResolver(), QRCodeBitmap, "Sonar_QR_Code", null);
 
-                Uri imageUri =  Uri.parse(path);
+                Uri imageUri = Uri.parse(path);
                 share.putExtra(Intent.EXTRA_STREAM, imageUri);
                 startActivity(Intent.createChooser(share, "Share QR Code"));
             }
@@ -136,7 +139,7 @@ public class ScanActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mainBut.callOnClick();
                 } else {
-                    Toast.makeText(this, "Please enable camera to add friends", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Please accept to be able to add friends", Toast.LENGTH_LONG).show();
                 }
                 break;
             }
@@ -169,7 +172,7 @@ public class ScanActivity extends AppCompatActivity {
 
     public void addUser(String name, String IDKey, String IconID, String publicKey) {
 
-        if (Arrays.equals(IDKey.getBytes(), currentUser.getUser_ID_key())){
+        if (Arrays.equals(IDKey.getBytes(), currentUser.getUser_ID_key())) {
             Toast.makeText(this, "Cannot make a conversation with youtself", Toast.LENGTH_LONG).show();
             return;
         }
