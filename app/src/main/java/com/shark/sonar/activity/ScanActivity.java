@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -87,7 +88,7 @@ public class ScanActivity extends AppCompatActivity {
         currentUser = control.selectUserProfile();
 
         ImageView imageView = findViewById(R.id.scannerImg);
-        int smallerDimension = 500;
+        int smallerDimension = 1000;
 
         String input = compileQRData(currentUser);
 
@@ -165,7 +166,28 @@ public class ScanActivity extends AppCompatActivity {
 
         icon = String.valueOf(user.getIcon().getIcon_ID());
 
+        ImageView v = findViewById(R.id.imageViewtempaf);
+
+        Drawable d = v.getDrawable();
+
+        Bitmap b = ((BitmapDrawable) v.getDrawable()).getBitmap();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        b.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageInByte = baos.toByteArray();
+
+
+        System.out.println(new String(base64.toBase64(imageInByte)));
+
         result = name + SpaceDel + ID + SpaceDel + icon + SpaceDel + key;
+
+
+        icon = new String(base64.toBase64(imageInByte));
+
+        System.out.println(imageInByte.length);
+        System.out.println(result.length());
+
+        result = icon;
 
         return result;
     }
