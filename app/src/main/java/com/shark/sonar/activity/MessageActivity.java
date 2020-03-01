@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +22,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +37,6 @@ import com.shark.sonar.data.History;
 import com.shark.sonar.data.Message;
 import com.shark.sonar.data.Profile;
 import com.shark.sonar.recycler.MessageAdapter;
-import com.shark.sonar.recycler.MessageViewHolder;
 import com.shark.sonar.utility.Client;
 
 import java.util.List;
@@ -111,6 +110,10 @@ public class MessageActivity extends AppCompatActivity {
         MainActivity.client.setCurrentMessageActivity(act);
     }
 
+    public void openImageView(View v){
+
+    }
+
     public void stop() {
         client.stop();
     }
@@ -182,6 +185,7 @@ public class MessageActivity extends AppCompatActivity {
         sendView.setTextColor(Color.parseColor(colour.getText_Background_Col()));
         sendView.setHintTextColor(Color.parseColor(colour.getHint_Col()));
         Drawable d = this.getDrawable(R.drawable.text_border);
+        assert d != null;
         d.setColorFilter(Color.parseColor(colour.getChat_Col_Background()), PorterDuff.Mode.MULTIPLY);
         sendView.setBackground(d);
 
@@ -191,10 +195,12 @@ public class MessageActivity extends AppCompatActivity {
         lay.setBackgroundColor(Color.parseColor(colour.getPrimary_Col()));
 
         //REF https://stackoverflow.com/a/32031019/11480852
-        FloatingActionButton fab = findViewById(R.id.msgFab);
-        fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(colour.getChat_Col_From())));
-        fab.setImageTintList(ColorStateList.valueOf(Color.parseColor(colour.getText_Col())));
+        ImageButton fab = findViewById(R.id.msgFab), img = findViewById(R.id.msgImg);
 
+        fab.getDrawable().setColorFilter(Color.parseColor(colour.getText_Col()), PorterDuff.Mode.MULTIPLY);
+        fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(colour.getChat_Col_From())));
+        img.getDrawable().setColorFilter(Color.parseColor(colour.getText_Col()), PorterDuff.Mode.MULTIPLY);
+        img.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(colour.getChat_Col_From())));
     }
 
     public Conversation getConversation() {
