@@ -15,10 +15,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -58,6 +60,15 @@ public class MessageActivity extends AppCompatActivity {
 
         //new ColourDbControl(this).makeSampleColours();
         sendView = findViewById(R.id.sendView);
+
+        //REF https://developer.android.com/training/keyboard-input/style.html
+        sendView.setOnEditorActionListener((v, i, e) -> {
+            if (i == EditorInfo.IME_ACTION_DONE) {
+                sendMessage(v);
+                return true;
+            }
+            return false;
+        });
 
         ProfileDbControl ProfCon = new ProfileDbControl(this);
         ProfUser = ProfCon.selectUserProfile();
@@ -107,7 +118,7 @@ public class MessageActivity extends AppCompatActivity {
     public void sendMessage(View v) {
         String message = sendView.getText().toString();
 
-        if (message.equals("")){
+        if (message.equals("")) {
             return;
         }
 
@@ -152,7 +163,7 @@ public class MessageActivity extends AppCompatActivity {
 
     }
 
-    public void HandleColours(){
+    public void HandleColours() {
         Colour colour = conversation.getColour();
         ConstraintLayout mainBackground = findViewById(R.id.msgOverall);
         mainBackground.setBackgroundColor(Color.parseColor(colour.getChat_Col_Background()));
@@ -239,7 +250,7 @@ public class MessageActivity extends AppCompatActivity {
         ConstraintLayout layThem, layYou, layBack, layOverall;
         TextView txtThem, txtYou, txtBack, txtID, txtTitle;
 
-        for (Colour c : colourList){
+        for (Colour c : colourList) {
             View child = li.inflate(R.layout.item_single_colour, null);
 
             txtTitle = child.findViewById(R.id.colHeader);
@@ -291,7 +302,7 @@ public class MessageActivity extends AppCompatActivity {
         Profile old = conversation.getProfile();
         conversation.refreshProfile();
 
-        if (!old.toString().equals(conversation.getProfile().toString())){
+        if (!old.toString().equals(conversation.getProfile().toString())) {
             adapter.updateUserIcon(conversation.getProfile().getIcon().getIcon_ID());
 
             getSupportActionBar().setTitle(conversation.getProfile().getName());
@@ -305,7 +316,7 @@ public class MessageActivity extends AppCompatActivity {
         client.isActive(false);
     }
 
-    public void AdapterUpdate(List<History> h){
+    public void AdapterUpdate(List<History> h) {
         conversation.setHistoryArrayList(h);
         client.refreshMain();
     }

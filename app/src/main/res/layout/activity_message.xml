@@ -46,13 +46,13 @@
         android:id="@+id/messageLayOverSendView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="parent">
 
-        <EditText
+        <com.shark.sonar.utility.ActionEditText
             android:id="@+id/sendView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,7 +64,8 @@
             android:background="@drawable/text_border"
             android:ems="10"
             android:hint="@string/send"
-            android:inputType="textMultiLine"
+            android:imeOptions="actionDone"
+            android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
             android:maxLines="3"
             android:minLines="1"
             android:theme="@style/PrimaryTextView"
