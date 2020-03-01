@@ -3,13 +3,18 @@ package com.shark.sonar.utility;
 import android.Manifest;
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
+import android.os.CancellationSignal;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.shark.sonar.activity.MainActivity;
 
 import java.security.KeyStore;
 
@@ -26,11 +31,16 @@ public class Fingerprinter {
     private Cipher cipher;
     private KeyStore keyStore;
     private Context c;
+    private FingerprintHelper helper;
     private boolean setup;
 
-    public Fingerprinter(Context c, boolean setup){
+    public Fingerprinter(Context c, boolean setup) {
         this.c = c;
         this.setup = setup;
+    }
+
+    public void silence() {
+        helper.silence();
     }
 
     //REF https://www.androidauthority.com/how-to-add-fingerprint-authentication-to-your-android-app-747304/
@@ -44,7 +54,8 @@ public class Fingerprinter {
                         != PackageManager.PERMISSION_GRANTED) ||
                 (!fingerprintManager.hasEnrolledFingerprints()) || (!keyguardManager.isKeyguardSecure())) {
 
-            if (setup) Toast.makeText(c, "Your device may not support fingerprint unlocking", Toast.LENGTH_LONG).show();
+            if (setup)
+                Toast.makeText(c, "Your device may not support fingerprint unlocking", Toast.LENGTH_LONG).show();
         } else {
             try {
                 generateKey();
@@ -55,10 +66,11 @@ public class Fingerprinter {
             if (initCipher()) {
                 FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
 
-                FingerprintHelper helper = new FingerprintHelper(c, setup);
+                helper = new FingerprintHelper(c, setup);
                 helper.startAuth(fingerprintManager, cryptoObject);
 
-                if (setup) Toast.makeText(c, "Touch your fingerprint sensor", Toast.LENGTH_SHORT).show();
+                if (setup)
+                    Toast.makeText(c, "Touch your fingerprint sensor", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -98,5 +110,67 @@ public class Fingerprinter {
 
             return false;
         }
+    }
+
+    //REF https://www.androidauthority.com/how-to-add-fingerprint-authentication-to-your-android-app-747304/
+    //This entire class is based on ^
+    private static class FingerprintHelper extends FingerprintManager.AuthenticationCallback {
+
+        private CancellationSignal cancellationSignal;
+        private Context context;
+        private boolean setup, silence;
+
+        public FingerprintHelper(Context c, boolean setup) {
+            this.setup = setup;
+            context = c;
+            silence = false;
+        }
+
+        public void silence() {
+            silence = true;
+        }
+
+        public void startAuth(FingerprintManager manager, FingerprintManager.CryptoObject cryptoObject) {
+
+            cancellationSignal = new CancellationSignal();
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            manager.authenticate(cryptoObject, cancellationSignal, 0, this, null);
+        }
+
+        @Override
+        public void onAuthenticationError(int errMsgId, CharSequence errString) {
+            if (!silence)
+                Toast.makeText(context, "Authentication failed", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onAuthenticationFailed() {
+            if (!silence)
+                Toast.makeText(context, "Authentication failed", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+        }
+
+        @Override
+        public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
+            SharedPreferences pref = context.getSharedPreferences("com.shark.sonar", Context.MODE_PRIVATE);
+
+            if (!silence) {
+                if (setup) {
+                    Toast.makeText(context, "Fingerprint security complete!", Toast.LENGTH_LONG).show();
+                    pref.edit().putBoolean("fingerprint", true).apply();
+                } else {
+                    Toast.makeText(context, "Fingerprint accepted", Toast.LENGTH_LONG).show();
+                    pref.edit().putBoolean("unlocked", true).apply();
+                    context.startActivity(new Intent(context, MainActivity.class));
+                }
+            }
+
+        }
+
     }
 }

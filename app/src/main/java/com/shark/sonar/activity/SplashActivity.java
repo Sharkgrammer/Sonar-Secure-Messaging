@@ -1,21 +1,11 @@
 package com.shark.sonar.activity;
 
-import android.Manifest;
-import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.hardware.fingerprint.FingerprintManager;
-import android.media.Image;
-import android.os.Build;
-import android.security.keystore.KeyGenParameterSpec;
-import android.security.keystore.KeyProperties;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,15 +16,8 @@ import com.shark.sonar.R;
 import com.shark.sonar.controller.ProfileDbControl;
 import com.shark.sonar.data.Icon;
 import com.shark.sonar.data.Profile;
-import com.shark.sonar.utility.FingerprintHelper;
 import com.shark.sonar.utility.Fingerprinter;
 import com.shark.sonar.utility.IconPicker;
-
-import java.security.KeyStore;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 
 import crypto.CryptManager;
 import util.temp;
