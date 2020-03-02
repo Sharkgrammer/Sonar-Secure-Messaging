@@ -8,8 +8,6 @@
         android:id="@+id/linLayoutMessages"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
         android:background="@drawable/incoming_message"
         android:foreground="@drawable/ripple"
         android:orientation="vertical">

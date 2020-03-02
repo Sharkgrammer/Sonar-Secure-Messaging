@@ -10,8 +10,10 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,17 +74,29 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         System.out.println(drawable);
 
         imgPerson.setImageResource(drawable);
+
+        imgPerson.setBackgroundColor(Color.parseColor(colour.getChat_Col_Background()));
     }
 
     public void setTextMessage(Message data, boolean addToCurrent) {
 
-        if (addToCurrent) {
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layoutwrapper.getLayoutParams();
-            layoutParams.topMargin = 3;
-            layoutParams.bottomMargin = 3;
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layoutin.getLayoutParams();
 
-            layoutwrapper.setLayoutParams(layoutParams);
+        int def = 3, expand = (def * def) * 2;
+
+        if (addToCurrent) {
+
+            layoutParams.topMargin = def;
+            layoutParams.bottomMargin = def;
+
+        }else{
+
+            layoutParams.topMargin = expand;
+            layoutParams.bottomMargin = def;
+
         }
+
+        layoutin.setLayoutParams(layoutParams);
 
         if (isImage){
             //Uri uri = Uri.parse(data.getImageMsg());
