@@ -183,7 +183,7 @@ public class ColourDbControl extends DbControl {
         Resources res = context.getResources();
 
         colour.setCol_Name("Default");
-        colour.setChat_Col_Background("#E8E8E8");
+        colour.setChat_Col_Background(res.getString(R.color.background));
         colour.setText_Background_Col("#000000");
         colour.setChat_Col_From(res.getString(R.color.colorAccent));
         colour.setChat_Col_To(res.getString(R.color.colorPrimary));
@@ -197,7 +197,7 @@ public class ColourDbControl extends DbControl {
         colour = new Colour();
 
         colour.setCol_Name("Original");
-        colour.setChat_Col_Background("#E8E8E8");
+        colour.setChat_Col_Background(res.getString(R.color.background));
         colour.setText_Background_Col("#000000");
         colour.setChat_Col_From("#EB5600");
         colour.setChat_Col_To("#008080");
@@ -210,60 +210,131 @@ public class ColourDbControl extends DbControl {
         colours.add(colour);
         colour = new Colour();
 
-        colour.setCol_Name("Inverted");
-        colour.setChat_Col_Background("#ffffff");
+        colour.setCol_Name("Sunshine");
+        colour.setChat_Col_Background(res.getString(R.color.background));
         colour.setText_Background_Col("#000000");
-        colour.setChat_Col_From("#008080");
-        colour.setChat_Col_To("#EB5600");
-        colour.setText_Col("#ffffff");
+        colour.setChat_Col_From("#DAA520");
+        colour.setChat_Col_To("#CD853F");
+        colour.setText_Col("#f4f4f4");
         colour.setColour_ID(ID++);
-        colour.setPrimary_Col("#118080");
-        colour.setPrimary_Col_Dark("#116363");
+        colour.setPrimary_Col("#DAA520");
+        colour.setPrimary_Col_Dark("#BF911D");
         colour.setHint_Col("#808080");
 
         colours.add(colour);
         colour = new Colour();
 
-        colour.setCol_Name("Dark mode");
-        colour.setChat_Col_Background("#000000");
-        colour.setText_Background_Col("#ffffff");
-        colour.setChat_Col_From("#D23641");
-        colour.setChat_Col_To("#A45209");
-        colour.setText_Col("#ffffff");
+        colour.setCol_Name("Hacker");
+        colour.setChat_Col_Background("#111111");
+        colour.setText_Background_Col("#20C20E");
+        colour.setChat_Col_From("#111111");
+        colour.setChat_Col_To("#111111");
+        colour.setText_Col("#20C20E");
         colour.setColour_ID(ID++);
-        colour.setPrimary_Col("#000000");
-        colour.setPrimary_Col_Dark("#000000");
+        colour.setPrimary_Col("#111111");
+        colour.setPrimary_Col_Dark("#111111");
         colour.setHint_Col("#808080");
 
         colours.add(colour);
         colour = new Colour();
 
-        colour.setCol_Name("Dark mode v2");
-        colour.setChat_Col_Background("#3D3D3D");
-        colour.setText_Background_Col("#ffffff");
-        colour.setChat_Col_From("#A10000");
-        colour.setChat_Col_To("#006618");
-        colour.setText_Col("#ffffff");
-        colour.setColour_ID(ID++);
-        colour.setPrimary_Col("#000000");
-        colour.setPrimary_Col_Dark("#000000");
-        colour.setHint_Col("#808080");
-
-        colours.add(colour);
-        colour = new Colour();
-
-        colour.setCol_Name("Aqua");
-        colour.setChat_Col_Background("#ffffff");
+        colour.setCol_Name("Water");
+        colour.setChat_Col_Background("#EEFFFF");
         colour.setText_Background_Col("#000000");
-        colour.setChat_Col_From("#00FFFF");
-        colour.setChat_Col_To("#FFAA00");
+        colour.setChat_Col_From("#00b7d4");
+        colour.setChat_Col_To("#008BA1");
+        colour.setText_Col("#ffffff");
+        colour.setColour_ID(ID++);
+        colour.setPrimary_Col("#00B7D4");
+        colour.setPrimary_Col_Dark("#008BA1");
+        colour.setHint_Col("#808080");
+
+        colours.add(colour);
+        colour = new Colour();
+
+        colour.setCol_Name("Futuristic");
+        colour.setChat_Col_Background("#D1D1D1");
+        colour.setText_Background_Col("#000000");
+        colour.setChat_Col_From("#CA8D8D");
+        colour.setChat_Col_To("#9E6F6F");
+        colour.setText_Col("#ffffff");
+        colour.setColour_ID(ID++);
+        colour.setPrimary_Col("#CA8D8D");
+        colour.setPrimary_Col_Dark("#9E6F6F");
+        colour.setHint_Col("#808080");
+
+        colours.add(colour);
+        colour = new Colour();
+
+        colour.setCol_Name("Cozy");
+        colour.setChat_Col_Background(res.getString(R.color.background));
+        colour.setText_Background_Col("#000000");
+        colour.setChat_Col_From("#990099");
+        colour.setChat_Col_To("#660066");
+        colour.setText_Col("#ffffff");
+        colour.setColour_ID(ID++);
+        colour.setPrimary_Col("#990099");
+        colour.setPrimary_Col_Dark("#660066");
+        colour.setHint_Col("#808080");
+
+        colours.add(colour);
+        colour = new Colour();
+
+        colour.setCol_Name("Arctic");
+        colour.setChat_Col_Background("#f6fcfc");
+        colour.setText_Background_Col("#000000");
+        colour.setChat_Col_From("#d3e7f3");
+        colour.setChat_Col_To("#b2d8ed");
         colour.setText_Col("#000000");
         colour.setColour_ID(ID++);
-        colour.setPrimary_Col("#00ffff");
-        colour.setPrimary_Col_Dark("#00B3B3");
+        colour.setPrimary_Col("#85C4FF");
+        colour.setPrimary_Col_Dark("#85C4FF");
         colour.setHint_Col("#808080");
 
         colours.add(colour);
+        colour = new Colour();
+
+        colour.setCol_Name("WhatsApp");
+        colour.setChat_Col_Background("#ECE5DD");
+        colour.setText_Background_Col("#000000");
+        colour.setChat_Col_From("#25D366");
+        colour.setChat_Col_To("#FFFFFF");
+        colour.setText_Col("#000000");
+        colour.setColour_ID(ID++);
+        colour.setPrimary_Col("#128C7E");
+        colour.setPrimary_Col_Dark("#075E54");
+        colour.setHint_Col("#808080");
+
+        colours.add(colour);
+        colour = new Colour();
+
+        colour.setCol_Name("IOS");
+        colour.setChat_Col_Background("#F2F2F7");
+        colour.setText_Background_Col("#000000");
+        colour.setChat_Col_From("#007AFF");
+        colour.setChat_Col_To("#8E8E93");
+        colour.setText_Col("#ffffff");
+        colour.setColour_ID(ID++);
+        colour.setPrimary_Col("#8E8E93");
+        colour.setPrimary_Col_Dark("#8E8E93");
+        colour.setHint_Col("#808080");
+
+        colours.add(colour);
+        colour = new Colour();
+
+        colour.setCol_Name("Android");
+        colour.setChat_Col_Background("#ECE5DD");
+        colour.setText_Background_Col("#000000");
+        colour.setChat_Col_From("#25D366");
+        colour.setChat_Col_To("#FFFFFF");
+        colour.setText_Col("#000000");
+        colour.setColour_ID(ID++);
+        colour.setPrimary_Col("#128C7E");
+        colour.setPrimary_Col_Dark("#075E54");
+        colour.setHint_Col("#808080");
+
+        colours.add(colour);
+        colour = new Colour();
 
         System.out.println(colours.size());
 

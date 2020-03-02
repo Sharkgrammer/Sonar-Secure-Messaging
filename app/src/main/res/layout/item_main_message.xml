@@ -35,8 +35,9 @@
                 android:id="@+id/imgPerson"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:foreground="@drawable/circle"
                 android:padding="15dp"
+                android:foreground="@drawable/circle"
+                android:background="@color/background"
                 android:scaleType="centerCrop"
                 tools:src="@drawable/ic_person1" />
 
