@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shark.sonar.R;
+import com.shark.sonar.controller.ColourDbControl;
 import com.shark.sonar.controller.ConvoDbControl;
 import com.shark.sonar.controller.DbControl;
 import com.shark.sonar.controller.ProfileDbControl;

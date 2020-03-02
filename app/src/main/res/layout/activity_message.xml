@@ -10,23 +10,17 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:foreground="@drawable/message_background"
         app:layout_constraintBottom_toTopOf="@+id/messageLayOverSendView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp" />
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp" />
 
     </LinearLayout>
 
@@ -82,12 +76,12 @@
 
             <ImageButton
                 android:id="@+id/msgImg"
-                android:onClick="openImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/image_button"
                 android:backgroundTint="@color/colorAccent"
                 android:foreground="@drawable/ripple_round_button"
+                android:onClick="openImageView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -106,12 +100,12 @@
 
             <ImageButton
                 android:id="@+id/msgFab"
-                android:onClick="sendMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/image_button"
                 android:backgroundTint="@color/colorAccent"
                 android:foreground="@drawable/ripple_round_button"
+                android:onClick="sendMessage"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

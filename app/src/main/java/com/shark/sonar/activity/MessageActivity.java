@@ -145,8 +145,8 @@ public class MessageActivity extends AppCompatActivity {
                 Uri imageURI = Uri.fromFile(f), finalUri;
 
                 String[] temp = imageURI.toString().split("/");
-                String file = imgUtil.FileToString(f, temp[temp.length - 1]);
-                finalUri = imgUtil.getCompressUri(f,  temp[temp.length - 1], c);
+                String file = imgUtil.FileToString(f, temp[temp.length - 1], c);
+                finalUri = imgUtil.getCompressUri();
 
                 sendMessage(file,"img::" + finalUri.toString());
             }

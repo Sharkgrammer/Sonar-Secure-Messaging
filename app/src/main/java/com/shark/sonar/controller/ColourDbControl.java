@@ -1,10 +1,13 @@
 package com.shark.sonar.controller;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import com.shark.sonar.R;
 import com.shark.sonar.data.Colour;
 import com.shark.sonar.utility.ReadFile;
 
@@ -164,6 +167,7 @@ public class ColourDbControl extends DbControl {
         }
     }
 
+    @SuppressLint("ResourceType")
     public void makeSampleColours(Boolean reset){
 
         if (reset){
@@ -171,23 +175,39 @@ public class ColourDbControl extends DbControl {
                 deleteColour(c.getColour_ID());
             }
         }
-        Log.wtf("COLOURS", "Started");
 
+        List<Colour> colours = new ArrayList<>();
+        int ID = 1;
         Colour colour = new Colour();
 
-        colour.setCol_Name("Default Colour");
+        Resources res = context.getResources();
+
+        colour.setCol_Name("Default");
+        colour.setChat_Col_Background("#E8E8E8");
+        colour.setText_Background_Col("#000000");
+        colour.setChat_Col_From(res.getString(R.color.colorAccent));
+        colour.setChat_Col_To(res.getString(R.color.colorPrimary));
+        colour.setColour_ID(ID++);
+        colour.setText_Col(res.getString(R.color.colorTextLight));
+        colour.setPrimary_Col(res.getString(R.color.colorPrimary));
+        colour.setPrimary_Col_Dark(res.getString(R.color.colorPrimaryDark));
+        colour.setHint_Col("#808080");
+
+        colours.add(colour);
+        colour = new Colour();
+
+        colour.setCol_Name("Original");
         colour.setChat_Col_Background("#E8E8E8");
         colour.setText_Background_Col("#000000");
         colour.setChat_Col_From("#EB5600");
         colour.setChat_Col_To("#008080");
-        colour.setColour_ID(1);
+        colour.setColour_ID(ID++);
         colour.setText_Col("#ffffff");
         colour.setPrimary_Col("#008080");
         colour.setPrimary_Col_Dark("#006363");
         colour.setHint_Col("#808080");
 
-        this.insertColour(colour);
-
+        colours.add(colour);
         colour = new Colour();
 
         colour.setCol_Name("Inverted");
@@ -196,52 +216,60 @@ public class ColourDbControl extends DbControl {
         colour.setChat_Col_From("#008080");
         colour.setChat_Col_To("#EB5600");
         colour.setText_Col("#ffffff");
+        colour.setColour_ID(ID++);
         colour.setPrimary_Col("#118080");
         colour.setPrimary_Col_Dark("#116363");
         colour.setHint_Col("#808080");
 
-        this.insertColour(colour);
-
+        colours.add(colour);
         colour = new Colour();
+
         colour.setCol_Name("Dark mode");
         colour.setChat_Col_Background("#000000");
         colour.setText_Background_Col("#ffffff");
         colour.setChat_Col_From("#D23641");
         colour.setChat_Col_To("#A45209");
         colour.setText_Col("#ffffff");
+        colour.setColour_ID(ID++);
         colour.setPrimary_Col("#000000");
         colour.setPrimary_Col_Dark("#000000");
         colour.setHint_Col("#808080");
 
-        this.insertColour(colour);
-
+        colours.add(colour);
         colour = new Colour();
+
         colour.setCol_Name("Dark mode v2");
         colour.setChat_Col_Background("#3D3D3D");
         colour.setText_Background_Col("#ffffff");
         colour.setChat_Col_From("#A10000");
         colour.setChat_Col_To("#006618");
         colour.setText_Col("#ffffff");
+        colour.setColour_ID(ID++);
         colour.setPrimary_Col("#000000");
         colour.setPrimary_Col_Dark("#000000");
         colour.setHint_Col("#808080");
 
-        this.insertColour(colour);
-
+        colours.add(colour);
         colour = new Colour();
+
         colour.setCol_Name("Aqua");
         colour.setChat_Col_Background("#ffffff");
         colour.setText_Background_Col("#000000");
         colour.setChat_Col_From("#00FFFF");
         colour.setChat_Col_To("#FFAA00");
         colour.setText_Col("#000000");
+        colour.setColour_ID(ID++);
         colour.setPrimary_Col("#00ffff");
         colour.setPrimary_Col_Dark("#00B3B3");
         colour.setHint_Col("#808080");
 
-        this.insertColour(colour);
+        colours.add(colour);
 
-        Log.wtf("COLOURS", "Ended");
+        System.out.println(colours.size());
+
+        for (Colour c : colours){
+            System.out.println(c.getCol_Name() + ":" + this.insertColour(c));
+        }
 
 
     }

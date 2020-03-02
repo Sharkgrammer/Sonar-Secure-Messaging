@@ -94,7 +94,7 @@ public class ScanActivity extends AppCompatActivity {
 
         //REF https://github.com/androidmads/QRGenerator
         QRGEncoder qrgEncoder = new QRGEncoder(input, null, QRGContents.Type.TEXT, smallerDimension);
-        qrgEncoder.setColorBlack(getResources().getColor(R.color.colorPrimary, null));
+        qrgEncoder.setColorBlack(getResources().getColor(R.color.colorPrimaryDark, null));
         qrgEncoder.setColorWhite(Color.WHITE);
         try {
             QRCodeBitmap = qrgEncoder.getBitmap();
