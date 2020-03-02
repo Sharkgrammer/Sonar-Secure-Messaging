@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -26,13 +27,13 @@ import java.util.List;
 
 public class MessageViewHolder extends RecyclerView.ViewHolder {
 
-    private ImageView imgPerson;
+    private ImageView imgPerson, imgMessage;
     private CardView imgCard;
     private TextView lblMessage, lblID;
     private LinearLayout layoutin, layouttop, layoutmessage, layoutwrapper;
     private Context context;
     private Colour colour;
-    private boolean userFrom;
+    private boolean userFrom, isImage;
     private MessageAdapter adapter;
     private int LTR = View.LAYOUT_DIRECTION_LTR, RTL = View.LAYOUT_DIRECTION_RTL, pos;
 
@@ -42,6 +43,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         this.imgPerson = itemView.findViewById(R.id.imgPerson);
         this.imgCard = itemView.findViewById(R.id.imgCard);
         this.lblMessage = itemView.findViewById(R.id.lblMessage);
+        this.imgMessage = itemView.findViewById(R.id.imgMessage);
         this.layouttop = itemView.findViewById(R.id.linLayoutTop);
         this.layoutin = itemView.findViewById(R.id.linLayoutInside);
         this.layoutmessage = itemView.findViewById(R.id.linLayoutMessages);
@@ -49,6 +51,21 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         this.lblID = itemView.findViewById(R.id.lblID);
         this.context = context;
         this.adapter = adapter;
+        this.isImage = false;
+    }
+
+    public void setImgView(){
+        lblMessage.setVisibility(View.GONE);
+        imgMessage.setVisibility(View.VISIBLE);
+
+        isImage = true;
+    }
+
+    public void setNormalView(){
+        lblMessage.setVisibility(View.VISIBLE);
+        imgMessage.setVisibility(View.GONE);
+
+        isImage = false;
     }
 
     public void setImgPerson(int drawable) {
@@ -67,9 +84,15 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             layoutwrapper.setLayoutParams(layoutParams);
         }
 
-        lblMessage.setTextColor(Color.parseColor(colour.getText_Col()));
-        lblMessage.setText(data.getMessage());
+        if (isImage){
+            //Uri uri = Uri.parse(data.getImageMsg());
+            //imgMessage.setImageURI(uri);
 
+            imgMessage.setImageBitmap(data.getImg(context));
+        }else{
+            lblMessage.setTextColor(Color.parseColor(colour.getText_Col()));
+            lblMessage.setText(data.getMessage());
+        }
     }
 
     public void onClick(History h){

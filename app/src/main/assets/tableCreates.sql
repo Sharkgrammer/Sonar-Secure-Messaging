@@ -34,10 +34,11 @@ create table Icon(
 create table History(
 	history_id integer primary key autoincrement,
 	convo_id integer not null,
-	message text not null,
+	message text,
 	his_time datetime not null,
 	end_date datetime not null,
-	user_from integer not null
+	user_from integer not null,
+	image_uri varchar(255)
 );
 
 create table Colour(

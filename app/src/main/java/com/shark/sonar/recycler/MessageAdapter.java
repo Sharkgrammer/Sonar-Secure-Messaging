@@ -51,6 +51,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         holder.onClick(h);
         holder.setPos(pos);
 
+        if (data.getMessage().equals("")){
+            holder.setImgView();
+        }else{
+            holder.setNormalView();
+        }
+
         if (pos > 0) {
             Message prevData = listData.get(pos - 1).getMessageObj();
 

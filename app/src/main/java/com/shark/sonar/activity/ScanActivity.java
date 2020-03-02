@@ -16,7 +16,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -95,7 +94,7 @@ public class ScanActivity extends AppCompatActivity {
 
         //REF https://github.com/androidmads/QRGenerator
         QRGEncoder qrgEncoder = new QRGEncoder(input, null, QRGContents.Type.TEXT, smallerDimension);
-        qrgEncoder.setColorBlack(getResources().getColor(R.color.colorPrimary));
+        qrgEncoder.setColorBlack(getResources().getColor(R.color.colorPrimary, null));
         qrgEncoder.setColorWhite(Color.WHITE);
         try {
             QRCodeBitmap = qrgEncoder.getBitmap();

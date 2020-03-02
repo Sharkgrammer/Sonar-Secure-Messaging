@@ -3,9 +3,11 @@ package com.shark.sonar.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -38,11 +40,18 @@ import com.shark.sonar.data.Message;
 import com.shark.sonar.data.Profile;
 import com.shark.sonar.recycler.MessageAdapter;
 import com.shark.sonar.utility.Client;
+import com.shark.sonar.utility.ImageUtil;
 
+import java.io.File;
+import java.net.URI;
 import java.util.List;
+
+import pl.aprilapps.easyphotopicker.DefaultCallback;
+import pl.aprilapps.easyphotopicker.EasyImage;
 
 public class MessageActivity extends AppCompatActivity {
 
+    private static final int GALLERY_REQUEST_CODE = 500;
     private EditText sendView;
     private Client client = MainActivity.client;
     private boolean clientOn = false, msgReceived = false, firstRun = true;
@@ -51,14 +60,19 @@ public class MessageActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Profile ProfUser;
     private Toolbar toolbar;
+    private ImageUtil imgUtil;
+    private Context c;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
+        c = this;
         //new ColourDbControl(this).makeSampleColours();
         sendView = findViewById(R.id.sendView);
+
+        imgUtil = new ImageUtil();
 
         //REF https://developer.android.com/training/keyboard-input/style.html
         sendView.setOnEditorActionListener((v, i, e) -> {
@@ -110,8 +124,33 @@ public class MessageActivity extends AppCompatActivity {
         MainActivity.client.setCurrentMessageActivity(act);
     }
 
-    public void openImageView(View v){
+    //REF https://github.com/jkwiecien/EasyImage/compare/2.0.4...master
+    public void openImageView(View v) {
+        EasyImage.openChooserWithDocuments(this, "Camera or Gallery?", 1);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
+            @Override
+            public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                //Some error handling
+            }
+
+            @Override
+            public void onImagesPicked(List<File> imagesFiles, EasyImage.ImageSource source, int type) {
+                File f = imagesFiles.get(0);
+                Uri imageURI = Uri.fromFile(f), finalUri;
+
+                String[] temp = imageURI.toString().split("/");
+                String file = imgUtil.FileToString(f, temp[temp.length - 1]);
+                finalUri = imgUtil.getCompressUri(f,  temp[temp.length - 1], c);
+
+                Log.wtf("LOG", file);
+
+                sendMessage(file,"img::" + finalUri.toString());
+            }
+        });
     }
 
     public void stop() {
@@ -125,8 +164,18 @@ public class MessageActivity extends AppCompatActivity {
             return;
         }
 
+        sendMessage(message, null);
+    }
+
+    public void sendMessage(String message, String messageHis) {
+
         History his = new History(this);
-        Message msg2 = new Message(ProfUser.getIcon().getIcon_ID(), true, message, "");
+
+        if (messageHis == null){
+            messageHis = message;
+        }
+
+        Message msg2 = new Message(ProfUser.getIcon().getIcon_ID(), true, messageHis, "");
         his.setConversation_ID(conversation.getConversation_ID());
         his.setMessageObj(msg2);
         his.setUser_from(ProfUser);
@@ -144,13 +193,20 @@ public class MessageActivity extends AppCompatActivity {
         sendView.setText("");
     }
 
-    public void messageReceived(final String message) {
+    public void messageReceived(String message) {
         System.out.println("Data from client class: " + message);
         final Context c = this;
 
+        if (message.length() > 5){
+            if (message.substring(0, 5).equals("img::")){
+                message = imgUtil.StringToUri(message, c);
+            }
+        }
+
+        final String finalMsg = message;
         this.runOnUiThread(() -> {
             History his = new History(c);
-            Message msg = new Message(conversation.getProfile().getIcon().getIcon_ID(), false, message, "");
+            Message msg = new Message(conversation.getProfile().getIcon().getIcon_ID(), false, finalMsg, "");
             his.setConversation_ID(conversation.getConversation_ID());
             his.setMessageObj(msg);
             his.setUser_from(conversation.getProfile());

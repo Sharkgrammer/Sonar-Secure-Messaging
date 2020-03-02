@@ -47,7 +47,7 @@ public class HistoryDbControl extends DbControl {
                 ProfileDbControl profileDbControl = new ProfileDbControl(context);
                 Profile userProf = profileDbControl.selectSingleProfile(ID);
 
-                Message item = new Message(userProf.getIcon().getIcon_ID(), ID == 1, cursor.getString(2), cursor.getString(3));
+                Message item = new Message(userProf.getIcon().getIcon_ID(), ID == 1, cursor.getString(2), cursor.getString(3), cursor.getString(6));
                 h.setMessageObj(item);
 
                 h.setEnd_date(cursor.getString(4));
@@ -136,9 +136,10 @@ public class HistoryDbControl extends DbControl {
         queryState.bindString(3, history.getMessageObj().getTime());
         queryState.bindString(4, history.getEnd_date());
         queryState.bindDouble(5, history.getUser_from().getProfile_ID());
+        queryState.bindString(6, history.getMessageObj().getImageMsg());
 
         if (historyID != null){
-            queryState.bindDouble(6, historyID);
+            queryState.bindDouble(7, historyID);
             return queryState.executeUpdateDelete();
         }else{
             return  queryState.executeInsert();
