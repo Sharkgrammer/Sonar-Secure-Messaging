@@ -212,23 +212,24 @@ public class ScanActivity extends AppCompatActivity {
         } else if (requestCode == REQUEST_CODE_QR_SCAN) {
             if (data == null) return;
 
-            String spaceDel = "&space&";
+            try {
 
-            //I hate this, but its needed to get the QR data back
-            String[] result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult").split(spaceDel);
+                String spaceDel = "&space&";
 
-            //Toast.makeText(this, Arrays.toString(result), Toast.LENGTH_LONG).show();
+                //I hate this, but its needed to get the QR data back
+                String[] result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult").split(spaceDel);
 
+                String name, userID, key, iconID;
+                name = result[0];
+                userID = result[1];
+                iconID = result[2];
+                key = result[3];
 
-            Log.wtf("RESULT", Arrays.toString(result));
+                addUser(name, userID, iconID, key);
 
-            String name, userID, key, iconID;
-            name = result[0];
-            userID = result[1];
-            iconID = result[2];
-            key = result[3];
-
-            addUser(name, userID, iconID, key);
+            } catch (Exception e) {
+                Toast.makeText(this, "Error, please try again", Toast.LENGTH_SHORT).show();
+            }
 
         }
     }
