@@ -55,6 +55,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
         String messageStart = "Say hello to your friend!!";
         try{
             Message obj = data.getLatestMessage().getMessageObj();
+            String msgObj = obj.getMessage();
+
+            if (msgObj.equals("")){
+                msgObj = "Sent an image";
+            }
 
             if (obj.isFromYou()){
                 messageStart = "You: ";
@@ -62,7 +67,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
                 messageStart = "";
             }
 
-            messageStart += obj.getMessage();
+            messageStart += msgObj;
         }catch (Exception e){
             Log.wtf("Error", e.toString());
         }
