@@ -13,7 +13,12 @@
     <string name="buttonScan">Scan a friends QR code</string>
     <string name="buttonShare">Share your QR code</string>
     <string name="scanText">Have your friend scan this QR code</string>
-    <string name="scanExplain">You both need to scan each others codes to be able to chat for security</string>
+
+    <string name="scanTitle">Steps to add a friend</string>
+    <string name="scan1">1. Scan your friends QR code</string>
+    <string name="scan2">2. Have your friend scan your QR code</string>
+    <string name="scan3">3. You can now send messages to each other!</string>
+
     <string name="toolbarScanner">Add friends</string>
     <string name="splashIcon">Please choose a profile icon</string>
     <string name="splashWelcome">Welcome to Sonar!</string>
