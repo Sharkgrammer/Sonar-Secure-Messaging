@@ -22,37 +22,19 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class ImageUtil {
 
-    public Uri getCompressUri(File f, String name, Context c) {
+    private String uriPath;
 
-        try {
-            byte[] bytesArray = new byte[(int) f.length()];
-
-            FileInputStream fis = new FileInputStream(f);
-            fis.read(bytesArray);
-            fis.close();
-
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inMutable = true;
-            Bitmap bmp = BitmapFactory.decodeByteArray(bytesArray, 0, bytesArray.length, options);
-
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-
-            String path = MediaStore.Images.Media.insertImage(c.getContentResolver(), bmp, name, null);
-
-            return  Uri.parse(path);
-        } catch (Exception e) {
-            return Uri.fromFile(f);
-        }
-
+    public Uri getCompressUri() {
+        return  Uri.parse(uriPath);
     }
 
-    public String FileToString(File f, String name) {
+    public String FileToString(File f, String name, Context c) {
 
         try {
             Base64Android base64Android = new Base64Android();
             byte[] bytesArray = new byte[(int) f.length()];
 
+            //REF https://stackoverflow.com/a/7780289/11480852
             FileInputStream fis = new FileInputStream(f);
             fis.read(bytesArray);
             fis.close();
@@ -62,8 +44,12 @@ public class ImageUtil {
             options.inMutable = true;
             Bitmap bmp = BitmapFactory.decodeByteArray(bytesArray, 0, bytesArray.length, options);
 
+            //REF https://stackoverflow.com/a/4989543/11480852
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+
+            //REF https://developer.android.com/reference/android/provider/MediaStore.Images.Media#insertImage(android.content.ContentResolver,%20java.lang.String,%20java.lang.String,%20java.lang.String)
+            uriPath = MediaStore.Images.Media.insertImage(c.getContentResolver(), bmp, name, null);
 
             byte[] encodedImg = base64Android.toBase64(bytes.toByteArray());
 

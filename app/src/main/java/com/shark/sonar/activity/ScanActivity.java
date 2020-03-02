@@ -117,6 +117,7 @@ public class ScanActivity extends AppCompatActivity {
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("image/jpeg");
 
+                //REF https://stackoverflow.com/a/4989543/11480852
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 QRCodeBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
                 String path = MediaStore.Images.Media.insertImage(getContentResolver(), QRCodeBitmap, "Sonar_QR_Code", null);

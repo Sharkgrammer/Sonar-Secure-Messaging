@@ -131,6 +131,8 @@ public class MessageActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //REF https://github.com/jkwiecien/EasyImage/compare/2.0.4...master
         EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
             @Override
             public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
@@ -145,8 +147,6 @@ public class MessageActivity extends AppCompatActivity {
                 String[] temp = imageURI.toString().split("/");
                 String file = imgUtil.FileToString(f, temp[temp.length - 1]);
                 finalUri = imgUtil.getCompressUri(f,  temp[temp.length - 1], c);
-
-                Log.wtf("LOG", file);
 
                 sendMessage(file,"img::" + finalUri.toString());
             }

@@ -72,6 +72,7 @@ public class Message {
         if (img == null) {
 
             try {
+                //REF https://stackoverflow.com/a/4717740/11480852
                 img = MediaStore.Images.Media.getBitmap(c.getContentResolver(), Uri.parse(imageMsg));
             } catch (Exception e) {
                 return null;

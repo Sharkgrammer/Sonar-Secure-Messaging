@@ -60,10 +60,6 @@ public class History {
         this.user_from = user_from;
     }
 
-    public void setUser_from(int user_from) {
-        //TODO fix this pls
-    }
-
     public int insertHistory(){
         HistoryDbControl db = new HistoryDbControl(context);
         return (int) db.insertHistory(this);
