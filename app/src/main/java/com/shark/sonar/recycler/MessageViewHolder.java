@@ -74,8 +74,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         System.out.println(drawable);
 
         imgPerson.setImageResource(drawable);
-
-        imgPerson.setBackgroundColor(Color.parseColor(colour.getChat_Col_Background()));
+        imgPerson.setBackgroundColor(Color.parseColor(colour.getText_Col()));
     }
 
     public void setTextMessage(Message data, boolean addToCurrent) {

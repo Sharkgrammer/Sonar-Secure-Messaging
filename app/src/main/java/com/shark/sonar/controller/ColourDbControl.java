@@ -308,6 +308,34 @@ public class ColourDbControl extends DbControl {
         colours.add(colour);
         colour = new Colour();
 
+        colour.setCol_Name("Neon");
+        colour.setChat_Col_Background("#0C141F");
+        colour.setText_Background_Col("#ffffff");
+        colour.setChat_Col_From("#18CAE6");
+        colour.setChat_Col_To("#DF740C");
+        colour.setText_Col("#ffffff");
+        colour.setColour_ID(ID++);
+        colour.setPrimary_Col("#0C141F");
+        colour.setPrimary_Col_Dark("#0C141F");
+        colour.setHint_Col("#808080");
+
+        colours.add(colour);
+        colour = new Colour();
+
+        colour.setCol_Name("Colour Blindness");
+        colour.setChat_Col_Background("#E3E3CD");
+        colour.setText_Background_Col("#000000");
+        colour.setChat_Col_From("#B42F32");
+        colour.setChat_Col_To("#DF6747");
+        colour.setText_Col("#ffffff");
+        colour.setColour_ID(ID++);
+        colour.setPrimary_Col("#878D92");
+        colour.setPrimary_Col_Dark("#49494D");
+        colour.setHint_Col("#808080");
+
+        colours.add(colour);
+        colour = new Colour();
+
         colour.setCol_Name("IOS");
         colour.setChat_Col_Background("#F2F2F7");
         colour.setText_Background_Col("#000000");
@@ -322,19 +350,16 @@ public class ColourDbControl extends DbControl {
         colours.add(colour);
         colour = new Colour();
 
-        colour.setCol_Name("Android");
-        colour.setChat_Col_Background("#ECE5DD");
+        colour.setCol_Name("Baroque luxury");
+        colour.setChat_Col_Background("#E5E4DA");
         colour.setText_Background_Col("#000000");
-        colour.setChat_Col_From("#25D366");
-        colour.setChat_Col_To("#FFFFFF");
-        colour.setText_Col("#000000");
+        colour.setChat_Col_From("#A11E22");
+        colour.setChat_Col_To("#E8A631");
+        colour.setText_Col("#ffffff");
         colour.setColour_ID(ID++);
-        colour.setPrimary_Col("#128C7E");
-        colour.setPrimary_Col_Dark("#075E54");
+        colour.setPrimary_Col("#A11E22");
+        colour.setPrimary_Col_Dark("#A11E22");
         colour.setHint_Col("#808080");
-
-        colours.add(colour);
-        colour = new Colour();
 
         System.out.println(colours.size());
 
