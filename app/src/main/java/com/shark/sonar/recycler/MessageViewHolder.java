@@ -1,5 +1,7 @@
 package com.shark.sonar.recycler;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -105,6 +107,15 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         }else{
             lblMessage.setTextColor(Color.parseColor(colour.getText_Col()));
             lblMessage.setText(data.getMessage());
+
+           /* lblMessage.setOnClickListener(view -> {
+                //REF https://stackoverflow.com/questions/19253786/how-to-copy-text-to-clip-board-in-android#19253868
+                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Copied Text", lblMessage.getText());
+                clipboard.setPrimaryClip(clip);
+
+                Toast.makeText(context, lblMessage.getText() + " copied", Toast.LENGTH_SHORT).show();
+            });*/
         }
     }
 
