@@ -163,6 +163,8 @@ public class ProfileDbControl extends DbControl {
 
             boolean result = con.insertConvo(convo);
 
+            con.destroy();
+
             System.out.println("USER PROFILE CONVO " + convo.getProfile().getName());
             System.out.println("CONVERSATION CREATED " + result);
         }

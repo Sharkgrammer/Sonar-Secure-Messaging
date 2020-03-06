@@ -90,6 +90,7 @@ public class Client implements ResultHandler {
 
             ProfileDbControl profileDbControl = new ProfileDbControl(mainActivity);
             Profile prof = profileDbControl.selectSingleProfile(fromID);
+            profileDbControl.destroy();
 
             //TODO test this pls
             System.out.println(new String(fromID));
@@ -105,6 +106,7 @@ public class Client implements ResultHandler {
 
                 ConvoDbControl convoDbControl = new ConvoDbControl(mainActivity);
                 Conversation conversation = convoDbControl.selectProfileConvo(prof.getProfile_ID());
+                convoDbControl.destroy();
 
                 Message msg2 = new Message(prof.getIcon().getIcon_ID(), false, msg, "");
                 his.setConversation_ID(conversation.getConversation_ID());

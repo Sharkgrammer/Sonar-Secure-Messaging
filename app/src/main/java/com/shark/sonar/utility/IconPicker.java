@@ -31,8 +31,9 @@ public class IconPicker {
     public void populate() {
 
         IconDbControl con = new IconDbControl(context);
-
         List<Icon> list = con.selectAllIcons();
+        con.destroy();
+
         LayoutInflater li = LayoutInflater.from(context);
         ImageView oneImg, twoImg, threeImg;
         LinearLayout oneLay, twoLay, threeLay;

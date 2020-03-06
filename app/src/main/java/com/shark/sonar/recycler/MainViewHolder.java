@@ -81,6 +81,7 @@ class MainViewHolder extends RecyclerView.ViewHolder {
 
                 ConvoDbControl dbControl = new ConvoDbControl(context);
                 boolean done = dbControl.deleteConvo(c);
+                dbControl.destroy();
 
                 Toast.makeText(context, "Delete " + (done ? "Success" : "Failure"), Toast.LENGTH_LONG).show();
                 if (done) adapter.ViewHolderUpdate(pos);

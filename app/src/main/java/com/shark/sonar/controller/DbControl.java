@@ -9,10 +9,7 @@ import android.util.Log;
 import com.shark.sonar.data.Icon;
 import com.shark.sonar.utility.ReadFile;
 
-import java.util.List;
-
 //REF https://github.com/Sharkgrammer/Android-Assistant/blob/master/app/src/main/java/com/shark/assistant/database.java
-
 public class DbControl extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
@@ -121,9 +118,11 @@ public class DbControl extends SQLiteOpenHelper {
                 con.insertIcon(icon);
             }
         }
+        con.destroy();
 
-
-        new ColourDbControl(context).makeSampleColours(false);
+        ColourDbControl colourDbControl = new ColourDbControl(context);
+        colourDbControl.makeSampleColours(false);
+        colourDbControl.destroy();
     }
 
     public void runDatabaseTest() {
@@ -162,5 +161,8 @@ public class DbControl extends SQLiteOpenHelper {
 
     }
 
+    public void destroy(){
+        db.close();
+    }
 
 }

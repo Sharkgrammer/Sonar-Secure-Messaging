@@ -36,6 +36,7 @@ public class Conversation {
 
         HistoryDbControl historyDbControl = new HistoryDbControl(context);
         historyArrayList = historyDbControl.selectHistory(conversation_ID);
+        historyDbControl.destroy();
 
         return historyArrayList;
     }
@@ -46,14 +47,15 @@ public class Conversation {
 
     public void setHistoryArrayList() {
         HistoryDbControl con = new HistoryDbControl(context);
-
         historyArrayList = con.selectHistory(conversation_ID);
+        con.destroy();
     }
 
     public Colour getColour() {
         if (colour == null){
             ColourDbControl db = new ColourDbControl(context);
             colour = db.selectSingleColour(1);
+            db.destroy();
         }
         return colour;
     }
@@ -62,21 +64,22 @@ public class Conversation {
         if (colour == null){
             ColourDbControl db = new ColourDbControl(context);
             colour = db.selectSingleColour(1);
+            db.destroy();
         }
         this.colour = colour;
     }
 
     public void setColour(int Colour_ID) {
         ColourDbControl con = new ColourDbControl(context);
-
         colour = con.selectSingleColour(Colour_ID);
+        con.destroy();
 
     }
 
     public void updateColour(){
         ConvoDbControl db = new ConvoDbControl(context);
-
         db.updateConvo(this.conversation_ID, this);
+        db.destroy();
     }
 
     public Bridge getBridge() {
@@ -95,8 +98,8 @@ public class Conversation {
 
     public void setBridge(int Bridge_ID) {
         BridgeDbControl con = new BridgeDbControl(context);
-
         bridge = con.selectBridge(Bridge_ID);
+        con.destroy();
     }
 
     public Profile getProfile() {
@@ -105,8 +108,8 @@ public class Conversation {
 
     public void refreshProfile(){
         ProfileDbControl con = new ProfileDbControl(context);
-
         profile = con.selectSingleProfile(profile.getProfile_ID());
+        con.destroy();
     }
 
     public void setProfile(Profile profile) {
@@ -116,6 +119,7 @@ public class Conversation {
     public void setProfile(Integer Profile_ID) {
         ProfileDbControl con = new ProfileDbControl(context);
         profile = con.selectSingleProfile(Profile_ID);
+        con.destroy();
     }
 
     public History getLatestMessage() {

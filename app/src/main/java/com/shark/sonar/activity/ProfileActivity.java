@@ -237,4 +237,10 @@ public class ProfileActivity extends AppCompatActivity {
         pinView.setText(currentPin.toString());
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        con.destroy();
+    }
+
 }

@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
             con.initialise();
         }
 
+        con.destroy();
+
         prefs = this.getSharedPreferences("com.shark.sonar", Context.MODE_PRIVATE);
         setPin = !prefs.getString("pin", "").equals("");
 
@@ -92,7 +94,9 @@ public class MainActivity extends AppCompatActivity {
             mainView = findViewById(R.id.imgPersonMain);
             mainView.setImageDrawable(ProfUser.getIcon().getIcon());
 
-            List<Conversation> conversations = new ConvoDbControl(this).selectAllConvo();
+            ConvoDbControl convoDbControl = new ConvoDbControl(this);
+            List<Conversation> conversations = convoDbControl.selectAllConvo();
+            convoDbControl.destroy();
 
             Log.wtf("CONVERSATION SIZE", String.valueOf(conversations.size()));
 
@@ -118,7 +122,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateList(){
-        List<Conversation> conversations = new ConvoDbControl(this).selectAllConvo();
+        ConvoDbControl convoDbControl = new ConvoDbControl(this);
+        List<Conversation> conversations = convoDbControl.selectAllConvo();
+        convoDbControl.destroy();
         adapter.updateList(conversations);
     }
 
@@ -180,5 +186,12 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         if (setPin) prefs.edit().putBoolean("unlocked", false).apply();
     }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        ProfCon.destroy();
+    }
+
 
 }

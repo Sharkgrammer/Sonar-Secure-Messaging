@@ -3,14 +3,12 @@ package com.shark.sonar.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,7 +41,6 @@ import com.shark.sonar.utility.Client;
 import com.shark.sonar.utility.ImageUtil;
 
 import java.io.File;
-import java.net.URI;
 import java.util.List;
 
 import pl.aprilapps.easyphotopicker.DefaultCallback;
@@ -85,10 +82,12 @@ public class MessageActivity extends AppCompatActivity {
 
         ProfileDbControl ProfCon = new ProfileDbControl(this);
         ProfUser = ProfCon.selectUserProfile();
+        ProfCon.destroy();
 
         ConvoDbControl conDB = new ConvoDbControl(this);
         String ID = (String) getIntent().getExtras().get("ID");
         conversation = conDB.selectConvoByID(Integer.parseInt(ID));
+        conDB.destroy();
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -312,8 +311,8 @@ public class MessageActivity extends AppCompatActivity {
         Button save = dialog.findViewById(R.id.dialogBtnSave);
 
         ColourDbControl dbControl = new ColourDbControl(this);
-
         List<Colour> colourList = dbControl.selectAllColours();
+        dbControl.destroy();
 
         ConstraintLayout layThem, layYou, layBack, layOverall;
         TextView txtThem, txtYou, txtBack, txtID, txtTitle;
@@ -387,5 +386,11 @@ public class MessageActivity extends AppCompatActivity {
     public void AdapterUpdate(List<History> h) {
         conversation.setHistoryArrayList(h);
         client.refreshMain();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+
     }
 }

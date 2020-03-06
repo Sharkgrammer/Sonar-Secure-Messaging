@@ -179,6 +179,7 @@ public class ScanActivity extends AppCompatActivity {
 
         ConvoDbControl convoDbControl = new ConvoDbControl(this);
         Conversation c = convoDbControl.selectProfileConvo(IDKey.getBytes());
+        convoDbControl.destroy();
 
         if (c != null) {
             Toast.makeText(this, "Cannot make a conversation that already exists", Toast.LENGTH_LONG).show();
@@ -232,6 +233,12 @@ public class ScanActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        control.destroy();
     }
 
 }

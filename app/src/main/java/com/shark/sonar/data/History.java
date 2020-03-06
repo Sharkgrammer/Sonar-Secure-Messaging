@@ -62,6 +62,8 @@ public class History {
 
     public int insertHistory(){
         HistoryDbControl db = new HistoryDbControl(context);
-        return (int) db.insertHistory(this);
+        int result =  (int) db.insertHistory(this);
+        db.destroy();
+        return result;
     }
 }

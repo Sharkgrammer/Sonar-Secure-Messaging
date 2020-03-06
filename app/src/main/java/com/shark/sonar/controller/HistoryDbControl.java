@@ -37,6 +37,8 @@ public class HistoryDbControl extends DbControl {
             cursor.moveToFirst();
 
             History h;
+            ProfileDbControl profileDbControl = new ProfileDbControl(context);
+
             do{
                 h = new History(context);
 
@@ -44,7 +46,6 @@ public class HistoryDbControl extends DbControl {
                 h.setConversation_ID(cursor.getInt(1));
 
                 int ID = cursor.getInt(5);
-                ProfileDbControl profileDbControl = new ProfileDbControl(context);
                 Profile userProf = profileDbControl.selectSingleProfile(ID);
 
                 Message item = new Message(userProf.getIcon().getIcon_ID(), ID == 1, cursor.getString(2), cursor.getString(3), cursor.getString(6));
@@ -58,6 +59,7 @@ public class HistoryDbControl extends DbControl {
 
             }while(cursor.moveToNext());
 
+            profileDbControl.destroy();
             cursor.close();
 
         } catch (Exception e) {

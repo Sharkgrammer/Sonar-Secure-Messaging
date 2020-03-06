@@ -153,6 +153,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
                 HistoryDbControl dbControl = new HistoryDbControl(context);
                 boolean done = dbControl.deleteHistory(h.getHistory_ID(), false);
 
+                dbControl.destroy();
                 Toast.makeText(context, "Delete " + (done ? "Success" : "Failure"), Toast.LENGTH_LONG).show();
                 if (done) adapter.ViewHolderUpdate(pos);
             });

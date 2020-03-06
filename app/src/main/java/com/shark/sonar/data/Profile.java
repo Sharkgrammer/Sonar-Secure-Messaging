@@ -60,6 +60,8 @@ public class Profile {
         IconDbControl con = new IconDbControl(context);
 
         Icon = con.selectSingleIcon(Icon_ID);
+
+        con.destroy();
     }
 
     public byte[] getUser_key_public() {

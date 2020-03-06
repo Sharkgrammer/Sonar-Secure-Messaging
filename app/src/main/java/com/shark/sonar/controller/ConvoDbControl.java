@@ -82,14 +82,17 @@ public class ConvoDbControl extends DbControl {
             Log.wtf("CONVO CURSOR", String.valueOf(cursor.getCount()));
 
             Conversation c;
+            ColourDbControl colDB = new ColourDbControl(context);
+            BridgeDbControl brigDB = new BridgeDbControl(context);
+            ProfileDbControl profDB =   new ProfileDbControl(context);
             do{
                 c = new Conversation(context);
 
                 c.setConversation_ID(cursor.getInt(0));
 
-                Colour col = new ColourDbControl(context).selectSingleColour(cursor.getInt(1));
-                Bridge brid = new BridgeDbControl(context).selectBridge(cursor.getInt(2));
-                Profile prof = new ProfileDbControl(context).selectSingleProfile(cursor.getInt(3));
+                Colour col = colDB.selectSingleColour(cursor.getInt(1));
+                Bridge brid = brigDB.selectBridge(cursor.getInt(2));
+                Profile prof = profDB.selectSingleProfile(cursor.getInt(3));
 
                 c.setColour(col);
                 c.setBridge(brid);
@@ -100,6 +103,9 @@ public class ConvoDbControl extends DbControl {
             }while(cursor.moveToNext());
 
             cursor.close();
+            colDB.destroy();
+            brigDB.destroy();
+            profDB.destroy();
 
         } catch (Exception e) {
             Log.wtf("Error in " + name, e.toString() + "  " + Arrays.toString(e.getStackTrace()));
@@ -111,9 +117,11 @@ public class ConvoDbControl extends DbControl {
     public boolean deleteConvo(Conversation c){
         ProfileDbControl prof = new ProfileDbControl(context);
         prof.deleteProfile(c.getProfile().getProfile_ID());
+        prof.destroy();
 
         HistoryDbControl his = new HistoryDbControl(context);
         his.deleteHistory(c.getConversation_ID(), true);
+        his.destroy();
 
         return deleteConvo(c.getConversation_ID());
     }
