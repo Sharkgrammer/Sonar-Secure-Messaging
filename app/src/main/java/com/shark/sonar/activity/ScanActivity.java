@@ -190,7 +190,7 @@ public class ScanActivity extends AppCompatActivity {
         byte[] pub = base64.fromBase64(publicKey);
 
         Icon icon = new Icon(Integer.parseInt(IconID), this);
-        Profile prof = new Profile(null, name, icon, pub, null, IDKey.getBytes());
+        Profile prof = new Profile(null, name, icon, pub, pub, IDKey.getBytes());
 
         boolean res = control.insertProfile(prof);
 

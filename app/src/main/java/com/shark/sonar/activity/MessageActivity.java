@@ -85,11 +85,10 @@ public class MessageActivity extends AppCompatActivity {
         ProfileDbControl ProfCon = new ProfileDbControl(this);
         ProfUser = ProfCon.selectUserProfile();
 
-        client.setUserToSendTo(conversation.getProfile());
-
         ConvoDbControl conDB = new ConvoDbControl(this);
         String ID = (String) getIntent().getExtras().get("ID");
         conversation = conDB.selectConvoByID(Integer.parseInt(ID));
+        client.setUserToSendTo(conversation.getProfile());
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -385,5 +384,5 @@ public class MessageActivity extends AppCompatActivity {
         conversation.setHistoryArrayList(h);
         client.refreshMain();
     }
-    
+
 }
