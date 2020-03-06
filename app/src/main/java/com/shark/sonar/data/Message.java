@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import java.io.ByteArrayOutputStream;
+
 public class Message {
 
     private int image;
@@ -13,7 +15,7 @@ public class Message {
     private String message;
     private String time;
     private String imageMsg;
-    private Bitmap img;
+    private Bitmap img, cImg;
 
     public Message(int map, boolean fromYou, String message, String time, String imageMsg) {
         this.image = map;
@@ -81,7 +83,26 @@ public class Message {
         }
 
         return img;
+    }
 
+    public Bitmap getCompressedImg(Context c) {
+        if (cImg == null) {
+
+            try {
+                ByteArrayOutputStream bout = new ByteArrayOutputStream();
+
+                getImg(c).compress(Bitmap.CompressFormat.JPEG, 40, bout);
+
+                byte[] tempBytes = bout.toByteArray();
+
+                cImg = BitmapFactory.decodeByteArray(tempBytes,0,tempBytes.length);
+            } catch (Exception e) {
+                return null;
+            }
+
+        }
+
+        return cImg;
     }
 
     public void setFromYou(boolean fromYou) {

@@ -3,6 +3,8 @@ package com.shark.sonar.recycler;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -27,6 +29,7 @@ import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.History;
 import com.shark.sonar.data.Message;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public class MessageViewHolder extends RecyclerView.ViewHolder {
@@ -58,14 +61,14 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         this.isImage = false;
     }
 
-    public void setImgView(){
+    public void setImgView() {
         lblMessage.setVisibility(View.GONE);
         imgMessage.setVisibility(View.VISIBLE);
 
         isImage = true;
     }
 
-    public void setNormalView(){
+    public void setNormalView() {
         lblMessage.setVisibility(View.VISIBLE);
         imgMessage.setVisibility(View.GONE);
 
@@ -90,7 +93,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             layoutParams.topMargin = def;
             layoutParams.bottomMargin = def;
 
-        }else{
+        } else {
 
             layoutParams.topMargin = expand;
             layoutParams.bottomMargin = def;
@@ -99,27 +102,46 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
         layoutin.setLayoutParams(layoutParams);
 
-        if (isImage){
+        if (isImage) {
             //Uri uri = Uri.parse(data.getImageMsg());
             //imgMessage.setImageURI(uri);
 
-            imgMessage.setImageBitmap(data.getImg(context));
-        }else{
+            final Bitmap image = data.getImg(context);
+            imgMessage.setImageBitmap(data.getCompressedImg(context));
+
+            layoutmessage.setOnClickListener(view -> {
+
+                LayoutInflater li = LayoutInflater.from(context);
+                View dialog = li.inflate(R.layout.image_holder, null);
+
+                ImageView imgV = dialog.findViewById(R.id.imageViewHolder);
+                imgV.setImageBitmap(image);
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                alertDialogBuilder.setView(dialog);
+
+                final AlertDialog alert = alertDialogBuilder.show();
+                alert.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+                dialog.setOnClickListener(view1 -> alert.dismiss());
+
+            });
+        } else {
             lblMessage.setTextColor(Color.parseColor(colour.getText_Col()));
             lblMessage.setText(data.getMessage());
 
-           /* lblMessage.setOnClickListener(view -> {
+            layoutmessage.setOnClickListener(view -> {
                 //REF https://stackoverflow.com/questions/19253786/how-to-copy-text-to-clip-board-in-android#19253868
                 ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("Copied Text", lblMessage.getText());
                 clipboard.setPrimaryClip(clip);
 
                 Toast.makeText(context, lblMessage.getText() + " copied", Toast.LENGTH_SHORT).show();
-            });*/
+            });
         }
     }
 
-    public void onClick(History h){
+    public void onClick(History h) {
         layoutmessage.setOnLongClickListener(view -> {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -195,7 +217,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         setImgVis(View.VISIBLE);
     }
 
-    public void setColour(Colour c){
+    public void setColour(Colour c) {
         this.colour = c;
     }
 
