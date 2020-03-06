@@ -53,7 +53,7 @@ public class Client implements ResultHandler {
         dataHolder = new DataHolder(publicKey, privateKey);
 
         dataHolder.setPort(6000);
-        dataHolder.setIP("192.168.43.233");
+        dataHolder.setIP("35.238.102.236");
         dataHolder.setBase64(b);
         dataHolder.setServer(false);
 
@@ -214,6 +214,10 @@ public class Client implements ResultHandler {
 
     public void isActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public void setUserToSendTo(Profile p){
+        dataHolder.setUserTo(p.getUserHolder());
     }
 }
 

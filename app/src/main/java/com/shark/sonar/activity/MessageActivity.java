@@ -3,12 +3,14 @@ package com.shark.sonar.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,7 +50,6 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 
 public class MessageActivity extends AppCompatActivity {
 
-    private static final int GALLERY_REQUEST_CODE = 500;
     private EditText sendView;
     private Client client = MainActivity.client;
     private boolean clientOn = false, msgReceived = false, firstRun = true;
@@ -89,6 +90,8 @@ public class MessageActivity extends AppCompatActivity {
         conversation = conDB.selectConvoByID(Integer.parseInt(ID));
         conDB.destroy();
 
+        client.setUserToSendTo(conversation.getProfile());
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(conversation.getProfile().getName());
@@ -99,10 +102,6 @@ public class MessageActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         List<History> his = conversation.getHistoryArrayList();
-
-        for (History h : his) {
-            System.out.println(h.getUser_from().getName());
-        }
 
         conversation.setHistoryArrayList(his);
 
