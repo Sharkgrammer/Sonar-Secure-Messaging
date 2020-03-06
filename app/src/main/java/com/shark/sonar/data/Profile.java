@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.shark.sonar.controller.IconDbControl;
 
+import util.UserHolder;
+
 public class Profile {
 
     private int Profile_ID;
@@ -13,6 +15,7 @@ public class Profile {
     private byte[] user_key_private;
     private byte[] user_ID_key;
     private Context context;
+    private UserHolder userHolder;
 
     public Profile(){}
 
@@ -84,5 +87,18 @@ public class Profile {
 
     public void setUser_ID_key(byte[] user_ID_key) {
         this.user_ID_key = user_ID_key;
+    }
+
+    public UserHolder getUserHolder() {
+        if (userHolder == null){
+            userHolder = new UserHolder(this.getUser_ID_key(),
+                    this.getUser_key_public(), this.getUser_key_private());
+        }
+
+        return userHolder;
+    }
+
+    public void setUserHolder(UserHolder userHolder) {
+        this.userHolder = userHolder;
     }
 }

@@ -20,7 +20,6 @@ import com.shark.sonar.utility.Fingerprinter;
 import com.shark.sonar.utility.IconPicker;
 
 import crypto.CryptManager;
-import util.temp;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -69,10 +68,11 @@ public class SplashActivity extends AppCompatActivity {
         Icon icon = new Icon(Integer.parseInt(view.getText().toString()));
         user.setIcon(icon);
 
-        //TODO redo when users can connect
-        temp temp = new temp();
-        user.setUser_key_private(temp.prkey1);
-        user.setUser_key_public(temp.pukey1);
+        CryptManager manager = new CryptManager();
+        manager.setKeys((byte[]) null, null);
+
+        user.setUser_key_private(manager.getPrivateKey().getEncoded());
+        user.setUser_key_public(manager.getPublicKey().getEncoded());
 
         boolean result = con.makeUserProfile(user);
 

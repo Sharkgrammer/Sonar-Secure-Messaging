@@ -25,8 +25,6 @@ import com.shark.sonar.utility.Client;
 
 import java.util.List;
 
-import util.temp;
-
 public class MainActivity extends AppCompatActivity {
 
     public static Client client;
@@ -85,9 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
 
-            temp temp = new temp();
-
-            client = new Client(ProfUser.getUser_ID_key(), temp.pukey1, temp.prkey1, this);
+            client = new Client(ProfUser.getUser_ID_key(), ProfUser.getUser_key_public(), ProfUser.getUser_key_private(), this);
 
             mainView = findViewById(R.id.imgPersonMain);
             mainView.setImageDrawable(ProfUser.getIcon().getIcon());

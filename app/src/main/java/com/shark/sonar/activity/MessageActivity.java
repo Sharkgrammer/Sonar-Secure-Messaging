@@ -51,7 +51,6 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 
 public class MessageActivity extends AppCompatActivity {
 
-    private static final int GALLERY_REQUEST_CODE = 500;
     private EditText sendView;
     private Client client = MainActivity.client;
     private boolean clientOn = false, msgReceived = false, firstRun = true;
@@ -86,6 +85,8 @@ public class MessageActivity extends AppCompatActivity {
         ProfileDbControl ProfCon = new ProfileDbControl(this);
         ProfUser = ProfCon.selectUserProfile();
 
+        client.setUserToSendTo(conversation.getProfile());
+
         ConvoDbControl conDB = new ConvoDbControl(this);
         String ID = (String) getIntent().getExtras().get("ID");
         conversation = conDB.selectConvoByID(Integer.parseInt(ID));
@@ -100,10 +101,6 @@ public class MessageActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         List<History> his = conversation.getHistoryArrayList();
-
-        for (History h : his) {
-            System.out.println(h.getUser_from().getName());
-        }
 
         conversation.setHistoryArrayList(his);
 
@@ -388,4 +385,5 @@ public class MessageActivity extends AppCompatActivity {
         conversation.setHistoryArrayList(h);
         client.refreshMain();
     }
+    
 }

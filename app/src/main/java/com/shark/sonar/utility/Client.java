@@ -213,5 +213,9 @@ public class Client implements ResultHandler {
     public void isActive(Boolean isActive) {
         this.isActive = isActive;
     }
+
+    public void setUserToSendTo(Profile p){
+        dataHolder.setUserTo(p.getUserHolder());
+    }
 }
 
