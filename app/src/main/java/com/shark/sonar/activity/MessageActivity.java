@@ -92,6 +92,8 @@ public class MessageActivity extends AppCompatActivity {
 
         client.setUserToSendTo(conversation.getProfile());
 
+        Log.wtf("LOG", new String(conversation.getProfile().getUser_key_public()));
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(conversation.getProfile().getName());

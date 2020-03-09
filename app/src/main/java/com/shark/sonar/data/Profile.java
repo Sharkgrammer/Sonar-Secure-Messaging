@@ -23,7 +23,7 @@ public class Profile {
         this.context =  context;
     }
 
-    public Profile(Integer ID, String Name, Icon icon, byte[] publicKey, byte[] privateKey, byte[] userKey){
+    public Profile(Integer ID, String Name, Icon icon, byte[] publicKey, byte[] userKey){
         if (ID != null){
             this.Profile_ID = ID;
         }
@@ -31,7 +31,7 @@ public class Profile {
         this.Name = Name;
         this.Icon = icon;
         this.user_key_public = publicKey;
-        this.user_key_private = privateKey;
+        this.user_key_private = new byte[0];
         this.user_ID_key = userKey;
     }
 

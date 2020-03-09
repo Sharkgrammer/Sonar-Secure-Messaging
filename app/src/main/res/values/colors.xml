@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#3F5661</color>
     <color name="colorAccent">@color/colorPrimaryDark</color>
     <color name="background">#EEEEEE</color>
+    <color name="backgroundRipple">#CCCCCC</color>
     <color name="colorTextLight">#ffffff</color>
     <color name="colorTextDark">#000000</color>
     <color name="colorBackground">#E8E8E8</color>
