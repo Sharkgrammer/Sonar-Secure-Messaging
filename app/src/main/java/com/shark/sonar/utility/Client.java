@@ -53,7 +53,7 @@ public class Client implements ResultHandler {
         dataHolder = new DataHolder(publicKey, privateKey);
 
         dataHolder.setPort(6000);
-        dataHolder.setIP("192.168.43.233");
+        dataHolder.setIP("35.238.205.100");
         dataHolder.setBase64(b);
         dataHolder.setServer(false);
 

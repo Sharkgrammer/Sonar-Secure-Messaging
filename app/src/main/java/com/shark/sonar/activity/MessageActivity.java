@@ -132,31 +132,37 @@ public class MessageActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        //REF https://github.com/jkwiecien/EasyImage/compare/2.0.4...master
-        EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
-            @Override
-            public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
-                Log.wtf("onImagesPicked", e.toString());
-                Toast.makeText(c, "Error, please try again", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onImagesPicked(List<File> imagesFiles, EasyImage.ImageSource source, int type) {
-                try{
-                    File f = imagesFiles.get(0);
-                    Uri imageURI = Uri.fromFile(f), finalUri;
-
-                    String[] temp = imageURI.toString().split("/");
-                    String file = imgUtil.FileToString(f, temp[temp.length - 1], c);
-                    finalUri = imgUtil.getCompressUri();
-
-                    sendMessage(file,"img::" + finalUri.toString());
-                }catch (Exception e){
+        try {
+            //REF https://github.com/jkwiecien/EasyImage/compare/2.0.4...master
+            EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
+                @Override
+                public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
                     Log.wtf("onImagesPicked", e.toString());
                     Toast.makeText(c, "Error, please try again", Toast.LENGTH_LONG).show();
                 }
-            }
-        });
+
+                @Override
+                public void onImagesPicked(List<File> imagesFiles, EasyImage.ImageSource source, int type) {
+                    try {
+                        File f = imagesFiles.get(0);
+                        Uri imageURI = Uri.fromFile(f), finalUri;
+
+                        String[] temp = imageURI.toString().split("/");
+                        String file = imgUtil.FileToString(f, temp[temp.length - 1], c);
+                        finalUri = imgUtil.getCompressUri();
+
+                        sendMessage(file, "img::" + finalUri.toString());
+                    } catch (Exception e) {
+                        Log.wtf("onImagesPicked", e.toString());
+                        Toast.makeText(c, "Error, please try again", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            Log.wtf("onImagesPicked", e.toString());
+            Toast.makeText(c, "Error, please try again", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void stop() {
@@ -177,7 +183,7 @@ public class MessageActivity extends AppCompatActivity {
 
         History his = new History(this);
 
-        if (messageHis == null){
+        if (messageHis == null) {
             messageHis = message;
         }
 
@@ -203,8 +209,8 @@ public class MessageActivity extends AppCompatActivity {
         System.out.println("Data from client class: " + message);
         final Context c = this;
 
-        if (message.length() > 5){
-            if (message.substring(0, 5).equals("img::")){
+        if (message.length() > 5) {
+            if (message.substring(0, 5).equals("img::")) {
                 message = imgUtil.StringToUri(message, c);
             }
         }
@@ -390,7 +396,7 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
 
     }
