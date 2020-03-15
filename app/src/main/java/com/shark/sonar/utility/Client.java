@@ -1,16 +1,7 @@
 package com.shark.sonar.utility;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
-import com.shark.sonar.R;
 import com.shark.sonar.activity.MainActivity;
 import com.shark.sonar.activity.MessageActivity;
 import com.shark.sonar.controller.ConvoDbControl;
@@ -28,6 +19,7 @@ import crypto.CryptManager;
 import send.MessageHandler;
 import util.DataHolder;
 import util.ResultHandler;
+import util.URLHandler;
 import util.UserHolder;
 
 public class Client implements ResultHandler {
@@ -38,27 +30,26 @@ public class Client implements ResultHandler {
     private MessageActivity currentMessageActivity;
     private boolean isActive;
     private boolean auth = false;
-    private String tempIP;
+    private boolean setPref = false;
 
     public Client(byte[] ID, byte[] publicKey, byte[] privateKey, String IP, int port) {
 
         UserHolder user = new UserHolder(ID, publicKey, privateKey);
         Base64Android b = new Base64Android();
+        URLHandler u = new URLAndroid();
 
         dataHolder = new DataHolder(publicKey, privateKey);
 
-        dataHolder.setPort(port);
-        dataHolder.setIP(IP);
-        this.tempIP = IP;
-
-        dataHolder.setAuthServer();
-
-        if (!tempIP.equals(dataHolder.getIP())){
-            mainActivity.setIP(dataHolder.getIP(), dataHolder.getPort());
-        }
-
         dataHolder.setBase64(b);
         dataHolder.setServer(false);
+        dataHolder.setUrl(u);
+
+        dataHolder.setPort(port);
+        dataHolder.setIP(IP);
+
+        setPref = IP == null;
+
+        dataHolder.setAuthServer();
 
         CryptManager manager = new CryptManager();
         manager.setKeys(publicKey, privateKey);
@@ -166,6 +157,10 @@ public class Client implements ResultHandler {
 
     public void setMainActivity(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
+
+        if (setPref) {
+            mainActivity.setIP(dataHolder.getIP(), dataHolder.getPort());
+        }
     }
 
     public MessageActivity getCurrentMessageActivity() {
@@ -184,7 +179,7 @@ public class Client implements ResultHandler {
         this.isActive = isActive;
     }
 
-    public void setUserToSendTo(Profile p){
+    public void setUserToSendTo(Profile p) {
         dataHolder.setUserTo(p.getUserHolder());
     }
 }

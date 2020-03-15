@@ -35,13 +35,13 @@ class URLAndroidInternal extends AsyncTask<String, Void, StringBuilder>{
     @Override
     protected StringBuilder doInBackground(String... strings) {
         String URL = strings[0];
+        StringBuilder response = new StringBuilder();
 
         try {
             URL url = new URL(URL);
             URLConnection conn = url.openConnection();
 
             BufferedReader reader = null;
-            StringBuilder response = new StringBuilder();
             reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = null;
 
@@ -49,11 +49,11 @@ class URLAndroidInternal extends AsyncTask<String, Void, StringBuilder>{
                 response.append(line);
             }
 
-            return response;
         }catch (Exception e){
             Log.wtf("Error in doInBackground", e.toString());
+            return null;
         }
 
-        return null;
+        return response;
     }
 }
