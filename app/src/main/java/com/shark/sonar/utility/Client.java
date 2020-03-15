@@ -5,7 +5,7 @@ import android.util.Log;
 import com.shark.sonar.activity.MainActivity;
 import com.shark.sonar.activity.MessageActivity;
 import com.shark.sonar.controller.ConvoDbControl;
-import com.shark.sonar.controller.NetControlAsyncTask;
+import com.shark.sonar.controller.NetControl;
 import com.shark.sonar.controller.ProfileDbControl;
 import com.shark.sonar.data.Conversation;
 import com.shark.sonar.data.History;
@@ -131,7 +131,7 @@ public class Client implements ResultHandler {
         data.setAuth(false);
         data.setHandler(client);
 
-        new NetControlAsyncTask(data).execute(true, false);
+        new NetControl().sendMessage(data);
     }
 
     private void sendAuthMessage() {
@@ -140,7 +140,7 @@ public class Client implements ResultHandler {
         data.setAuth(true);
         data.setHandler(client);
 
-        new NetControlAsyncTask(data).execute(false, true);
+        new NetControl().sendAuth(data);
     }
 
     public void stop() {
@@ -184,7 +184,9 @@ public class Client implements ResultHandler {
     }
 
     public boolean isUserOnline(byte[] ID){
-        return client.isUserOnline(ID);
+        NetControl c = new NetControl();
+
+        return c.isOnline(ID, client);
     }
 
 }

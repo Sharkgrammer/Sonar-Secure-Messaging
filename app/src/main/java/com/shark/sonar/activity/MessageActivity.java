@@ -121,13 +121,18 @@ public class MessageActivity extends AppCompatActivity {
         client.setCurrentMessageActivity(act);
         MainActivity.client.setCurrentMessageActivity(act);
 
-        boolean isOnline = client.isUserOnline(conversation.getProfile().getUser_ID_key());
+        Runnable r = () -> {
+            boolean isOnline = client.isUserOnline(conversation.getProfile().getUser_ID_key());
 
-        if (!isOnline){
-            sendView.setEnabled(false);
-            sendView.setHint("User offline");
-        }
+            if (!isOnline){
+                sendView.setEnabled(false);
+                sendView.setHint("User offline");
+            }
+        };
 
+        //TODO isOnline mightn't actually work, fix this threading thing
+        //Thread t = new Thread(r);
+        //t.start();
     }
 
     //REF https://github.com/jkwiecien/EasyImage/compare/2.0.4...master
