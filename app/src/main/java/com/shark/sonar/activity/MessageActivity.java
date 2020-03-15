@@ -3,14 +3,12 @@ package com.shark.sonar.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -122,6 +120,14 @@ public class MessageActivity extends AppCompatActivity {
         MessageActivity act = this;
         client.setCurrentMessageActivity(act);
         MainActivity.client.setCurrentMessageActivity(act);
+
+        boolean isOnline = client.isUserOnline(conversation.getProfile().getUser_ID_key());
+
+        if (!isOnline){
+            sendView.setEnabled(false);
+            sendView.setHint("User offline");
+        }
+
     }
 
     //REF https://github.com/jkwiecien/EasyImage/compare/2.0.4...master

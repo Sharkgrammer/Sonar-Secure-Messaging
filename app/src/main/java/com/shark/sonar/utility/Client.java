@@ -182,5 +182,10 @@ public class Client implements ResultHandler {
     public void setUserToSendTo(Profile p) {
         dataHolder.setUserTo(p.getUserHolder());
     }
+
+    public boolean isUserOnline(byte[] ID){
+        return client.isUserOnline(ID);
+    }
+
 }
 
